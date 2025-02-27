@@ -1,0 +1,1 @@
+nixos/hosts/*/secrets/*.yaml diff=sopsdiffer
