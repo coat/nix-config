@@ -151,6 +151,7 @@
       imhex
       jq
       joypixels
+      mise
       sops
       unzip
       uxn
