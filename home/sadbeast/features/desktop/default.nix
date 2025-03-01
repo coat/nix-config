@@ -16,6 +16,7 @@
   home = {
     packages = with pkgs; [
       galculator
+      gimp
       pavucontrol
       vlc
       waypipe
