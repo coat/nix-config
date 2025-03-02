@@ -4,16 +4,14 @@
   pkgs,
   ...
 }: {
-  fonts.fontconfig.enable = true;
-
   home = {
-    sessionVariables = {
-      XDG_CURRENT_DESKTOP = "sway";
-      MOZ_ENABLE_WAYLAND = 1;
-      QT_QPA_PLATFORM = "wayland";
-      LIBSEAT_BACKEND = "logind";
-      SDL_VIDEODRIVER = "wayland";
-    };
+    # sessionVariables = {
+    #   XDG_CURRENT_DESKTOP = "sway";
+    #   MOZ_ENABLE_WAYLAND = 1;
+    #   QT_QPA_PLATFORM = "wayland";
+    #   LIBSEAT_BACKEND = "logind";
+    #   SDL_VIDEODRIVER = "wayland";
+    # };
     packages = with pkgs; [
       grim
       iosevka
@@ -26,22 +24,6 @@
       dmenu-wayland
       xwayland
     ];
-
-    pointerCursor = {
-      gtk.enable = true;
-      package = pkgs.vanilla-dmz;
-      name = "Vanilla-DMZ";
-      size = 22;
-    };
-  };
-
-  gtk = {
-    enable = true;
-    theme = {
-      package = pkgs.gnome-themes-extra;
-      # name = "Adwaita-dark";
-      name = "Adwaita";
-    };
   };
 
   wayland.windowManager.sway = {

@@ -8,6 +8,7 @@
     ./global
     ./features/desktop
     ./features/games.nix
+    ./features/awesome
   ];
 
   home = {
