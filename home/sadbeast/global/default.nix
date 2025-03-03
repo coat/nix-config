@@ -151,6 +151,7 @@
       imhex
       jq
       joypixels
+      lazygit
       mise
       sops
       unzip
