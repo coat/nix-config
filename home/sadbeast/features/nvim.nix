@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   pkgs,
   ...
@@ -18,6 +17,8 @@ in {
       ### treesitter
       tree-sitter
       gcc
+      ### to build nil_ls
+      cargo
     ];
   };
 
