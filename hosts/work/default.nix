@@ -8,6 +8,7 @@
 
     ../common/global
     ../common/optional/wireless.nix
+    ../common/optional/xorg.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -30,18 +31,6 @@
       HandleLidSwitchExternalPower=ignore
     '';
     tmate-ssh-server.enable = true;
-
-    xserver = {
-      enable = true;
-      displayManager.startx.enable = true;
-      windowManager.awesome = {
-        enable = true;
-        luaModules = with pkgs.luaPackages; [
-          luarocks # is the package manager for Lua modules
-          luadbi-mysql # Database abstraction layer
-        ];
-      };
-    };
   };
 
   virtualisation = {

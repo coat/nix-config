@@ -21,6 +21,7 @@
     ../features/dev.nix
     ../features/git.nix
     ../features/gpg.nix
+    ../features/nvim.nix
     ../features/pass.nix
     ../features/ssh.nix
     ../features/vim.nix
