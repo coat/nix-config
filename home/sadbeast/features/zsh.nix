@@ -59,7 +59,7 @@
       };
 
       sessionVariables = {
-        EDITOR = "vim";
+        EDITOR = "nvim";
       };
 
       # TODO: this causes a 2 second delay
