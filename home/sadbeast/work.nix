@@ -7,6 +7,7 @@
   imports = [
     ./global
     ./features/desktop
+    ./features/awesome
   ];
 
   home = {
@@ -14,6 +15,7 @@
       # adrs
       aws-sam-cli
       awscli2
+      devpod
       vscode
       vscode-extensions.github.copilot-chat
       gcc
