@@ -55,6 +55,7 @@
 
       shellAliases = {
         ll = "ls -l";
+        nix-shell = "nix-shell --run $SHELL";
       };
 
       sessionVariables = {
