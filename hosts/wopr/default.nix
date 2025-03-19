@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   ...
 }: {
   imports = [
@@ -8,6 +7,7 @@
 
     ../common/global
     ../common/optional/games.nix
+    ../common/optional/libvirt.nix
     ../common/optional/wireless.nix
     ../common/optional/xorg.nix
   ];
