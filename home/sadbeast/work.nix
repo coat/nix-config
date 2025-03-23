@@ -4,6 +4,7 @@
 }: {
   imports = [
     ./global
+    ./features/dev.nix
     ./features/desktop
     ./features/awesome
   ];

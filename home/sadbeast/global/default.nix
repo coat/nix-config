@@ -18,7 +18,6 @@
     inputs.nix-index-database.hmModules.nix-index
 
     # You can also split up your configuration and import pieces of it here:
-    ../features/dev.nix
     ../features/git.nix
     ../features/gpg.nix
     ../features/nvim.nix
