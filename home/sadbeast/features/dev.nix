@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   home = {
     packages = with pkgs; [
+      awscli2
       devcontainer
       devpod
       httpie
@@ -9,8 +10,13 @@
       lazygit
       mise
       nodejs
+      pipx
       zig
       zls
+    ];
+
+    sessionPath = [
+      "/home/sadbeast/.local/bin"
     ];
   };
 
