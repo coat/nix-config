@@ -91,7 +91,6 @@
   programs = {
     sway.enable = true;
     zsh.enable = true;
-    # zsh.promptInit = "source ''${pkgs.zsh-powerlevel10k}/share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
     git.enable = true;
 
     fuse.userAllowOther = true;
