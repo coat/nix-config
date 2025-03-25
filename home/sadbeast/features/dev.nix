@@ -8,7 +8,6 @@
       jq
       imhex
       lazygit
-      mise
       nodejs
       pipx
       zig
