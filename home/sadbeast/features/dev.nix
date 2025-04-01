@@ -10,6 +10,7 @@
       lazygit
       nodejs
       pipx
+      ruby-lsp
       zig
       zls
     ];
