@@ -13,6 +13,7 @@
       # adrs
       aws-sam-cli
       awscli2
+      awsvpnclient
       devpod
       vscode
       vscode-extensions.github.copilot-chat
