@@ -12,9 +12,9 @@ in {
     profiles.sadbeast = {
       search = {
         force = true;
-        default = "Google";
-        privateDefault = "DuckDuckGo";
-        order = ["Google" "DuckDuckGo"];
+        default = "google";
+        privateDefault = "ddg";
+        order = ["google" "ddg"];
       };
       bookmarks = {};
       extensions = with addons; [
