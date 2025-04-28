@@ -5,7 +5,6 @@
     ./features/desktop/firefox.nix
     ./features/dev.nix
     ./features/desktop
-    ./features/awesome
   ];
 
   home = {
@@ -29,7 +28,7 @@
       #ruby
       #ruby-lsp
       sshfs
-      slack
+      #slack
       ssm-session-manager-plugin
       tmate
       virt-manager
@@ -55,14 +54,14 @@
       };
     };
 
-    obs-studio = {
-      enable = true;
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-      ];
-    };
+    # obs-studio = {
+    #   enable = true;
+    #   plugins = with pkgs.obs-studio-plugins; [
+    #     wlrobs
+    #     obs-backgroundremoval
+    #     obs-pipewire-audio-capture
+    #   ];
+    # };
 
     qutebrowser = {
       settings.content.blocking.whitelist = [
@@ -72,11 +71,11 @@
   };
 
   xdg.mimeApps.defaultApplications = {
-    "text/html" = "librewolf.desktop";
-    "x-scheme-handler/http" = "librewolf.desktop";
-    "x-scheme-handler/https" = "librewolf.desktop";
-    "x-scheme-handler/about" = "librewolf.desktop";
-    "x-scheme-handler/unknown" = "librewolf.desktop";
+    "text/html" = "firefox.desktop";
+    "x-scheme-handler/http" = "firefox.desktop";
+    "x-scheme-handler/https" = "firefox.desktop";
+    "x-scheme-handler/about" = "firefox.desktop";
+    "x-scheme-handler/unknown" = "firefox.desktop";
   };
 
   wayland.windowManager.sway.config.output = {

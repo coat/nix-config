@@ -5,40 +5,25 @@
   modulesPath,
   ...
 }: {
-  imports = [
-    (modulesPath + "/installer/scan/not-detected.nix")
-  ];
+  imports =
+    [ (modulesPath + "/profiles/qemu-guest.nix")
+    ];
 
-  boot.initrd.availableKernelModules = ["xhci_pci" "ahci" "usbhid" "usb_storage" "sd_mod" "rtsx_usb_sdmmc"];
-  boot.initrd.kernelModules = [];
-  boot.kernelModules = ["kvm-intel"];
-  boot.extraModulePackages = [];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "sr_mod" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/0ac2bd64-7a06-4972-af6e-beffa6567ba7";
-    fsType = "btrfs";
-    options = ["subvol=root"];
-  };
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/749acd44-a21f-43e6-a00b-893d0485088e";
+      fsType = "ext4";
+    };
 
-  boot.initrd.luks.devices."work".device = "/dev/disk/by-uuid/7ce450be-7739-476e-9a8d-e25e57d8707f";
-
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/0ac2bd64-7a06-4972-af6e-beffa6567ba7";
-    fsType = "btrfs";
-    options = ["subvol=nix"];
-  };
-
-  fileSystems."/persistent" = {
-    device = "/dev/disk/by-uuid/0ac2bd64-7a06-4972-af6e-beffa6567ba7";
-    fsType = "btrfs";
-    options = ["subvol=persistent"];
-  };
-
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/A468-9833";
-    fsType = "vfat";
-    options = ["fmask=0022" "dmask=0022"];
-  };
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/C033-C6FE";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
 
   swapDevices = [
     {device = "/dev/disk/by-label/swap";}
@@ -56,9 +41,8 @@
     };
   };
 
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   hardware = {
-    cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     graphics.enable = true;
   };
 }
