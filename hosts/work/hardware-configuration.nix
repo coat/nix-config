@@ -15,12 +15,12 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/749acd44-a21f-43e6-a00b-893d0485088e";
+    { device = "/dev/disk/by-label/nixos";
       fsType = "ext4";
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/C033-C6FE";
+    { device = "/dev/disk/by-label/boot";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
@@ -35,14 +35,10 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking = {
     useDHCP = lib.mkDefault true;
-    wireless = {
-      enable = true;
-      userControlled.enable = true;
-    };
   };
 
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
-  hardware = {
-    graphics.enable = true;
-  };
+  #hardware = {
+  #  graphics.enable = true;
+  #};
 }

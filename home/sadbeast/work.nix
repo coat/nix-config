@@ -4,7 +4,6 @@
     ./features/desktop
     ./features/desktop/firefox.nix
     ./features/dev.nix
-    ./features/desktop
   ];
 
   home = {
@@ -22,6 +21,7 @@
       #localstack
       nodejs
       ngrok
+      open-vm-tools
       pipx
       pop
       pgcli
