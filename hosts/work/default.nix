@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+lib,
   ...
 }: {
   imports = [
@@ -8,6 +9,7 @@
 
     ../common/global
     ../common/optional/docker.nix
+    ../../modules/nixos/vmware-guest.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -25,6 +27,12 @@
     # here, NOT in environment.systemPackages
   ];
 
+  disabledModules = [
+    # Disable the default NixOS configuration for the vmware guest
+    # module, since we are using a custom one.
+    "virtualisation/vmware-guest.nix"
+  ];
+
   services = {
     logind.extraConfig = ''
       HandleLidSwitchExternalPower=ignore
@@ -33,6 +41,20 @@
   };
 
   virtualisation.vmware.guest.enable = true;
+
+# Share our host filesystem
+  fileSystems."/host" = {
+    fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
+    device = ".host:/";
+    options = [
+      "umask=22"
+      "uid=1000"
+      "gid=1000"
+      "allow_other"
+      "auto_unmount"
+      "defaults"
+    ];
+  };
 
   users.users.sadbeast = {
     hashedPasswordFile = config.sops.secrets.sadbeast-password.path;
