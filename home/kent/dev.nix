@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, lib, ...}: {
   imports = [
     ../features/dev.nix
     ../features/git.nix
@@ -9,6 +9,7 @@
   ];
 
   nix = {
+    package = lib.mkDefault pkgs.nix;
     settings = {
       experimental-features = [
         "nix-command"
@@ -19,8 +20,9 @@
     };
   };
 
-  home = {
-    username = "kent";
+  home = let username = "vscode"; in {
+    username = username;
+    homeDirectory = "/home/${username}";
 
     stateVersion = "25.05";
 
