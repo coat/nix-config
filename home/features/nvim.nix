@@ -22,5 +22,5 @@ in {
     ];
   };
 
-  xdg.configFile."nvim" = mkDotfilesSymlink "home/sadbeast/features/nvim";
+  xdg.configFile."nvim" = mkDotfilesSymlink "home/features/nvim";
 }
