@@ -19,6 +19,8 @@
       # $ darwin-rebuild changelog
       system.stateVersion = 6;
 
+      system.defaults.dock.autohide = true;
+
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
 
