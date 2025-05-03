@@ -30,7 +30,7 @@
 
     sops-nix.url = "github:Mic92/sops-nix";
 
-    systems.url = "github:nix-systems/default-linux";
+    systems.url = "github:nix-systems/default";
   };
 
   outputs = {
@@ -38,6 +38,7 @@
     nixpkgs,
     home-manager,
     darwin,
+    nix-index-database,
     systems,
     ...
   } @ inputs: let
@@ -115,15 +116,13 @@
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
       modules = [
         ./hosts/darwin.nix
+        nix-index-database.darwinModules.nix-index
         home-manager.darwinModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.kent = import ./home/kent/darwin.nix;
-
-          # Optionally, use home-manager.extraSpecialArgs to pass
-          # arguments to home.nix
-          }
+        }
       ];
     };
 
