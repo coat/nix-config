@@ -1,11 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, openvpn
-, xdg-utils
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  openvpn,
+  xdg-utils,
 }:
-
 buildGoModule rec {
   pname = "awsvpnclient";
   version = "cae3a69821bd2ad78423ae585d212400531fdb8d";
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-602xj0ffJXQW//cQeByJjtQnU0NjqOrZWTCWLLhqMm0=";
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [makeWrapper];
 
   postInstall = ''
     cp ${src}/awsvpnclient.yml.example $out/awsvpnclient.yml
@@ -30,7 +30,6 @@ buildGoModule rec {
 
     makeWrapper $out/bin/aws-vpn-client $out/bin/awsvpnclient \
       --run "cd $out" \
-      --prefix PATH : "${lib.makeBinPath [ openvpn xdg-utils ]}"
+      --prefix PATH : "${lib.makeBinPath [openvpn xdg-utils]}"
   '';
-
 }

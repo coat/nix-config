@@ -1,11 +1,17 @@
-{pkgs, lib, ...}: {
+{
+  inputs,
+  # outputs,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
-    ../features/dev.nix
-    ../features/git.nix
-    ../features/nvim.nix
-    ../features/pass.nix
-    ../features/ssh.nix
-    ../features/zsh.nix
+  ../features/dev.nix
+  ../features/git.nix
+  ../features/nvim.nix
+  ../features/pass.nix
+  ../features/ssh.nix
+  ../features/zsh.nix
   ];
 
   nix = {
@@ -20,24 +26,47 @@
     };
   };
 
-  home = let username = "vscode"; in {
-    username = username;
-    homeDirectory = "/home/${username}";
+  nixpkgs = {
+    overlays = [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      # outputs.overlays.additions
+      # outputs.overlays.modifications
+      # outputs.overlays.stable-packages
 
-    stateVersion = "25.05";
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
 
-    sessionVariables = {
-      CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
+    ];
+
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = pkg:
+        builtins.elem (lib.getName pkg) [
+          "joypixels"
+        ];
+      joypixels.acceptLicense = true;
     };
   };
 
-  programs = {
-    comma.enable = true;
+  home = {
+    packages = with pkgs; [
+      comma
+      joypixels
+      sops
+      unzip
+      zip
+    ];
+  };
 
+  programs = {
     git = {
       enable = true;
-      userName = "Kent Smith";
-      userEmail = "kent.smith@andros.co";
 
       extraConfig = {
         core.sshCommand = "ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes";
@@ -45,6 +74,7 @@
     };
 
     fd.enable = true;
+    home-manager.enable = true;
     ripgrep.enable = true;
     starship.enable = true;
 

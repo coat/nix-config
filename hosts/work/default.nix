@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-lib,
+  lib,
   ...
 }: {
   imports = [
@@ -42,7 +42,7 @@ lib,
 
   virtualisation.vmware.guest.enable = true;
 
-# Share our host filesystem
+  # Share our host filesystem
   fileSystems."/host" = {
     fsType = "fuse./run/current-system/sw/bin/vmhgfs-fuse";
     device = ".host:/";

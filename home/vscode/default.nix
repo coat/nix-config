@@ -3,8 +3,11 @@
     ../features/global.nix
   ];
 
-  home = {
-    username = "kent";
+  home = let
+    username = "vscode";
+  in {
+    username = username;
+    homeDirectory = "/home/${username}";
 
     stateVersion = "25.05";
 

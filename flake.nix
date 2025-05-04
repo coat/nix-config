@@ -112,14 +112,13 @@
       };
     };
 
-    
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
       modules = [
         ./hosts/darwin.nix
         nix-index-database.darwinModules.nix-index
         home-manager.darwinModules.home-manager
         {
-          home-manager.useGlobalPkgs = true;
+          # home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.kent = import ./home/kent/darwin.nix;
         }
@@ -165,7 +164,7 @@
         pkgs = pkgsFor.aarch64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
-          ./home/kent/dev.nix
+          ./home/vscode/default.nix
         ];
       };
     };

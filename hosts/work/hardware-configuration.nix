@@ -5,25 +5,25 @@
   modulesPath,
   ...
 }: {
-  imports =
-    [ (modulesPath + "/profiles/qemu-guest.nix")
-    ];
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+  ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "sr_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = ["xhci_pci" "sr_mod"];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-label/nixos";
-      fsType = "ext4";
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-label/nixos";
+    fsType = "ext4";
+  };
 
-  fileSystems."/boot" =
-    { device = "/dev/disk/by-label/boot";
-      fsType = "vfat";
-      options = [ "fmask=0022" "dmask=0022" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-label/boot";
+    fsType = "vfat";
+    options = ["fmask=0022" "dmask=0022"];
+  };
 
   swapDevices = [
     {device = "/dev/disk/by-label/swap";}
