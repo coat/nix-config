@@ -111,10 +111,11 @@
     mako = {
       enable = true;
 
-      extraConfig = ''
-        [mode=do-not-disturb]
-        invisible=1
-      '';
+      criteria = {
+        "mode=do-not-disturb" = {
+          invisible = "1";
+        };
+      };
     };
 
     pasystray.enable = true;
