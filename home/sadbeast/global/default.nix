@@ -1,9 +1,7 @@
 {
   inputs,
-  outputs,
   lib,
   config,
-  pkgs,
   ...
 }: {
   # You can import other home-manager modules here
@@ -26,8 +24,8 @@
     ../../features/ssh.nix
     ../features/vim.nix
     ../../features/zsh.nix
+    ../features/devcontainers.nix
   ];
-
 
   home = {
     username = "sadbeast";

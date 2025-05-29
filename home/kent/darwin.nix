@@ -1,6 +1,9 @@
 {...}: {
   imports = [
     ../features/global.nix
+    ../features/qutebrowser.nix
+    ../features/devcontainers.nix
+    # ../features/ghostty.nix
   ];
 
   home = {

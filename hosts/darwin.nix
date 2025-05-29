@@ -75,6 +75,7 @@
   homebrew = {
     enable = true;
     brews = [
+      "aichat"
       "docker"
       "docker-compose"
     ];
