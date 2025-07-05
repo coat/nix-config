@@ -2,7 +2,7 @@
   imports = [
     ./foot.nix
     ../../../features/ghostty.nix
-    # ../../../features/qutebrowser.nix
+    ../../../features/qutebrowser.nix
     ./sway.nix
     ./waybar.nix
   ];
