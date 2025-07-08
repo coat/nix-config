@@ -18,6 +18,17 @@
     };
   };
 
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      allowUnfreePredicate = pkg:
+        builtins.elem (lib.getName pkg) [
+          "joypixels"
+        ];
+      joypixels.acceptLicense = true;
+    };
+  };
+
   home = let
     username = "vscode";
   in {
