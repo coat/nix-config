@@ -1,6 +1,5 @@
 {
   pkgs,
-  config,
   ...
 }: {
   home = {
@@ -8,17 +7,22 @@
       discord
       ez80asm
       fab-agon-emulator
-      fallout-ce
+      # fallout-ce
       fceux
       lutris
+
+      (retroarch.withCores (cores:
+        with cores; [
+          mame
+          mesen
+          mgba
+          sameboy
+          snes9x
+        ]))
+
       shattered-pixel-dungeon
       tiled
       uxn
-      (retroarch.withCores (cores:
-        with cores; [
-          mesen
-          gambatte
-        ]))
     ];
   };
 }
