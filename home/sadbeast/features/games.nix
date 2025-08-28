@@ -13,9 +13,11 @@
 
       (retroarch.withCores (cores:
         with cores; [
+          desmume
           mame
           mesen
           mgba
+          mupen64plus
           sameboy
           snes9x
         ]))
