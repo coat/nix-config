@@ -14,4 +14,11 @@ return {
       inlay_hints = { enabled = false },
     },
   },
+  -- Amp Plugin
+  {
+    "sourcegraph/amp.nvim",
+    branch = "main",
+    lazy = false,
+    opts = { auto_start = true, log_level = "info" },
+  },
 }
