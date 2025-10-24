@@ -68,9 +68,7 @@
     git = {
       enable = true;
 
-      extraConfig = {
-        core.sshCommand = "ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes";
-      };
+      settings.core.sshCommand = "ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes";
     };
 
     fd.enable = true;
