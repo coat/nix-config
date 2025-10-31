@@ -12,7 +12,8 @@
     inputs.home-manager.nixosModules.home-manager
     inputs.impermanence.nixosModules.impermanence
     ./sops.nix
-  ];
+  ]
+  ++ (builtins.attrValues outputs.nixosModules);
 
   #home-manager.useGlobalPkgs = true;
   home-manager.backupFileExtension = "backup";

@@ -2,30 +2,33 @@
   inputs,
   lib,
   config,
+  outputs,
   ...
 }: {
   # You can import other home-manager modules here
-  imports = [
-    # If you want to use modules your own flake exports (from modules/home-manager):
-    # outputs.homeManagerModules.example
+  imports =
+    [
+      # If you want to use modules your own flake exports (from modules/home-manager):
+      # outputs.homeManagerModules.example
 
-    # Or modules exported from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModules.default
-    inputs.impermanence.nixosModules.home-manager.impermanence
+      # Or modules exported from other flakes (such as nix-colors):
+      # inputs.nix-colors.homeManagerModules.default
+      inputs.impermanence.nixosModules.home-manager.impermanence
 
-    inputs.nix-index-database.homeModules.nix-index
+      inputs.nix-index-database.homeModules.nix-index
 
-    # You can also split up your configuration and import pieces of it here:
-    ../../features/global.nix
-    ../../features/git.nix
-    ../../features/gpg.nix
-    ../../features/nvim.nix
-    ../../features/pass.nix
-    ../../features/ssh.nix
-    ../features/vim.nix
-    ../../features/zsh.nix
-    ../../features/devcontainers.nix
-  ];
+      # You can also split up your configuration and import pieces of it here:
+      ../../features/global.nix
+      ../../features/git.nix
+      ../../features/gpg.nix
+      ../../features/nvim.nix
+      ../../features/pass.nix
+      ../../features/ssh.nix
+      ../features/vim.nix
+      ../../features/zsh.nix
+      ../../features/devcontainers.nix
+    ]
+    ++ (builtins.attrValues outputs.homeManagerModules);
 
   home = {
     username = "sadbeast";
