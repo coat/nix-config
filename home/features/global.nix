@@ -6,12 +6,12 @@
   ...
 }: {
   imports = [
-  ../features/dev.nix
-  ../features/git.nix
-  # ../features/nvim.nix
-  ../features/pass.nix
-  ../features/ssh.nix
-  ../features/zsh.nix
+    ../features/dev.nix
+    ../features/git.nix
+    # ../features/nvim.nix
+    ../features/pass.nix
+    ../features/ssh.nix
+    ../features/zsh.nix
   ];
 
   nix = {
