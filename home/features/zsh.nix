@@ -99,6 +99,7 @@
 
       sessionVariables = {
         EDITOR = "nvim";
+        MANPAGER = "nvim +Man!";
       };
 
       # TODO: this causes a 2 second delay
