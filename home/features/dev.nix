@@ -1,5 +1,4 @@
 {
-  inputs,
   pkgs,
   ...
 }: {
@@ -8,6 +7,7 @@
       act
       amp-cli
       awscli2
+      docker-buildx
       duckdb
       github-copilot-cli
       httpie
@@ -24,7 +24,16 @@
     crush = {
       enable = true;
       settings = {
-        # tui = { compact_mode = true; };
+        options = {
+          tui = { compact_mode = true; };
+        };
+        mcp = {
+          playwright = {
+            type = "http";
+            url = "http://localhost:8931/mcp";
+            disabled = false;
+          };
+        };
       };
     };
 
