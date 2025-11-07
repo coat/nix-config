@@ -55,6 +55,11 @@
         import nixpkgs {
           inherit system;
           config.allowUnfree = true;
+          overlays = [
+            outputs.overlays.additions
+            outputs.overlays.modifications
+            outputs.overlays.stable-packages
+          ];
         }
     );
   in {
