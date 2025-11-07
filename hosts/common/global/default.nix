@@ -16,7 +16,7 @@
     ]
     ++ (builtins.attrValues outputs.nixosModules);
 
-  #home-manager.useGlobalPkgs = true;
+  home-manager.useGlobalPkgs = true;
   home-manager.backupFileExtension = "backup";
   home-manager.extraSpecialArgs = {
     inherit inputs outputs;
