@@ -1,53 +1,43 @@
 {
-  description = "my nix config";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    # You can access packages and modules from different nixpkgs revs
-    # at the same time. Here's a working example:
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.05";
-    # Also see the 'stable-packages' overlay at 'overlays/default.nix'.
-    darwin.url = "github:lnl7/nix-darwin";
-    darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # charm.url = "github:charmbracelet/nur";
-    charm.url = "github:malikwirin/charmbracelet-nur?ref=feature/32";
+    charm.url = "github:charmbracelet/nur";
     charm.inputs.nixpkgs.follows = "nixpkgs";
 
-    # Third party programs, packaged with nix
-    firefox-addons = {
-      url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
+    clan-core.inputs.nixpkgs.follows = "nixpkgs";
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    home-manager.url = "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    impermanence.url = "github:nix-community/impermanence";
+    nixarr.url = "github:rasmus-kirk/nixarr";
+    nixarr.inputs.nixpkgs.follows = "nixpkgs";
 
-    nix-index-database = {
-      url = "github:nix-community/nix-index-database";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
-    sops-nix.url = "github:Mic92/sops-nix";
-
-    systems.url = "github:nix-systems/default";
+    systems.follows = "clan-core/systems";
   };
 
   outputs = {
     self,
-    nixpkgs,
-    home-manager,
-    darwin,
-    nix-index-database,
-    systems,
     charm,
+    clan-core,
+    home-manager,
+    nixpkgs,
+    nixarr,
+    systems,
+    nixvim,
     ...
   } @ inputs: let
     inherit (self) outputs;
+    # Usage see: https://docs.clan.lol
+    clan = clan-core.lib.clan {
+    inherit self;
+      imports = [./clan.nix];
+      specialArgs = {inherit inputs;};
+    };
     lib = nixpkgs.lib // home-manager.lib;
     forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
     pkgsFor = lib.genAttrs (import systems) (
@@ -58,141 +48,47 @@
           overlays = [
             outputs.overlays.additions
             outputs.overlays.modifications
-            outputs.overlays.stable-packages
           ];
         }
     );
   in {
-    inherit lib;
-    # Your custom packages
-    # Accessible through 'nix build', 'nix shell', etc
+    inherit (clan.config) nixosModules clanInternals;
+    clan = clan.config;
+
     packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
 
-    # Formatter for your nix files, available through 'nix fmt'
-    # Other options beside 'alejandra' include 'nixpkgs-fmt'
-    formatter = forEachSystem (pkgs: pkgs.alejandra);
-
-    # Your custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs outputs;};
-    # Reusable nixos modules you might want to export
-    # These are usually stuff you would upstream into nixpkgs
-    nixosModules = import ./modules/nixos;
-    # Reusable home-manager modules you might want to export
-    # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager {inherit inputs;};
 
+    # Add the Clan cli tool to the dev shell.
+    # Use "nix develop" to enter the dev shell.
     devShells = forEachSystem (pkgs: {
       default = pkgs.mkShell {
-        name = "nix-config";
-        nativeBuildInputs = with pkgs; [
-          age
-          sops
-          nix-prefetch
-          nix-prefetch-scripts
-        ];
+        packages = [clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli];
       };
     });
 
+    formatter = forEachSystem (pkgs: pkgs.alejandra);
+
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      wopr = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/wopr
-        ];
+    nixosConfigurations =
+      clan.config.nixosConfigurations
+      // {
+        wopr = nixpkgs.lib.nixosSystem {
+          specialArgs = {inherit inputs outputs self;};
+          modules = [
+            ./machines/wopr/configuration.nix
+          ];
+        };
       };
-      joshua = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/joshua
-        ];
-      };
-      norad = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/norad
-        ];
-      };
-      work = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-          ./hosts/work
-        ];
-      };
-    };
 
-    darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
-      # pkgs = pkgsFor.aarch64-darwin;
-      modules = [
-        ./hosts/darwin.nix
-        nix-index-database.darwinModules.nix-index
-        home-manager.darwinModules.home-manager
-        {
-          # home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {inherit inputs outputs;};
-          home-manager.users.kent = import ./home/kent/darwin.nix;
-        }
-      ];
-    };
-
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
       "sadbeast@wopr" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
-          ./home/sadbeast/wopr.nix
-        ];
-      };
-
-      "sadbeast@joshua" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home/sadbeast/joshua.nix
-        ];
-      };
-
-      "sadbeast@norad" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home/sadbeast/norad.nix
-        ];
-      };
-
-      "sadbeast@crystalpalace" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home/sadbeast/crystalpalace.nix
-        ];
-      };
-
-      "dev" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.aarch64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home/vscode/default.nix
-        ];
-      };
-
-      "vscode" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home/vscode/default.nix
-        ];
-      };
-
-      "node" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.aarch64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./home/node/default.nix
+          nixvim.homeModules.nixvim
+          ./users/sadbeast/wopr.nix
         ];
       };
     };

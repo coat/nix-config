@@ -1,19 +1,22 @@
-# Installation
+# nix-config
 
-1. Create partitions under the [NixOS Installation](https://mt-caret.github.io/blog/2020-06-29-optin-state.html) section.
-2. Ensure `keys.txt` is located at `/mnt/var/lib/sops-nix/`
-3. Follow the [installation guide](https://nixos.org/manual/nixos/stable/#sec-installation-manual-installing) and run `sudo nixos-install --no-root-passwd --flake .#hostname` in this directory, instead of `nixos-install`.
+## hosts
 
-# Usage
+Use [clan](https://clan.lol) to manage machines remotely:
 
-To rebuild the system after changes in `hosts/`:
+```sh
+clan machines update
 ```
+
+Or, if you are on the machine:
+
+```sh
 sudo nixos-rebuild switch --flake .#hostname
 ```
 
-After making changes in `home/`:
+## home-manager
 
-```
+```sh
 home-manager switch --flake .#sadbeast@hostname
 ```
 
