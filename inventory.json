@@ -2,6 +2,14 @@
   "machines": {
     "crystalpalace": {
       "installedAt": 1763837125
+    },
+    "cheyenne": {
+      "deploy": {
+        "targetHost": "104.156.253.227"
+      },
+      "tags": [
+        "server"
+      ]
     }
   }
 }
