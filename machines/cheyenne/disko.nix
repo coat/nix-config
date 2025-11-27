@@ -13,7 +13,7 @@
   disko.devices = {
     disk = {
       main = {
-        name = "main-dd2e5cdb191848cc8b0086cf694b0b7c";
+        name = "main-99f2abb7484042d48ecd0789d3904e56";
         device = "/dev/disk/by-path/pci-0000:05:00.0";
         type = "disk";
         content = {
