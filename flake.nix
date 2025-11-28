@@ -60,6 +60,21 @@
           ];
         }
     );
+    # Helper to create home-manager configurations with common modules
+    mkHomeConfiguration = {
+      pkgs,
+      modules,
+    }:
+      home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules =
+          [
+            inputs.nix-index-database.homeModules.nix-index
+            nixvim.homeModules.nixvim
+          ]
+          ++ modules;
+      };
   in {
     inherit (clan.config) nixosModules clanInternals;
     clan = clan.config;
@@ -79,30 +94,20 @@
     nixosConfigurations = clan.config.nixosConfigurations;
 
     homeConfigurations = {
-      "sadbeast@wopr" = home-manager.lib.homeManagerConfiguration {
+      "sadbeast@wopr" = mkHomeConfiguration {
         pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          nixvim.homeModules.nixvim
-          ./users/sadbeast/wopr.nix
-        ];
+        modules = [./users/sadbeast/wopr.nix];
       };
 
-      "sadbeast@joshua" = home-manager.lib.homeManagerConfiguration {
+      "sadbeast@joshua" = mkHomeConfiguration {
         pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          nixvim.homeModules.nixvim
-          ./users/sadbeast/joshua.nix
-        ];
+        modules = [./users/sadbeast/joshua.nix];
       };
 
       "devcontainer" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.aarch64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./users/vscode/default.nix
-        ];
+        modules = [./users/vscode/default.nix];
       };
     };
 

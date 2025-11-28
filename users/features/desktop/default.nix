@@ -13,6 +13,7 @@
     packages = with pkgs; [
       galculator
       gimp
+      lagrange
       pavucontrol
       vlc
       waypipe

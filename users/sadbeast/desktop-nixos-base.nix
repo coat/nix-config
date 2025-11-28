@@ -15,6 +15,11 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = {inherit inputs outputs;};
+
+    sharedModules = [
+      inputs.nixvim.homeModules.nixvim
+      inputs.nix-index-database.homeModules.nix-index
+    ];
   };
 
   time.timeZone = "America/Los_Angeles";

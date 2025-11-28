@@ -11,12 +11,13 @@
     useGlobalPkgs = true;
     useUserPackages = true;
     extraSpecialArgs = {inherit inputs outputs;};
-    users.sadbeast = {
-      imports = [
-        inputs.nixvim.homeModules.nixvim
-        ./home.nix
-      ];
-    };
+
+    sharedModules = [
+      inputs.nixvim.homeModules.nixvim
+      inputs.nix-index-database.homeModules.nix-index
+    ];
+
+    users.sadbeast.imports = [./home.nix];
   };
   time.timeZone = "America/Los_Angeles";
 }

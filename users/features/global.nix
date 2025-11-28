@@ -56,6 +56,7 @@
   home = {
     packages = with pkgs; [
       comma
+      home-manager
     ];
   };
 
