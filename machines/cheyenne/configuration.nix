@@ -14,11 +14,27 @@
       enable = true;
 
       virtualHosts."sadbeast.com" = {
-        addSSL = true;
+        forceSSL = true;
         enableACME = true;
 
         root = "/srv/www/sadbeast.com";
       };
+
+      # virtualHosts."irc.sadbeast.com" = {
+      #   listen = [
+      #     {
+      #       addr = "127.0.0.1";
+      #       port = 1667;
+      #       ssl = true;
+      #     }
+      #   ];
+      #   addSSL = true;
+      #   enableACME = true;
+      #
+      #   locations."/" = {
+      #     proxyPass = "unix:/run/soju/irc.sock";
+      #   };
+      # };
 
       virtualHosts."miramiraspa.com" = {
         addSSL = true;
@@ -27,6 +43,10 @@
         locations."/".return = "301 https://linktr.ee/Thinklikeanesthetician";
       };
     };
+
+    # soju = {
+    #   enable = true;
+    # };
 
     stargazer = {
       enable = true;
