@@ -1,25 +1,10 @@
-{
-  self,
-  inputs,
-  outputs,
-  ...
-}: {
-  imports = [
-    self.inputs.home-manager.nixosModules.default
-  ];
+{inputs, ...}: {
+  imports = [./desktop-nixos-base.nix];
 
-  programs.dconf.enable = true;
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = {inherit inputs outputs;};
-    users.sadbeast = {
-      imports = [
-        inputs.nixvim.homeModules.nixvim
-        ./wopr.nix
-      ];
-    };
+  home-manager.users.sadbeast = {
+    imports = [
+      inputs.nixvim.homeModules.nixvim
+      ./wopr.nix
+    ];
   };
-  time.timeZone = "America/Los_Angeles";
 }

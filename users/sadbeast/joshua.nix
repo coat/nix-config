@@ -1,14 +1,5 @@
-{
-  inputs,
-  config,
-  ...
-}: {
-  imports = [
-    ./home.nix
-    ../features/desktop
-    ../features/desktop/games.nix
-    ../features/dev.nix
-  ];
+{...}: {
+  imports = [./desktop-base.nix];
 
   wayland.windowManager.sway.config.output = {
     HDMI-A-1 = {
