@@ -4,7 +4,7 @@
   ...
 }: {
   imports = [
-   inputs.nixarr.nixosModules.default
+    inputs.nixarr.nixosModules.default
     ../../modules/global.nix
     ../../modules/nixarr.nix
     ../../modules/samba.nix

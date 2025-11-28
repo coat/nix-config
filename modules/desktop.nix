@@ -12,7 +12,7 @@
     };
 
     printing.enable = true;
-    }
+  };
   security = {
     polkit.enable = true;
     # rtkit is optional but recommended
@@ -21,5 +21,5 @@
     pam.services = {
       swaylock = {};
     };
-  }
+  };
 }

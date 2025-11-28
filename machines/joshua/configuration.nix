@@ -8,37 +8,16 @@
 
     ../../users/sadbeast/nixos.nix
     ../../modules/global.nix
-    ../../modules/wireless.nix
-    # ../common/global
-    # ../common/optional/games.nix
-    # ../common/optional/docker.nix
-    # ../common/optional/libvirt.nix
-    # ../common/optional/wireless.nix
-    # ../common/optional/xorg.nix
   ];
-
-  # programs.nix-ld.enable = true;
-  # programs.nix-ld.libraries = with pkgs; [
-  #   # Add any missing dynamic libraries for unpackaged programs
-  #   # here, NOT in environment.systemPackages
-  #   SDL2
-  #   libudev-zero
-  # ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "wopr";
+  networking.hostName = "joshua";
 
   # Slows down write operations considerably
   nix.settings.auto-optimise-store = false;
-
-  services = {
-    logind.settings.Login = {
-      HandleLidSwitchExternalPower = "ignore";
-    };
-  };
 
   users.users.sadbeast = {
     extraGroups = ["docker"];
@@ -56,8 +35,6 @@
       }
     ];
   };
-
-  # home-manager.users.sadbeast = import ../../users/sadbeast/${config.networking.hostName}.nix;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.11";

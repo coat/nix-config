@@ -8,11 +8,17 @@
     clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
 
+    darwin.url = "github:lnl7/nix-darwin";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
+
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nixarr.url = "github:rasmus-kirk/nixarr";
     nixarr.inputs.nixpkgs.follows = "nixpkgs";
+
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
 
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
@@ -24,19 +30,22 @@
     self,
     charm,
     clan-core,
+    darwin,
     home-manager,
-    nixpkgs,
+    nix-index-database,
     nixarr,
-    systems,
+    nixpkgs,
     nixvim,
+    systems,
     ...
   } @ inputs: let
     inherit (self) outputs;
+
     # Usage see: https://docs.clan.lol
     clan = clan-core.lib.clan {
-    inherit self;
+      inherit self;
       imports = [./clan.nix];
-      specialArgs = {inherit inputs;};
+      specialArgs = {inherit inputs self outputs;};
     };
     lib = nixpkgs.lib // home-manager.lib;
     forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
@@ -59,8 +68,6 @@
 
     overlays = import ./overlays {inherit inputs outputs;};
 
-    # Add the Clan cli tool to the dev shell.
-    # Use "nix develop" to enter the dev shell.
     devShells = forEachSystem (pkgs: {
       default = pkgs.mkShell {
         packages = [clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli];
@@ -69,18 +76,7 @@
 
     formatter = forEachSystem (pkgs: pkgs.alejandra);
 
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations =
-      clan.config.nixosConfigurations
-      // {
-        wopr = nixpkgs.lib.nixosSystem {
-          specialArgs = {inherit inputs outputs self;};
-          modules = [
-            ./machines/wopr/configuration.nix
-          ];
-        };
-      };
+    nixosConfigurations = clan.config.nixosConfigurations;
 
     homeConfigurations = {
       "sadbeast@wopr" = home-manager.lib.homeManagerConfiguration {
@@ -91,6 +87,38 @@
           ./users/sadbeast/wopr.nix
         ];
       };
+
+      "sadbeast@joshua" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor.x86_64-linux;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          nixvim.homeModules.nixvim
+          ./users/sadbeast/joshua.nix
+        ];
+      };
+
+      "devcontainer" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor.aarch64-linux;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./users/vscode/default.nix
+        ];
+      };
+    };
+
+    darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
+      # pkgs = pkgsFor.aarch64-darwin;
+      modules = [
+        ./machines/work/configuration.nix
+        nix-index-database.darwinModules.nix-index
+        home-manager.darwinModules.home-manager
+        {
+          # home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {inherit inputs outputs;};
+          home-manager.users.kent = import ./home/kent/work.nix;
+        }
+      ];
     };
   };
 }

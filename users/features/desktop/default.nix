@@ -26,7 +26,7 @@
     };
   };
 
-  programs.librewolf.enable = true;
+  # programs.librewolf.enable = true;
 
   gtk = {
     enable = true;
@@ -37,4 +37,3 @@
     };
   };
 }
-
