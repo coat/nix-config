@@ -1,4 +1,8 @@
-{self, inputs, ...}: {
+{
+  self,
+  inputs,
+  ...
+}: {
   imports = [
     self.inputs.home-manager.nixosModules.default
   ];
