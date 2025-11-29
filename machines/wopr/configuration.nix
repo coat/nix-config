@@ -8,22 +8,9 @@
 
     ../../users/sadbeast/nixos.nix
     ../../modules/global.nix
+    ../../modules/desktop.nix
     ../../modules/wireless.nix
-    # ../common/global
-    # ../common/optional/games.nix
-    # ../common/optional/docker.nix
-    # ../common/optional/libvirt.nix
-    # ../common/optional/wireless.nix
-    # ../common/optional/xorg.nix
   ];
-
-  # programs.nix-ld.enable = true;
-  # programs.nix-ld.libraries = with pkgs; [
-  #   # Add any missing dynamic libraries for unpackaged programs
-  #   # here, NOT in environment.systemPackages
-  #   SDL2
-  #   libudev-zero
-  # ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -41,7 +28,7 @@
   };
 
   users.users.sadbeast = {
-    extraGroups = ["docker"];
+    extraGroups = ["docker" "audio"];
 
     subUidRanges = [
       {

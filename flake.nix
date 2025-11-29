@@ -85,7 +85,10 @@
 
     devShells = forEachSystem (pkgs: {
       default = pkgs.mkShell {
-        packages = [clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli];
+        packages = [
+          clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli
+          pkgs.sops
+        ];
       };
     });
 

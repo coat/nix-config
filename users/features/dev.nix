@@ -13,6 +13,7 @@
       awscli2
       docker-buildx
       duckdb
+      gcc
       github-copilot-cli
       httpie
       imhex
