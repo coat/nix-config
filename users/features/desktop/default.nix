@@ -9,6 +9,8 @@
 
   fonts.fontconfig.enable = true;
 
+  programs.librewolf.enable = true;
+
   home = {
     packages = with pkgs; [
       galculator
