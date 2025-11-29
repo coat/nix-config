@@ -8,6 +8,7 @@
     ./nixvim/keymaps.nix
     ./nixvim/lsp.nix
     ./nixvim/lualine.nix
+    ./nixvim/noice.nix
     ./nixvim/snacks.nix
     ./nixvim/todo-comments.nix
     ./nixvim/trouble.nix
@@ -116,7 +117,6 @@
   # Configure NixVim without prefixing with `plugins.nixvim`
   plugins = {
     mini-icons.enable = true;
-    noice.enable = true;
     nui.enable = true;
     web-devicons.enable = true;
   };

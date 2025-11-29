@@ -1,7 +1,9 @@
 {lib, ...}: {
   imports = [
+    ./nixvim/amp.nix
     ./nixvim/cmp.nix
     ./nixvim/conform.nix
+    ./nixvim/dap.nix
     ./nixvim/gitsigns.nix
     ./nixvim/lsp.nix
     ./nixvim/neotest.nix
