@@ -5,6 +5,7 @@
 }: {
   imports = [
     inputs.charm.homeModules.crush
+    ./nixvim-dev.nix
   ];
   home = {
     packages = with pkgs; [
@@ -28,8 +29,6 @@
   };
 
   programs = {
-    nixvim.imports = [./nixvim-dev.nix];
-
     crush = {
       enable = true;
       settings = {
