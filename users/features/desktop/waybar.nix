@@ -7,7 +7,6 @@
       mainBar = {
         layer = "bottom";
         position = "top";
-        height = 22;
 
         modules-left = ["sway/workspaces" "sway/mode" "sway/window"];
         modules-right = ["tray" "battery" "clock"];
@@ -45,13 +44,9 @@
 
           tooltip = false;
         };
-
-        tray = {
-          icon-size = 18;
-        };
       };
     };
 
-    style = ./waybar.css;
+    # style = ''* { font-size: 12pt }'';
   };
 }

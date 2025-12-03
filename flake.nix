@@ -2,6 +2,9 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    amp-nvim.url = "github:sourcegraph/amp.nvim";
+    amp-nvim.flake = false;
+
     charm.url = "github:charmbracelet/nur";
     charm.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -23,12 +26,10 @@
     nixvim.url = "github:nix-community/nixvim";
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
-    systems.follows = "clan-core/systems";
+    stylix.url = "github:nix-community/stylix";
+    stylix.inputs.nixpkgs.follows = "nixpkgs";
 
-    amp-nvim = {
-      url = "github:sourcegraph/amp.nvim";
-      flake = false;
-    };
+    systems.follows = "clan-core/systems";
   };
 
   outputs = {
@@ -41,6 +42,7 @@
     nixarr,
     nixpkgs,
     nixvim,
+    stylix,
     systems,
     ...
   } @ inputs: let
@@ -110,6 +112,11 @@
       "sadbeast@joshua" = mkHomeConfiguration {
         pkgs = pkgsFor.x86_64-linux;
         modules = [./users/sadbeast/joshua.nix];
+      };
+
+      "nix-on-droid" = mkHomeConfiguration {
+        pkgs = pkgsFor.x86_64-linux;
+        modules = [./users/nix-on-droid];
       };
 
       "devcontainer" = home-manager.lib.homeManagerConfiguration {

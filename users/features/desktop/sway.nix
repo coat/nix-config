@@ -5,13 +5,6 @@
   ...
 }: {
   home = {
-    # sessionVariables = {
-    #   XDG_CURRENT_DESKTOP = "sway";
-    #   MOZ_ENABLE_WAYLAND = 1;
-    #   QT_QPA_PLATFORM = "wayland";
-    #   LIBSEAT_BACKEND = "logind";
-    #   SDL_VIDEODRIVER = "wayland";
-    # };
     packages = with pkgs; [
       grim
       iosevka
@@ -33,11 +26,6 @@
       modifier = "Mod4";
 
       bars = [];
-
-      fonts = {
-        names = ["Iosevka"];
-        size = 12.0;
-      };
 
       gaps = {
         smartGaps = true;
