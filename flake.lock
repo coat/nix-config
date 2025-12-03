@@ -120,11 +120,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1764634448,
-        "narHash": "sha256-TC+btSPGi1tJ5iIqfGhzK0DvdgL8kFHWqVJ79bboEyI=",
-        "rev": "f1568696bb1bc5f7e96f5c43e3e1c39be3cf8624",
+        "lastModified": 1764721663,
+        "narHash": "sha256-gdyZQ41CoJ4u4XSuXcZlDB/pqiLNni1xALMYP3VTk3Y=",
+        "rev": "6ace9cefb0780f34c33c016c108fc2bf0a87bdc4",
         "type": "tarball",
-        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/f1568696bb1bc5f7e96f5c43e3e1c39be3cf8624.tar.gz"
+        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/6ace9cefb0780f34c33c016c108fc2bf0a87bdc4.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -338,11 +338,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1764636297,
-        "narHash": "sha256-S41K55kw+hWgDfgKmZ9/fMZ3F0BQDMvqFfE120fMHeE=",
+        "lastModified": 1764734243,
+        "narHash": "sha256-/zLLKBxvC3ZLyivCUfWEy08h/Evr5hFqQ0pqAfgRvbU=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "ff067cfc619fdf6f82d50344e7d19ff2323f0827",
+        "rev": "93d907a205ca7a4cd524a3c5f9e926904c7485bc",
         "type": "github"
       },
       "original": {
@@ -442,11 +442,11 @@
         "website-builder": "website-builder"
       },
       "locked": {
-        "lastModified": 1764066022,
-        "narHash": "sha256-YY9UdoNN/Iu9HTYsUWuZQiuRyQYOtcvnsT5X/+LuV1M=",
+        "lastModified": 1764669475,
+        "narHash": "sha256-lTIxxGTYyc9pQeLvwypRVWyVnabVQg0TE/wjAC+sjFY=",
         "owner": "rasmus-kirk",
         "repo": "nixarr",
-        "rev": "3ea7ad8a1ca9d67df206cda19775ce711a55add4",
+        "rev": "ac11a6d765bc321b514d518f0d6c1abab3fb797a",
         "type": "github"
       },
       "original": {
@@ -496,11 +496,11 @@
         "systems": "systems_3"
       },
       "locked": {
-        "lastModified": 1764611906,
-        "narHash": "sha256-8UbK91SY+IN93IsA59G1W0IclCCgJ95DhNxi9b1YLHw=",
+        "lastModified": 1764720537,
+        "narHash": "sha256-BTVEOnpGaJargkE/SW3q40Wa/FAgoDbSctvDxeEF3o4=",
         "owner": "nix-community",
         "repo": "nixvim",
-        "rev": "ee6ccaae42fc032ca4678951b48f92c635cb8ebc",
+        "rev": "b52b1fb4a4317a96fd8e481e5d80903c1e07bcfb",
         "type": "github"
       },
       "original": {
