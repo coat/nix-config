@@ -1,4 +1,4 @@
-{...}: {
+{
   # Common desktop home-manager configuration
   imports = [
     ./home.nix

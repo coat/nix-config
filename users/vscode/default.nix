@@ -1,4 +1,4 @@
-{outputs, ...}: {
+{
   imports = [
     ../features/global.nix
     ../features/dev.nix
