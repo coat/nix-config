@@ -98,6 +98,20 @@ in {
       mini-icons.enable = true;
       nui.enable = true;
       web-devicons.enable = true;
+
+      obsidian = {
+        enable = true;
+
+        settings = {
+          legacy_commands = false;
+
+          completion = {
+            min_chars = 2;
+            nvim_cmp = true;
+          };
+          new_notes_location = "notes";
+        };
+      };
     };
   };
 }
