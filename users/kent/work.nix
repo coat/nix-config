@@ -22,7 +22,6 @@
   programs.git.settings.user.name = "Kent Smith";
   programs.git.settings.user.email = "kent.smith@andros.co";
 
-  programs.nixvim.plugins.cmp.enable = true;
   programs.nixvim.plugins = {
     obsidian.settings = {
       workspaces = [
