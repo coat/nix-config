@@ -18,7 +18,6 @@
       };
     };
     fd.enable = true;
-    obsidian.enable = true;
     ripgrep.enable = true;
     starship.enable = true;
 
