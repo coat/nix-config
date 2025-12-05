@@ -6,4 +6,8 @@
     ../features/desktop/games.nix
     ../features/dev.nix
   ];
+
+  programs.librewolf.profiles.sadbeast = {};
+
+  stylix.targets.librewolf.profileNames = ["sadbeast"];
 }
