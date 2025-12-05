@@ -129,7 +129,7 @@
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
           home-manager.sharedModules = [
             nixvim.homeModules.nixvim
-            nix-index-database.hmModules.nix-index
+            nix-index-database.homeModules.nix-index
             stylix.homeModules.stylix
             ./modules/stylix.nix
           ];
