@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-FLAKE="${1:-devcontainer}"
+FLAKE="${1:-linux-devcontainer}"
 
 sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
 . ~/.nix-profile/etc/profile.d/nix.sh
