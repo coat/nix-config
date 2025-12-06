@@ -2,6 +2,7 @@
   self,
   inputs,
   outputs,
+  config,
   ...
 }: {
   imports = [
@@ -11,7 +12,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    extraSpecialArgs = {inherit inputs outputs;};
+    extraSpecialArgs = {inherit inputs outputs; nixosConfig = config;};
 
     sharedModules = [
       inputs.nixvim.homeModules.nixvim
