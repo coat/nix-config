@@ -28,11 +28,5 @@
     keyMap = "emacs2";
   };
 
-  nixpkgs = {
-    config = {
-      allowUnfree = true;
-    };
-  };
-
   security.sudo.wheelNeedsPassword = false;
 }
