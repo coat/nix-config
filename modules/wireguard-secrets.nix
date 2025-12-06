@@ -1,5 +1,6 @@
 {
   clan.core.vars.generators.wireguard-vpn = {
+    share = true;
     files.wg-conf = {
       secret = true;
     };
