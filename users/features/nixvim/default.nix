@@ -12,7 +12,6 @@ in {
       ./lsp.nix
       ./lualine.nix
       ./noice.nix
-      ./obsidian.nix
       ./snacks.nix
       ./todo-comments.nix
       ./trouble.nix
