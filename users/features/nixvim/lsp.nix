@@ -36,6 +36,7 @@
       rubocop.enable = true;
       ruby_lsp.enable = true;
       terraformls.enable = true;
+      ts_ls.enable = true;
       zls.enable = true;
     };
 
