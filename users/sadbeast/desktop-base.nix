@@ -4,6 +4,7 @@
     ./home.nix
     ../features/desktop
     ../features/desktop/games.nix
+    ../features/desktop/dev.nix
     ../features/dev.nix
   ];
 

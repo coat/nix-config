@@ -73,20 +73,27 @@
       imports = [./clan.nix];
       specialArgs = {inherit inputs self outputs;};
     };
-    # Helper to create home-manager configurations with common modules
-    mkHomeConfiguration = {
-      pkgs,
-      modules,
-    }:
+    mkDevcontainer = system:
       home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        pkgs = pkgsFor.${system};
         extraSpecialArgs = {inherit inputs outputs;};
-        modules =
-          [
-            inputs.nix-index-database.homeModules.nix-index
-            nixvim.homeModules.nixvim
-          ]
-          ++ modules;
+        modules = [
+          ./users/vscode/default.nix
+          nixvim.homeModules.nixvim
+          nix-index-database.homeModules.nix-index
+          stylix.homeModules.stylix
+          ./modules/stylix.nix
+          {
+            stylix = {
+              autoEnable = false;
+              targets.btop.enable = true;
+              targets.fzf.enable = true;
+              targets.nixvim.enable = true;
+              targets.starship.enable = true;
+              targets.tmux.enable = true;
+            };
+          }
+        ];
       };
   in {
     inherit (clan.config) nixosModules clanInternals;
@@ -112,28 +119,8 @@
     # Standalone home-manager configs for non-NixOS targets only.
     # NixOS machines use clan + integrated home-manager.
     homeConfigurations = {
-      # "nix-on-droid" = mkHomeConfiguration {
-      #   pkgs = pkgsFor.aarch64-linux;
-      #   modules = [./users/nix-on-droid];
-      # };
-
-      "linux-devcontainer" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./users/vscode/default.nix
-          {
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {inherit inputs outputs;};
-            home-manager.sharedModules = [
-              nixvim.homeModules.nixvim
-              nix-index-database.homeModules.nix-index
-              stylix.homeModules.stylix
-              ./modules/stylix.nix
-            ];
-          }
-        ];
-      };
+      "devcontainer-x86_64-linux" = mkDevcontainer "x86_64-linux";
+      "devcontainer-aarch64-darwin" = mkDevcontainer "aarch64-darwin";
     };
 
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {

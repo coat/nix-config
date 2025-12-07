@@ -1,9 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./git.nix
-    ./gpg.nix
     ./nixvim
-    ./pass.nix
     ./ssh.nix
     ./tmux.nix
     ./zsh.nix

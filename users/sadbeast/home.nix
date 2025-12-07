@@ -1,6 +1,8 @@
 {lib, ...}: {
   imports = [
     ../features/global.nix
+    ../features/gpg.nix
+    ../features/pass.nix
   ];
 
   home = {

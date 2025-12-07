@@ -30,6 +30,12 @@
     };
   };
 
+  programs.nixvim = {
+    imports = [
+      ../nixvim/obsidian.nix
+    ];
+  };
+
   gtk.enable = true;
 
   xdg.mimeApps = {

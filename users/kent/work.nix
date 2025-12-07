@@ -2,6 +2,7 @@
   imports = [
     ../features/global.nix
     ../features/dev.nix
+    ../features/desktop/dev.nix
     ../features/devcontainers.nix
   ];
   # ++ (builtins.attrValues outputs.homeManagerModules);

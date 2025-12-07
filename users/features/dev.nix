@@ -1,10 +1,5 @@
-{
-  pkgs,
-  inputs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
-    inputs.charm.homeModules.crush
     ./nixvim-dev.nix
     ./devcontainers.nix
   ];
@@ -19,7 +14,6 @@
       gcc
       github-copilot-cli
       httpie
-      imhex
       jq
       lazygit
       nodejs
@@ -30,22 +24,6 @@
   };
 
   programs = {
-    crush = {
-      enable = true;
-      settings = {
-        options = {
-          tui = {compact_mode = true;};
-        };
-        mcp = {
-          playwright = {
-            type = "http";
-            url = "http://localhost:8931/mcp";
-            disabled = false;
-          };
-        };
-      };
-    };
-
     gh = {
       enable = true;
       extensions = [pkgs.gh-copilot];
