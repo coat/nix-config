@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  config,
+  ...
+}: {
   imports = [
     ./foot.nix
     ./ghostty.nix
@@ -38,12 +42,26 @@
 
   gtk.enable = true;
 
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/html" = "org.qutebrowser.qutebrowser.desktop";
-      "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
-      "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
+  xdg = {
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "text/html" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/http" = "org.qutebrowser.qutebrowser.desktop";
+        "x-scheme-handler/https" = "org.qutebrowser.qutebrowser.desktop";
+      };
+    };
+
+    userDirs = let
+      homeDir = config.home.homeDirectory;
+    in {
+      enable = true;
+      createDirectories = false;
+
+      desktop = "${homeDir}";
+      documents = "${homeDir}/docs";
+      download = "${homeDir}/downloads";
+      pictures = "${homeDir}/pics";
     };
   };
 }
