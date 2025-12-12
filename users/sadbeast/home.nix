@@ -3,6 +3,7 @@
     ../features/global.nix
     ../features/gpg.nix
     ../features/pass.nix
+    ../features/ssh.nix
   ];
 
   home = {

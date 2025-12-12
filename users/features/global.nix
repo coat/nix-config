@@ -2,7 +2,6 @@
   imports = [
     ./git.nix
     ./nixvim
-    ./ssh.nix
     ./tmux.nix
     ./zsh.nix
   ];
