@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, localstack-tap, ...}: {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [colima];
@@ -76,8 +76,10 @@
     enable = true;
     brews = [
       "aichat"
+      "awscli-local"
       "docker"
       "docker-compose"
+      "localstack-cli"
     ];
 
     casks = [
@@ -85,6 +87,10 @@
       "firefox"
       "font-iosevka"
       "ghostty"
+    ];
+
+    taps = [
+      "localstack/tap"
     ];
   };
 
