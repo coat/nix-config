@@ -32,6 +32,8 @@
   };
 
   programs = {
+    comma.enable = true;
+
     git = {
       enable = true;
       userName = "Kent Smith";
