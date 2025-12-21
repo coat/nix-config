@@ -7,6 +7,8 @@
     # at the same time. Here's a working example:
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
     # Also see the 'stable-packages' overlay at 'overlays/default.nix'.
+    darwin.url = "github:lnl7/nix-darwin";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Third party programs, packaged with nix
     firefox-addons = {
@@ -35,6 +37,7 @@
     self,
     nixpkgs,
     home-manager,
+    darwin,
     systems,
     ...
   } @ inputs: let
@@ -106,6 +109,22 @@
           ./hosts/work
         ];
       };
+    };
+
+    
+    darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
+      modules = [
+        ./hosts/darwin.nix
+        home-manager.darwinModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.kent = import ./home/kent/darwin.nix;
+
+          # Optionally, use home-manager.extraSpecialArgs to pass
+          # arguments to home.nix
+          }
+      ];
     };
 
     # Standalone home-manager configuration entrypoint
