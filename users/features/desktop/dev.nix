@@ -9,6 +9,11 @@
 
   home = {
     packages = with pkgs; [
+      act
+      amp-cli
+      gcc
+      nodejs
+      github-copilot-cli
       imhex
     ];
   };

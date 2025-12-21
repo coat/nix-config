@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   imports = [
-    ./nixvim-dev.nix
+    ./nixvim/dev.nix
     ./devcontainers.nix
   ];
   home = {
