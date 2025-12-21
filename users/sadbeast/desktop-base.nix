@@ -8,6 +8,16 @@
   ];
 
   programs.librewolf.profiles.sadbeast = {};
+  programs.nixvim.plugins = {
+    obsidian.settings = {
+      workspaces = [
+        {
+          name = "personal";
+          path = "~/docs/vault/personal";
+        }
+      ];
+    };
+  };
 
   stylix.targets.librewolf.profileNames = ["sadbeast"];
 
@@ -20,6 +30,7 @@
     passwordFile = nixosConfig.clan.core.vars.generators.syncthing.files.password.path;
 
     settings = {
+      gui.user = "admin";
       devices = {
         "android" = {id = "HRX5BNT-KRGX5X4-MVZNXB3-5RMWIOK-JQZNV3V-Z5FWCLD-2T42CYW-KSWCMQI";};
       };

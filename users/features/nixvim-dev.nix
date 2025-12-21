@@ -8,6 +8,7 @@
       ./nixvim/gitsigns.nix
       ./nixvim/lsp.nix
       ./nixvim/neotest.nix
+      ./nixvim/obsidian.nix
       ./nixvim/todo-comments.nix
       ./nixvim/trouble.nix
     ];

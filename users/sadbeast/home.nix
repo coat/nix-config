@@ -14,16 +14,5 @@
   programs = {
     git.settings.user.name = "Sad Beast";
     git.settings.user.email = lib.mkDefault "sadbeast@sadbeast.com";
-
-    nixvim.plugins = {
-      obsidian.settings = {
-        workspaces = [
-          {
-            name = "personal";
-            path = "~/docs/vault/personal";
-          }
-        ];
-      };
-    };
   };
 }
