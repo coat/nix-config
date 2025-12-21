@@ -1,17 +1,10 @@
-{
+{lib, ...}: {
   imports = [
-    (import ../common/home-base.nix {
-      username = "kent";
-      realName = "Kent Smith";
-      email = "sadbeast@sadbeast.com";
-      stateVersion = "25.11";
-      extraImports = [
-        ../features/desktop
-        ../features/desktop/dev.nix
-        ../features/dev.nix
-      ];
-    })
+    ./home.nix
+    ../features/desktop
   ];
+
+  home.stateVersion = lib.mkForce "25.11";
 
   programs.librewolf.profiles.kent = {};
   stylix.targets.librewolf.profileNames = ["kent"];
