@@ -7,6 +7,7 @@
 
     ../common/global
     ../common/optional/games.nix
+    ../common/optional/docker.nix
     ../common/optional/libvirt.nix
     ../common/optional/wireless.nix
     ../common/optional/xorg.nix
@@ -33,25 +34,6 @@
     logind.extraConfig = ''
       HandleLidSwitchExternalPower=ignore
     '';
-  };
-
-  virtualisation = {
-    docker = {
-      enable = true;
-
-      daemon.settings = {
-        userland-proxy = false;
-        experimental = true;
-        metrics-addr = "0.0.0.0:9323";
-        ipv6 = true;
-        fixed-cidr-v6 = "fd00::/80";
-      };
-      # rootless = {
-      #   enable = true;
-      #   setSocketVariable = true;
-      # };
-      storageDriver = "btrfs";
-    };
   };
 
   users.users.sadbeast = {
