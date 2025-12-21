@@ -5,6 +5,8 @@
     # server.enable = true;
 
     settings = {
+      scrollback.lines = 5000;
+
       main = {
         # font = "Iosevka-11:style=Medium,Regular, JoyPixels:charset=1f000-1f644";
         font = "Iosevka-12:style=Medium,Regular";
