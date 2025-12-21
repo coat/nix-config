@@ -8,6 +8,7 @@
   imports = [
     ./git.nix
     ./gpg.nix
+    ./nixvim
     ./pass.nix
     ./ssh.nix
     ./tmux.nix
@@ -15,11 +16,6 @@
   ];
 
   programs = {
-    nixvim = {
-      imports = [./nixvim.nix];
-      _module.args.inputs = inputs;
-    };
-
     btop = {
       enable = true;
       settings = {
