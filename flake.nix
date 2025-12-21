@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     amp-nvim.url = "github:sourcegraph/amp.nvim";
     amp-nvim.flake = false;
@@ -48,25 +49,30 @@
   } @ inputs: let
     inherit (self) outputs;
 
+    lib = nixpkgs.lib // home-manager.lib;
+    forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
+
+    mkPkgsFor = nixpkgsSrc:
+      lib.genAttrs (import systems) (
+        system:
+          import nixpkgsSrc {
+            inherit system;
+            config.allowUnfree = true;
+            overlays = [
+              outputs.overlays.additions
+              outputs.overlays.modifications
+            ];
+          }
+      );
+
+    pkgsFor = mkPkgsFor nixpkgs;
+
     # Usage see: https://docs.clan.lol
     clan = clan-core.lib.clan {
       inherit self;
       imports = [./clan.nix];
       specialArgs = {inherit inputs self outputs;};
     };
-    lib = nixpkgs.lib // home-manager.lib;
-    forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
-    pkgsFor = lib.genAttrs (import systems) (
-      system:
-        import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-          overlays = [
-            outputs.overlays.additions
-            outputs.overlays.modifications
-          ];
-        }
-    );
     # Helper to create home-manager configurations with common modules
     mkHomeConfiguration = {
       pkgs,

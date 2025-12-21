@@ -1,15 +1,16 @@
-{
-  self,
-  lib,
-  ...
-}: let
-  # Common configuration for all machines
-  commonConfig = {
-    nixpkgs.overlays = [
-      self.overlays.additions
-      self.overlays.modifications
-    ];
-  };
+{self, ...}: let
+  # Common overlays for all machines
+  commonOverlays = [
+    self.overlays.additions
+    self.overlays.modifications
+  ];
+
+  mkPkgs = nixpkgsSrc: system:
+    import nixpkgsSrc {
+      inherit system;
+      config.allowUnfree = true;
+      overlays = commonOverlays;
+    };
 in {
   # Ensure this is unique among all clans you want to use.
   meta.name = "sadbeast";
@@ -17,9 +18,9 @@ in {
 
   inventory.machines = {
     cheyenne.deploy.targetHost = "root@cheyenne.sadbeast.com";
-    crystalpalace.deploy.targetHost = "root@192.168.0.2";
-    joshua.deploy.targetHost = "root@192.168.0.3";
-    wopr.deploy.targetHost = "root@192.168.0.4";
+    crystalpalace.deploy.targetHost = "root@crystalpalace.local";
+    joshua.deploy.targetHost = "root@joshua.local";
+    wopr.deploy.targetHost = "root@wopr.local";
   };
 
   # Docs: See https://docs.clan.lol/reference/clanServices
@@ -49,21 +50,24 @@ in {
   # machines/jon/configuration.nix will be automatically imported.
   # See: https://docs.clan.lol/guides/more-machines/#automatic-registration
   machines = {
-    cheyenne = lib.mkMerge [
-      commonConfig
-      {imports = [./users/sadbeast/server.nix];}
-    ];
-    crystalpalace = lib.mkMerge [
-      commonConfig
-      {imports = [./users/sadbeast/server.nix];}
-    ];
-    joshua = lib.mkMerge [
-      commonConfig
-      {imports = [./users/sadbeast/joshua-nixos.nix];}
-    ];
-    wopr = lib.mkMerge [
-      commonConfig
-      {imports = [./users/sadbeast/wopr-nixos.nix];}
-    ];
+    cheyenne = {inputs, ...}: {
+      # nixpkgs.pkgs = mkPkgs inputs.nixpkgs-stable "x86_64-linux";
+      nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
+      imports = [./users/sadbeast/server.nix];
+      clan.core.networking.buildHost = "root@crystalpalace.local";
+    };
+    crystalpalace = {inputs, ...}: {
+      # nixpkgs.pkgs = mkPkgs inputs.nixpkgs-stable "x86_64-linux";
+      nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
+      imports = [./users/sadbeast/server.nix];
+    };
+    joshua = {inputs, ...}: {
+      nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
+      imports = [./users/sadbeast/joshua-nixos.nix];
+    };
+    wopr = {inputs, ...}: {
+      nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
+      imports = [./users/sadbeast/wopr-nixos.nix];
+    };
   };
 }
