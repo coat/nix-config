@@ -29,14 +29,5 @@
     };
   };
 
-  # programs.librewolf.enable = true;
-
-  gtk = {
-    enable = true;
-    theme = {
-      package = pkgs.gnome-themes-extra;
-      # name = "Adwaita-dark";
-      name = "Adwaita";
-    };
-  };
+  gtk.enable = true;
 }
