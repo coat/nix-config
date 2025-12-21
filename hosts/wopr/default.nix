@@ -9,6 +9,7 @@
     ../common/global
     ../common/optional/games.nix
     ../common/optional/wireless.nix
+    ../common/optional/xorg.nix
   ];
 
   programs.nix-ld.enable = true;

@@ -13,6 +13,8 @@
     ./waybar.nix
   ];
 
+  fonts.fontconfig.enable = true;
+
   home = {
     packages = with pkgs; [
       galculator
@@ -22,6 +24,23 @@
       waypipe
       wine
     ];
+
+    pointerCursor = {
+      gtk.enable = true;
+      package = pkgs.vanilla-dmz;
+      name = "Vanilla-DMZ";
+      size = 22;
+    };
   };
+
   programs.librewolf.enable = true;
+
+  gtk = {
+    enable = true;
+    theme = {
+      package = pkgs.gnome-themes-extra;
+      # name = "Adwaita-dark";
+      name = "Adwaita";
+    };
+  };
 }
