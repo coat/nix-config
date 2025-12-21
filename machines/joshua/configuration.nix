@@ -8,6 +8,7 @@
 
     ../../users/sadbeast/nixos.nix
     ../../modules/global.nix
+    ../../modules/desktop.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -20,7 +21,7 @@
   nix.settings.auto-optimise-store = false;
 
   users.users.sadbeast = {
-    extraGroups = ["docker"];
+    extraGroups = ["docker" "audio"];
 
     subUidRanges = [
       {
