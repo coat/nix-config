@@ -13,7 +13,7 @@
     # inputs.nix-colors.homeManagerModules.default
     inputs.impermanence.nixosModules.home-manager.impermanence
 
-    inputs.nix-index-database.hmModules.nix-index
+    inputs.nix-index-database.homeModules.nix-index
 
     # You can also split up your configuration and import pieces of it here:
     ../../features/global.nix
