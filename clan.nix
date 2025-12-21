@@ -102,6 +102,8 @@ in {
     falken = {inputs, ...}: {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "aarch64-linux";
       imports = [./users/kent/falken-nixos.nix];
+
+      clan.core.deployment.requireExplicitUpdate = true;
     };
   };
 }
