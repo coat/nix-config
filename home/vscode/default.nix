@@ -1,9 +1,13 @@
-{pkgs, lib, ...}: {
+{
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     # ../features/global.nix
-  ../features/zsh.nix
-  ../features/git.nix
-  ../features/ssh.nix
+    ../features/zsh.nix
+    ../features/git.nix
+    ../features/ssh.nix
   ];
 
   nix = {

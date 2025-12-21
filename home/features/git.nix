@@ -58,7 +58,6 @@
         enabled = true;
         autoupdate = true;
       };
-
     };
 
     ignores = [".direnv"];
