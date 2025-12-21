@@ -1,7 +1,9 @@
 {pkgs, ...}: {
   home = {
     packages = with pkgs; [
+      act
       awscli2
+      ssm-session-manager-plugin
       devcontainer
       devpod
       duckdb
