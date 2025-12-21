@@ -121,6 +121,7 @@
     homeConfigurations = {
       "devcontainer-x86_64-linux" = mkDevcontainer "x86_64-linux";
       "devcontainer-aarch64-darwin" = mkDevcontainer "aarch64-darwin";
+      "devcontainer-aarch64-linux" = mkDevcontainer "aarch64-linux";
     };
 
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
