@@ -106,10 +106,10 @@
     # Standalone home-manager configs for non-NixOS targets only.
     # NixOS machines use clan + integrated home-manager.
     homeConfigurations = {
-      "nix-on-droid" = mkHomeConfiguration {
-        pkgs = pkgsFor.aarch64-linux;
-        modules = [./users/nix-on-droid];
-      };
+      # "nix-on-droid" = mkHomeConfiguration {
+      #   pkgs = pkgsFor.aarch64-linux;
+      #   modules = [./users/nix-on-droid];
+      # };
 
       "devcontainer" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.aarch64-linux;
