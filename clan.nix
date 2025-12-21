@@ -4,22 +4,10 @@
   meta.tld = "com";
 
   inventory.machines = {
-    cheyenne = {
-      deploy.targetHost = "root@cheyenne.sadbeast.com";
-      tags = ["server"];
-    };
-    crystalpalace = {
-      deploy.targetHost = "root@192.168.0.2";
-      tags = ["server"];
-    };
-    joshua = {
-      deploy.targetHost = "root@192.168.0.3";
-      tags = ["desktop"];
-    };
-    wopr = {
-      deploy.targetHost = "root@192.168.0.4";
-      tags = ["desktop"];
-    };
+    cheyenne.deploy.targetHost = "root@cheyenne.sadbeast.com";
+    crystalpalace.deploy.targetHost = "root@192.168.0.2";
+    joshua.deploy.targetHost = "root@192.168.0.3";
+    wopr.deploy.targetHost = "root@192.168.0.4";
   };
 
   # Docs: See https://docs.clan.lol/reference/clanServices
@@ -30,25 +18,8 @@
     admin = {
       roles.default.tags.all = {};
       roles.default.settings.allowedKeys = {
-        # Insert the public key that you want to use for SSH access.
         # All keys will have ssh access to all machines ("tags.all" means 'all machines').
-        # Alternatively set 'users.users.root.openssh.authorizedKeys.keys' in each machine
         "sadbeast" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINGpEusv/bS34Q1JQxZXikdcwnq1vToz2d+HgV+E8NRX";
-      };
-    };
-
-    internet = {
-      roles.default.machines.cheyenne = {
-        settings.host = "cheyenne.sadbeast.com";
-      };
-      roles.default.machines.crystalpalace = {
-        settings.host = "192.168.0.2";
-      };
-      roles.default.machines.joshua = {
-        settings.host = "192.168.0.3";
-      };
-      roles.default.machines.wopr = {
-        settings.host = "192.168.0.4";
       };
     };
 
