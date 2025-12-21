@@ -9,21 +9,35 @@
     allowedTCPPorts = [22 80 443 1965];
   };
 
-  services.nginx = {
-    enable = true;
+  services = {
+    nginx = {
+      enable = true;
 
-    virtualHosts."sadbeast.com" = {
-      addSSL = true;
-      enableACME = true;
+      virtualHosts."sadbeast.com" = {
+        addSSL = true;
+        enableACME = true;
 
-      root = "/var/www/sadbeast.com";
+        root = "/srv/www/sadbeast.com";
+      };
+
+      virtualHosts."miramiraspa.com" = {
+        addSSL = true;
+        enableACME = true;
+
+        locations."/".return = "301 https://linktr.ee/Thinklikeanesthetician";
+      };
     };
 
-    virtualHosts."miramiraspa.com" = {
-      addSSL = true;
-      enableACME = true;
+    stargazer = {
+      enable = true;
+      genCerts = true;
 
-      locations."/".return = "301 https://linktr.ee/Thinklikeanesthetician";
+      routes = [
+        {
+          route = "sadbeast.com";
+          root = "/srv/gemini/sadbeast.com";
+        }
+      ];
     };
   };
 
