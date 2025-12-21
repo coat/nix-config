@@ -4,15 +4,10 @@
       act
       awscli2
       ssm-session-manager-plugin
-      devcontainer
-      devpod
       duckdb
       httpie
       jq
       lazygit
-      nodejs
-      ruby
-      ruby-lsp
     ];
   };
 

@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./foot.nix
-    ./ghostty.nix
+    ../../../features/ghostty.nix
     ./qutebrowser.nix
     ./sway.nix
     ./waybar.nix
