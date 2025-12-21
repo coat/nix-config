@@ -1,9 +1,8 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     ./global
+    ./features/desktop
+    ./features/desktop/firefox.nix
     ./features/dev.nix
     ./features/desktop
     ./features/awesome
