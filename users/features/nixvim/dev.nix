@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   programs.nixvim = {
     imports = [
       ./amp.nix
@@ -14,7 +14,30 @@
 
     plugins = {
       lint.enable = true;
-      treesitter.enable = true;
+      treesitter = {
+        enable = true;
+
+        settings = {
+          highlight.enable = true;
+          indent.enable = true;
+        };
+
+        grammarPackages = with pkgs.vimPlugins.nvim-treesitter.builtGrammars; [
+          bash
+          json
+          lua
+          markdown
+          nix
+          regex
+          ruby
+          toml
+          vim
+          vimdoc
+          xml
+          yaml
+        ];
+      };
+
       ts-comments.enable = true;
     };
   };
