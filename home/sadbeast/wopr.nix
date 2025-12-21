@@ -8,7 +8,6 @@
     ./global
     ./features/desktop
     ./features/games.nix
-    ./features/nvim.nix
     ./features/awesome
   ];
 
