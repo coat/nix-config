@@ -4,6 +4,7 @@
       awscli2
       devcontainer
       devpod
+      duckdb
       httpie
       jq
       lazygit
