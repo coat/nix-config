@@ -19,17 +19,21 @@
     };
   };
 
-  programs.git.settings.user.name = "Kent Smith";
-  programs.git.settings.user.email = "kent.smith@andros.co";
+  programs = {
+    obsidian.enable = true;
 
-  programs.nixvim.plugins = {
-    obsidian.settings = {
-      workspaces = [
-        {
-          name = "work";
-          path = "~/Documents/vault/work";
-        }
-      ];
+    git.settings.user.name = "Kent Smith";
+    git.settings.user.email = "kent.smith@andros.co";
+
+    nixvim.plugins = {
+      obsidian.settings = {
+        workspaces = [
+          {
+            name = "work";
+            path = "~/Documents/vault/work";
+          }
+        ];
+      };
     };
   };
 }

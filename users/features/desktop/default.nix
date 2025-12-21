@@ -10,6 +10,7 @@
   fonts.fontconfig.enable = true;
 
   programs.librewolf.enable = true;
+  programs.obsidian.enable = true;
 
   home = {
     packages = with pkgs; [
