@@ -139,7 +139,8 @@
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
           home-manager.sharedModules = [
             nixvim.homeModules.nixvim
-            stylix.homeManagerModules.stylix
+            stylix.homeModules.stylix
+            ./modules/stylix.nix
           ];
           home-manager.users.kent = import ./users/kent/work.nix;
         }
