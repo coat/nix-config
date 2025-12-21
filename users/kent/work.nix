@@ -1,7 +1,4 @@
-{
-  outputs,
-  ...
-}: {
+{outputs, ...}: {
   imports =
     [
       ../features/global.nix
@@ -26,4 +23,3 @@
     userEmail = "kent.smith@andros.co";
   };
 }
-

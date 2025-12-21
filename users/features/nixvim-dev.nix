@@ -3,4 +3,3 @@
     treesitter.enable = true;
   };
 }
-
