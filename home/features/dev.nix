@@ -6,8 +6,11 @@
       ssm-session-manager-plugin
       duckdb
       httpie
+      nodejs
+      imhex
       jq
       lazygit
+      ruby
     ];
   };
 
