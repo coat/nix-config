@@ -14,7 +14,7 @@
         fi
       '';
 
-      initExtra = ''
+      initContent = ''
         #   precmd() {
         #       print -Pn "\e]133;A\e\\"
         #   }
