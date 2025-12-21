@@ -1,7 +1,7 @@
 {lib, ...}: {
   plugins.lsp = {
     enable = true;
-    inlayHints = true;
+    inlayHints = false;
 
     servers = {
       lua_ls = {

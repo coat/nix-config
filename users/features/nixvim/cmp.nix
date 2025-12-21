@@ -40,8 +40,8 @@
         enabled = true;
         keymap = {
           preset = "cmdline";
-          "<Right>" = [ ];
-          "<Left>" = [ ];
+          "<Right>" = [];
+          "<Left>" = [];
         };
         completion = {
           list = {selection = {preselect = false;};};
