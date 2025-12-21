@@ -117,10 +117,22 @@
       #   modules = [./users/nix-on-droid];
       # };
 
-      "devcontainer" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.aarch64-linux;
+      "linux-devcontainer" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
-        modules = [./users/vscode/default.nix];
+        modules = [
+          ./users/vscode/default.nix
+          {
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {inherit inputs outputs;};
+            home-manager.sharedModules = [
+              nixvim.homeModules.nixvim
+              nix-index-database.homeModules.nix-index
+              stylix.homeModules.stylix
+              ./modules/stylix.nix
+            ];
+          }
+        ];
       };
     };
 
