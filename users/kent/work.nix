@@ -1,11 +1,10 @@
 {outputs, ...}: {
-  imports =
-    [
-      ../features/global.nix
-      ../features/dev.nix
-      ../features/devcontainers.nix
-    ];
-    # ++ (builtins.attrValues outputs.homeManagerModules);
+  imports = [
+    ../features/global.nix
+    ../features/dev.nix
+    ../features/devcontainers.nix
+  ];
+  # ++ (builtins.attrValues outputs.homeManagerModules);
 
   nixpkgs.config.allowUnfree = true;
 
@@ -20,8 +19,6 @@
     };
   };
 
-  programs.git = {
-    userName = "Kent Smith";
-    userEmail = "kent.smith@andros.co";
-  };
+  programs.git.settings.user.name = "Kent Smith";
+  programs.git.settings.user.email = "kent.smith@andros.co";
 }
