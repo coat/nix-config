@@ -86,6 +86,11 @@
           mode = ["n" "x"];
         }
         {
+          __unkeyed-1 = "<leader>o";
+          group = "obsidian";
+          mode = ["n" "x"];
+        }
+        {
           __unkeyed-1 = "<leader>b";
           group = "buffer";
           expand = lib.nixvim.mkRaw ''
