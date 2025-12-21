@@ -24,7 +24,7 @@
     ../../features/ssh.nix
     ../features/vim.nix
     ../../features/zsh.nix
-    ../features/devcontainers.nix
+    ../../features/devcontainers.nix
   ];
 
   home = {
