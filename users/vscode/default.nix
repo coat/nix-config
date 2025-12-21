@@ -1,7 +1,6 @@
 {
   imports = [
     ../features/global.nix
-    ../features/nixvim-dev.nix
     ../features/dev.nix
   ];
 

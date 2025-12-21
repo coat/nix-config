@@ -5,14 +5,15 @@
 }: {
   imports = [
     inputs.charm.homeModules.crush
+    ../../features/devcontainers.nix
   ];
 
   home = {
     packages = with pkgs; [
       act
       amp-cli
+      docker-buildx
       gcc
-      nodejs
       github-copilot-cli
       imhex
     ];
