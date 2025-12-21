@@ -103,5 +103,20 @@
   hardware = {
     cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
     graphics.enable = true;
+    bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      input = {
+        General = {
+          UserspaceHID = true;
+        };
+      };
+      settings = {
+        General = {
+          Experimental = true; # Show battery charge of Bluetooth devices
+        };
+      };
+    };
+    steam-hardware.enable = true;
   };
 }
