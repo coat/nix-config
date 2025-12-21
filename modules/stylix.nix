@@ -5,11 +5,15 @@
     base16Scheme = "${pkgs.base16-schemes}/share/themes/default-dark.yaml";
     polarity = "dark";
 
-    fonts = {
-      monospace = {
-        package = pkgs.nerd-fonts.iosevka;
-        name = "Iosevka";
-      };
+    fonts = with pkgs; {
+      serif.package = alegreya;
+      serif.name = "Alegreya";
+
+      sansSerif.package = fira-sans;
+      sansSerif.name = "Fira Sans";
+
+      monospace.package = nerd-fonts.iosevka;
+      monospace.name = "Iosevka";
     };
   };
 }
