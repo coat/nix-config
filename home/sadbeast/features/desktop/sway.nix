@@ -36,7 +36,7 @@
 
       fonts = {
         names = ["Iosevka"];
-        size = 10.0;
+        size = 12.0;
       };
 
       gaps = {

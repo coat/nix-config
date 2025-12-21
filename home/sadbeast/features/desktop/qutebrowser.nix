@@ -1,7 +1,4 @@
 {
-  config,
-  pkgs,
-  lib,
   ...
 }: {
   programs.qutebrowser = {
@@ -9,7 +6,7 @@
     settings = {
       fonts = {
         default_family = "Iosevka";
-        default_size = "10pt";
+        default_size = "12pt";
       };
     };
   };
