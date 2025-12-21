@@ -8,6 +8,7 @@
       jq
       lazygit
       nodejs
+      ruby
       ruby-lsp
     ];
   };

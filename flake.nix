@@ -162,11 +162,11 @@
         ];
       };
 
-      "sadbeast@work" = home-manager.lib.homeManagerConfiguration {
+      "dev" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.aarch64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
-          ./home/sadbeast/work.nix
+          ./home/kent/dev.nix
         ];
       };
     };
