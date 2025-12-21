@@ -7,10 +7,10 @@
   };
 
   services = {
-    avahi = {
-      enable = true;
-      openFirewall = true;
-    };
+    # avahi = {
+    #   enable = true;
+    #   openFirewall = true;
+    # };
 
     openssh = {
       enable = true;

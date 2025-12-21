@@ -1,8 +1,4 @@
-{
-  self,
-  inputs,
-  ...
-}: {
+{self, inputs, ...}: {
   imports = [
     self.inputs.home-manager.nixosModules.default
   ];
@@ -10,7 +6,12 @@
     imports = [
       inputs.nixvim.homeModules.nixvim
       ./home.nix
+      ../features/desktop
+      ../features/desktop/games.nix
+      ../features/dev.nix
     ];
+
+    programs.bluetuith.enable = true;
   };
   time.timeZone = "America/Los_Angeles";
 }

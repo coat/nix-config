@@ -24,10 +24,9 @@
         hostname = "192.168.0.3";
       };
 
-      "teamdraft" = {
+      "cheyenne" = {
         user = "sadbeast";
-        hostname = "teamdraft.net";
-        port = 6973;
+        hostname = "cheyenne.sadbeast.com";
       };
     };
   };

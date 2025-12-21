@@ -7,6 +7,7 @@
 }: {
   imports = [
     ./git.nix
+    ./gpg.nix
     ./pass.nix
     ./ssh.nix
     ./tmux.nix
@@ -54,7 +55,7 @@
 
   home = {
     packages = with pkgs; [
-    tree-sitter
+      comma
     ];
   };
 

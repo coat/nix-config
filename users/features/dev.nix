@@ -26,6 +26,8 @@
   };
 
   programs = {
+    nixvim.imports = [./nixvim-dev.nix];
+
     crush = {
       enable = true;
       settings = {
