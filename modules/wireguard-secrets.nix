@@ -19,14 +19,14 @@
       echo -n "$priv_key" > "$out/wg-key"
       cat > "$out/wg-conf" <<EOF
       [Interface]
-      Address = 10.20.155.53
+      Address = 10.17.205.221
       PrivateKey = $priv_key
       DNS = 10.0.0.243
       [Peer]
       PersistentKeepalive = 25
-      PublicKey = 5u3eMHBFKLCzKcezy/Xd/F7EqNP75Ixw0ud9hlKYkjg=
+      PublicKey = WbYarp116unGvL3OjsplJSj686LuY2dVIuius3lDAGM=
       AllowedIPs = 0.0.0.0/0
-      Endpoint = 149.22.95.149:1337
+      Endpoint = 212.56.52.56:1337
       EOF
     '';
   };
