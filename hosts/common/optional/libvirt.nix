@@ -1,4 +1,4 @@
-{pkgs, ...}: {
+{pkgs, config, ...}: {
   virtualisation.libvirtd = {
     enable = true;
     qemu = {
@@ -17,6 +17,8 @@
       };
     };
   };
+
+  programs.virt-manager.enable = true;
 
   users.users.sadbeast = {
     extraGroups = ["libvirtd"];

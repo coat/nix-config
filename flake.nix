@@ -167,6 +167,14 @@
           ./home/vscode/default.nix
         ];
       };
+
+      "node" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor.aarch64-linux;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home/node/default.nix
+        ];
+      };
     };
   };
 }
