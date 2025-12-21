@@ -39,6 +39,7 @@
     packages = with pkgs; [
       comma
       joypixels
+      obsidian
       sops
       unzip
       zip
