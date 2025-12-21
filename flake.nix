@@ -136,6 +136,14 @@
         ];
       };
 
+      "sadbeast@crystalpalace" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor.x86_64-linux;
+        extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./home/sadbeast/crystalpalace.nix
+        ];
+      };
+
       "sadbeast@work" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.x86_64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
