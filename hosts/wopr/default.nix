@@ -28,9 +28,9 @@
   nix.settings.auto-optimise-store = false;
 
   services = {
-    logind.extraConfig = ''
-      HandleLidSwitchExternalPower=ignore
-    '';
+    logind.settings.Login = {
+      HandleLidSwitchExternalPower = "ignore";
+    };
   };
 
   users.users.sadbeast = {
