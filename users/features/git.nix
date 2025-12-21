@@ -59,7 +59,7 @@
       };
     };
 
-    ignores = [".direnv"];
+    ignores = [".direnv" ".DS_Store"];
 
     lfs.enable = true;
   };
