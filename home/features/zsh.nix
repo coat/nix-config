@@ -15,6 +15,11 @@
       '';
 
       initContent = ''
+        #make sure brew is on the path for Apple Silicon
+        if [[ $(uname -m) == 'arm64' ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+
         #   precmd() {
         #       print -Pn "\e]133;A\e\\"
         #   }
