@@ -1,4 +1,8 @@
-{self, lib, ...}: let
+{
+  self,
+  lib,
+  ...
+}: let
   # Common configuration for all machines
   commonConfig = {
     nixpkgs.overlays = [
