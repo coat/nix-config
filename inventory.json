@@ -5,11 +5,12 @@
     },
     "cheyenne": {
       "deploy": {
-        "targetHost": "104.156.253.227"
+        "targetHost": "root@cheyenne.sadbeast.com"
       },
       "tags": [
         "server"
-      ]
+      ],
+      "installedAt": 1764272535
     }
   }
 }
