@@ -10,7 +10,6 @@
     ../common/optional/wireless.nix
     ../common/optional/libvirt.nix
     ../common/optional/docker.nix
-    ../common/optional/xorg.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -33,6 +32,7 @@
       HandleLidSwitchExternalPower=ignore
     '';
     tmate-ssh-server.enable = true;
+    qemuGuest.enable = true;
   };
 
   users.users.sadbeast = {
@@ -56,11 +56,11 @@
 
   environment = {
     systemPackages = [
-      (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" ''
-        qemu-system-x86_64 \
-          -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
-          "$@"
-      '')
+      # (pkgs.writeShellScriptBin "qemu-system-x86_64-uefi" ''
+      #   qemu-system-x86_64 \
+      #     -bios ${pkgs.OVMF.fd}/FV/OVMF.fd \
+      #     "$@"
+      # '')
       pkgs.qemu
     ];
   };

@@ -35,7 +35,6 @@
     self,
     nixpkgs,
     home-manager,
-    ghostty,
     systems,
     ...
   } @ inputs: let
@@ -153,7 +152,7 @@
       };
 
       "kentsmith@work" = home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
+        pkgs = pkgsFor.aarch64-linux;
         extraSpecialArgs = {inherit inputs outputs;};
         modules = [
           ./home/kentsmith/work.nix

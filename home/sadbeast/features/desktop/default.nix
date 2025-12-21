@@ -16,7 +16,7 @@
       pavucontrol
       vlc
       waypipe
-      wine
+      #wine
     ];
 
     pointerCursor = {
