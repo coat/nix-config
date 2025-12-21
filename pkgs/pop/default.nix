@@ -42,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       ffmpeg
       libdrm
+      libgbm
       libxkbcommon
       mesa
       nspr
