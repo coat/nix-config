@@ -9,6 +9,11 @@
   };
 
   services = {
+    avahi = {
+      enable = true;
+      openFirewall = true;
+    };
+
     pipewire = {
       enable = true;
       alsa.enable = true;
