@@ -10,6 +10,10 @@
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+    # charm.url = "github:charmbracelet/nur";
+    charm.url = "github:malikwirin/charmbracelet-nur?ref=feature/32";
+    charm.inputs.nixpkgs.follows = "nixpkgs";
+
     # Third party programs, packaged with nix
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
@@ -40,6 +44,7 @@
     darwin,
     nix-index-database,
     systems,
+    charm,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -69,7 +74,7 @@
     nixosModules = import ./modules/nixos;
     # Reusable home-manager modules you might want to export
     # These are usually stuff you would upstream into home-manager
-    homeManagerModules = import ./modules/home-manager;
+    homeManagerModules = import ./modules/home-manager {inherit inputs;};
 
     devShells = forEachSystem (pkgs: {
       default = pkgs.mkShell {

@@ -21,6 +21,7 @@
   };
 
   programs = {
+    crush.enable = true;
     gh = {
       enable = true;
       extensions = [pkgs.gh-copilot];
