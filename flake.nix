@@ -118,6 +118,7 @@
     };
 
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
+      # pkgs = pkgsFor.aarch64-darwin;
       modules = [
         ./hosts/darwin.nix
         nix-index-database.darwinModules.nix-index
@@ -125,6 +126,7 @@
         {
           # home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.extraSpecialArgs = {inherit inputs outputs;};
           home-manager.users.kent = import ./home/kent/darwin.nix;
         }
       ];
