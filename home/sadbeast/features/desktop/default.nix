@@ -1,11 +1,8 @@
 {
   pkgs,
-  config,
-  lib,
   ...
 }: {
   imports = [
-    # ./firefox.nix
     ./foot.nix
     ./ghostty.nix
     ./qutebrowser.nix
