@@ -1,5 +1,8 @@
 {
-  imports = [./desktop-base.nix];
+  imports = [
+    ./desktop-base.nix
+    ../features/desktop/games.nix
+  ];
 
   wayland.windowManager.sway.config = {
     output = {

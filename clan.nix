@@ -17,10 +17,26 @@ in {
   meta.tld = "com";
 
   inventory.machines = {
-    cheyenne.deploy.targetHost = "root@cheyenne.sadbeast.com";
-    crystalpalace.deploy.targetHost = "root@crystalpalace.local";
-    joshua.deploy.targetHost = "root@joshua.local";
-    wopr.deploy.targetHost = "root@wopr.local";
+    cheyenne = {
+      deploy.targetHost = "root@cheyenne.sadbeast.com";
+      tags = ["personal"];
+    };
+    crystalpalace = {
+      deploy.targetHost = "root@crystalpalace.local";
+      tags = ["personal"];
+    };
+    joshua = {
+      deploy.targetHost = "root@joshua.local";
+      tags = ["personal"];
+    };
+    wopr = {
+      deploy.targetHost = "root@wopr.local";
+      tags = ["personal"];
+    };
+    falken = {
+      deploy.targetHost = "root@192.168.0.101";
+      tags = ["work"];
+    };
   };
 
   # Docs: See https://docs.clan.lol/reference/clanServices
@@ -36,10 +52,22 @@ in {
     sadbeast-user = {
       module.name = "users";
       roles.default = {
-        tags.all = {};
+        tags = ["personal"];
         settings = {
           user = "sadbeast";
           groups = ["wheel" "media"];
+          share = true;
+        };
+      };
+    };
+
+    kent-user = {
+      module.name = "users";
+      roles.default = {
+        tags = ["work"];
+        settings = {
+          user = "kent";
+          groups = ["wheel" "docker"];
           share = true;
         };
       };
@@ -68,6 +96,10 @@ in {
     wopr = {inputs, ...}: {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
       imports = [./users/sadbeast/wopr-nixos.nix];
+    };
+    falken = {inputs, ...}: {
+      nixpkgs.pkgs = mkPkgs inputs.nixpkgs "aarch64-linux";
+      imports = [./users/kent/falken-nixos.nix];
     };
   };
 }

@@ -5,10 +5,6 @@
     ./stylix.nix
   ];
 
-  programs = {
-    sway.enable = true;
-  };
-
   services = {
     avahi = {
       enable = true;

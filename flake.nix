@@ -139,7 +139,7 @@
             stylix.homeModules.stylix
             ./modules/stylix.nix
           ];
-          home-manager.users.kent = import ./users/kent/work.nix;
+          home-manager.users.kent = import ./users/kent/darwin.nix;
         }
       ];
     };

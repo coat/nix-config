@@ -18,6 +18,8 @@
   # Slows down write operations considerably
   nix.settings.auto-optimise-store = false;
 
+  programs.sway.enable = true;
+
   services = {
     logind.settings.Login = {
       HandleLidSwitchExternalPower = "ignore";

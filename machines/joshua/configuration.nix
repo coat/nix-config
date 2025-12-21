@@ -5,6 +5,7 @@
     ../../users/sadbeast/nixos.nix
     ../../modules/global.nix
     ../../modules/desktop.nix
+
     ../../modules/wireguard.nix
   ];
 
@@ -16,6 +17,8 @@
 
   # Slows down write operations considerably
   nix.settings.auto-optimise-store = false;
+
+  programs.sway.enable = true;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.11";

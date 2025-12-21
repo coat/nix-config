@@ -24,7 +24,7 @@
       enable = true;
       settings = {
         options = {
-          tui = {compact_mode = true;};
+          tui.compact_mode = true;
         };
         mcp = {
           playwright = {
