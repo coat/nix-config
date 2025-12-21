@@ -7,8 +7,6 @@
     ./hardware-configuration.nix
 
     ../common/global
-    ../common/optional/wireless.nix
-    ../common/optional/libvirt.nix
     ../common/optional/docker.nix
   ];
 

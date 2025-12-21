@@ -20,7 +20,7 @@
       #   enable = true;
       #   setSocketVariable = true;
       # };
-      storageDriver = "btrfs";
+      # storageDriver = "btrfs";
     };
   };
 }
