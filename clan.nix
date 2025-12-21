@@ -15,8 +15,8 @@
     };
 in {
   # Ensure this is unique among all clans you want to use.
-  meta.name = "sadbeast";
-  meta.tld = "com";
+  meta.name = "norad";
+  meta.domain = "norad";
 
   inventory.machines = {
     cheyenne = {
