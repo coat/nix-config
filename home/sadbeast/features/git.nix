@@ -20,7 +20,6 @@
 
     extraConfig = {
       branch.sort = "-committerdate";
-      column.ui = "auto";
       commit.verbose = true;
       help.autocorrect = "prompt";
       init.defaultBranch = "main";
