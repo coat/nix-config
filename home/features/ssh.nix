@@ -2,9 +2,11 @@
   programs.ssh = {
     enable = true;
 
-    forwardAgent = true;
-
     matchBlocks = {
+      "*" = {
+        forwardAgent = true;
+      };
+
       "falken" = {
         user = "sadbeast";
         hostname = "sadbeast.com";
