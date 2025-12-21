@@ -6,15 +6,15 @@
 }: {
   home = {
     packages = with pkgs; [
+      dmenu-wayland
       grim
       iosevka
-      nerd-fonts.iosevka
       light
+      nerd-fonts.iosevka
       slurp
       sway-launcher-desktop
       swayimg
       wl-clipboard
-      dmenu-wayland
       xwayland
     ];
   };
@@ -24,6 +24,8 @@
 
     config = {
       modifier = "Mod4";
+
+      defaultWorkspace = "1";
 
       bars = [];
 
