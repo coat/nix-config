@@ -3,10 +3,7 @@
 #
 # Test:
 # $ nix-shell -p qemu --run "qemu-system-x86_64 -enable-kvm -m 256 -cdrom result/iso/nixos-*.iso"
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
 
