@@ -17,8 +17,8 @@
     ];
   };
 
-  home.file."${config.xdg.configHome}/nvim" = {
-    source = ./nvim;
-    recursive = true;
-  };
+  # home.file."${config.xdg.configHome}/nvim" = {
+  #   source = ./nvim;
+  #   recursive = true;
+  # };
 }
