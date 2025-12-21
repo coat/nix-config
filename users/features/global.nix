@@ -57,18 +57,6 @@
     ];
   };
 
-  xdg.userDirs = let
-    homeDir = config.home.homeDirectory;
-  in {
-    enable = true;
-    createDirectories = false;
-
-    desktop = "${homeDir}";
-    documents = "${homeDir}/docs";
-    download = "${homeDir}/downloads";
-    pictures = "${homeDir}/pics";
-  };
-
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
 }

@@ -4,8 +4,10 @@
       ../features/global.nix
       ../features/dev.nix
       ../features/devcontainers.nix
-    ]
-    ++ (builtins.attrValues outputs.homeManagerModules);
+    ];
+    # ++ (builtins.attrValues outputs.homeManagerModules);
+
+  nixpkgs.config.allowUnfree = true;
 
   home = {
     username = "kent";

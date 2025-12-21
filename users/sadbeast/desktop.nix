@@ -18,4 +18,16 @@
     programs.bluetuith.enable = true;
   };
   time.timeZone = "America/Los_Angeles";
+
+  xdg.userDirs = let
+    homeDir = config.home.homeDirectory;
+  in {
+    enable = true;
+    createDirectories = false;
+
+    desktop = "${homeDir}";
+    documents = "${homeDir}/docs";
+    download = "${homeDir}/downloads";
+    pictures = "${homeDir}/pics";
+  };
 }

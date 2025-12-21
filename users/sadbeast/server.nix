@@ -7,6 +7,7 @@
   imports = [
     self.inputs.home-manager.nixosModules.default
   ];
+
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -15,6 +16,7 @@
     sharedModules = [
       inputs.nixvim.homeModules.nixvim
       inputs.nix-index-database.homeModules.nix-index
+      inputs.stylix.homeModules.stylix
     ];
 
     users.sadbeast.imports = [./home.nix];

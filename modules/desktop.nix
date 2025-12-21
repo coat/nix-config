@@ -1,4 +1,9 @@
-{...}: {
+{inputs, ...}: {
+  imports = [
+    inputs.stylix.nixosModules.stylix
+    ./stylix.nix
+  ];
+
   programs = {
     sway.enable = true;
   };

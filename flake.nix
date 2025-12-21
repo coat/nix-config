@@ -127,16 +127,21 @@
     };
 
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
+      specialArgs = {inherit inputs outputs;};
       # pkgs = pkgsFor.aarch64-darwin;
       modules = [
-        ./machines/work/configuration.nix
+        ./hosts/work/configuration.nix
         nix-index-database.darwinModules.nix-index
         home-manager.darwinModules.home-manager
         {
           # home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
-          home-manager.users.kent = import ./home/kent/work.nix;
+          home-manager.sharedModules = [
+            nixvim.homeModules.nixvim
+            stylix.homeManagerModules.stylix
+          ];
+          home-manager.users.kent = import ./users/kent/work.nix;
         }
       ];
     };
