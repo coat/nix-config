@@ -101,5 +101,6 @@
   users.users.kent = {
     home = "/Users/kent";
     shell = pkgs.zsh;
+    uid = 501; # default macOS uid for first user
   };
 }
