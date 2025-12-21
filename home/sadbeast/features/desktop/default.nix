@@ -23,4 +23,5 @@
       wine
     ];
   };
+  programs.librewolf.enable = true;
 }
