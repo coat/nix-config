@@ -1,9 +1,7 @@
 {
   imports = [
-    ../../modules/home-manager.nix
+    ../../modules/desktop-nixos-base.nix
   ];
-
-  programs.dconf.enable = true;
 
   home-manager.users.kent.imports = [./falken.nix];
 }

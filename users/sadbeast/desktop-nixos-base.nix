@@ -1,6 +1,6 @@
 {
   imports = [
-    ../../modules/home-manager.nix
+    ../../modules/desktop-nixos-base.nix
     {
       clan.core.vars.generators.syncthing = {
         share = true;
@@ -15,6 +15,4 @@
       };
     }
   ];
-
-  programs.dconf.enable = true;
 }
