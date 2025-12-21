@@ -32,8 +32,9 @@
       HandleLidSwitchExternalPower=ignore
     '';
     tmate-ssh-server.enable = true;
-    qemuGuest.enable = true;
   };
+
+  virtualisation.vmware.guest.enable = true;
 
   users.users.sadbeast = {
     hashedPasswordFile = config.sops.secrets.sadbeast-password.path;
