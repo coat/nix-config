@@ -111,7 +111,7 @@
     mako = {
       enable = true;
 
-      criteria = {
+      settings = {
         "mode=do-not-disturb" = {
           invisible = "1";
         };
