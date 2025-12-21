@@ -1,5 +1,4 @@
 {
-  pkgs,
   config,
   ...
 }: {
@@ -14,12 +13,6 @@
 
       loginExtra = ''
         if [ "$(tty)" = "/dev/tty1" ]; then
-          export XDG_CURRENT_DESKTOP = "sway";
-          export MOZ_ENABLE_WAYLAND = 1;
-          export QT_QPA_PLATFORM = "wayland";
-          export LIBSEAT_BACKEND = "logind";
-          export SDL_VIDEODRIVER = "wayland";
-
           exec sway
         fi
       '';
