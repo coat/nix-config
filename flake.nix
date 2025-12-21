@@ -103,17 +103,9 @@
 
     nixosConfigurations = clan.config.nixosConfigurations;
 
+    # Standalone home-manager configs for non-NixOS targets only.
+    # NixOS machines use clan + integrated home-manager.
     homeConfigurations = {
-      "sadbeast@wopr" = mkHomeConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        modules = [./users/sadbeast/wopr.nix];
-      };
-
-      "sadbeast@joshua" = mkHomeConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
-        modules = [./users/sadbeast/joshua.nix];
-      };
-
       "nix-on-droid" = mkHomeConfiguration {
         pkgs = pkgsFor.aarch64-linux;
         modules = [./users/nix-on-droid];
@@ -128,17 +120,16 @@
 
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
       specialArgs = {inherit inputs outputs;};
-      # pkgs = pkgsFor.aarch64-darwin;
       modules = [
-        ./hosts/work/configuration.nix
+        ./hosts/darwin/work/configuration.nix
         nix-index-database.darwinModules.nix-index
         home-manager.darwinModules.home-manager
         {
-          # home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
           home-manager.sharedModules = [
             nixvim.homeModules.nixvim
+            nix-index-database.hmModules.nix-index
             stylix.homeModules.stylix
             ./modules/stylix.nix
           ];

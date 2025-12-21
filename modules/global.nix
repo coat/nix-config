@@ -1,8 +1,4 @@
 {
-  lib,
-  pkgs,
-  ...
-}: {
   imports = [
     # inputs.stylix.nixosModules.stylix
     # ../modules/stylix.nix
@@ -22,6 +18,8 @@
       };
     };
   };
+
+  time.timeZone = "America/Los_Angeles";
 
   i18n.defaultLocale = "en_US.UTF-8";
 

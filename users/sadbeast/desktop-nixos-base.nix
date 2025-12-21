@@ -1,26 +1,7 @@
 {
-  self,
-  inputs,
-  outputs,
-  ...
-}: {
-  # Common desktop NixOS configuration with home-manager
   imports = [
-    self.inputs.home-manager.nixosModules.default
+    ../../modules/home-manager.nix
   ];
 
   programs.dconf.enable = true;
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    extraSpecialArgs = {inherit inputs outputs;};
-
-    sharedModules = [
-      inputs.nixvim.homeModules.nixvim
-      inputs.nix-index-database.homeModules.nix-index
-    ];
-  };
-
-  time.timeZone = "America/Los_Angeles";
 }

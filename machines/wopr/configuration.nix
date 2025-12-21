@@ -24,25 +24,6 @@
     };
   };
 
-  users.users.sadbeast = {
-    extraGroups = ["docker" "audio"];
-
-    subUidRanges = [
-      {
-        startUid = 100000;
-        count = 65536;
-      }
-    ];
-    subGidRanges = [
-      {
-        startGid = 100000;
-        count = 65536;
-      }
-    ];
-  };
-
-  # home-manager.users.sadbeast = import ../../users/sadbeast/${config.networking.hostName}.nix;
-
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
   system.stateVersion = "24.11";
 }

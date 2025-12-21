@@ -1,4 +1,4 @@
-{...}: {
+{
   imports = [./desktop-base.nix];
 
   wayland.windowManager.sway.config.output = {
