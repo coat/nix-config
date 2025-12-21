@@ -6,6 +6,7 @@
   imports = [
     inputs.charm.homeModules.crush
     ./nixvim-dev.nix
+    ./devcontainers.nix
   ];
   home = {
     packages = with pkgs; [

@@ -1,5 +1,6 @@
 {inputs, ...}: {
   imports = [
+    ./docker.nix
     inputs.stylix.nixosModules.stylix
     ./stylix.nix
   ];
