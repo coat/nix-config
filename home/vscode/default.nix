@@ -1,4 +1,4 @@
-{...}: {
+{pkgs, lib, ...}: {
   imports = [
     # ../features/global.nix
   ../features/zsh.nix
