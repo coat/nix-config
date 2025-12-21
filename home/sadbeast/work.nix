@@ -20,7 +20,6 @@
       vscode-extensions.github.copilot-chat
       gcc
       glow
-      google-chrome
       libreoffice
       #localstack
       nodejs
@@ -74,11 +73,11 @@
   };
 
   xdg.mimeApps.defaultApplications = {
-    "text/html" = "google-chrome.desktop";
-    "x-scheme-handler/http" = "google-chrome.desktop";
-    "x-scheme-handler/https" = "google-chrome.desktop";
-    "x-scheme-handler/about" = "google-chrome.desktop";
-    "x-scheme-handler/unknown" = "google-chrome.desktop";
+    "text/html" = "librewolf.desktop";
+    "x-scheme-handler/http" = "librewolf.desktop";
+    "x-scheme-handler/https" = "librewolf.desktop";
+    "x-scheme-handler/about" = "librewolf.desktop";
+    "x-scheme-handler/unknown" = "librewolf.desktop";
   };
 
   wayland.windowManager.sway.config.output = {
