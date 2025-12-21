@@ -4,7 +4,7 @@
     enableZshIntegration = true;
     installVimSyntax = true;
     settings = {
-      font-family = "Iosevka NFM Medium";
+      font-family = "Iosevka";
       font-size = 12;
       window-decoration = false;
       resize-overlay = "never";
