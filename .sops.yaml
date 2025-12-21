@@ -1,0 +1,16 @@
+keys:
+  - &users:
+    - &sadbeast age1a6k6lwndk7w5ck3w8vydw72af3q8appm6jyxj7amwp6fmqnylywsy7ay0e
+  - &hosts:
+    - &crystalpalace age16qcn9298rk3eav38442zw2ejhqac6uvdj0m86qf4ggnjgug8efgsp9lwcd 
+    - &joshua age1hls0h26tcls67ukcpt7e0ztua8mwzheaqkuuwl4anv8zstq8regqd7nqv9
+    - &wopr age1dg0dxg6nf5rm05py3da3yz8tkg7xtgustuehxwn37cm8mdrf93ysn9n622
+
+creation_rules:
+  - path_regex: hosts/common/secrets.ya?ml$
+    key_groups:
+    - age:
+      - *crystalpalace
+      - *joshua
+      - *wopr
+      - *sadbeast
