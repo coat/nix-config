@@ -1,6 +1,4 @@
 {
-  inputs,
-  # outputs,
   pkgs,
   lib,
   ...
@@ -134,5 +132,7 @@
       keys = ["id_ed25519"];
       extraFlags = ["--quiet"];
     };
+
+    rmpc.enable = true;
   };
 }
