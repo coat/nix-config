@@ -32,8 +32,6 @@
             (( ZSH_SUBSHELL )) || osc7-pwd
         }
         add-zsh-hook -Uz chpwd chpwd-osc7-pwd
-
-        eval "$(mise activate zsh)"
       '';
 
       defaultKeymap = "emacs";
