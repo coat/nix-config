@@ -21,7 +21,6 @@
       google-chrome
       libreoffice
       #localstack
-      mise
       nodejs
       ngrok
       pipx
