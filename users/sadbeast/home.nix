@@ -1,21 +1,14 @@
-{lib, ...}: {
+{
   imports = [
-    ../features/global.nix
-    ../features/gpg.nix
-    ../features/pass.nix
-    ../features/ssh.nix
+    (import ../common/home-base.nix {
+      username = "sadbeast";
+      realName = "Sad Beast";
+      email = "sadbeast@sadbeast.com";
+      extraImports = [
+        ../features/gpg.nix
+        ../features/pass.nix
+        ../features/ssh.nix
+      ];
+    })
   ];
-
-  home = {
-    username = "sadbeast";
-    homeDirectory = "/home/sadbeast";
-
-    # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-    stateVersion = "25.05";
-  };
-
-  programs = {
-    git.settings.user.name = "Sad Beast";
-    git.settings.user.email = lib.mkDefault "sadbeast@sadbeast.com";
-  };
 }

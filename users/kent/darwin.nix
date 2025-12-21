@@ -1,40 +1,32 @@
 {
   imports = [
-    ../features/global.nix
-    ../features/dev.nix
-    ../features/desktop/dev.nix
-    ../features/devcontainers.nix
+    (import ../common/home-base.nix {
+      username = "kent";
+      realName = "Kent Smith";
+      email = "kent.smith@andros.co";
+      extraImports = [
+        ../features/dev.nix
+        ../features/desktop/dev.nix
+        ../features/devcontainers.nix
+      ];
+    })
   ];
-  # ++ (builtins.attrValues outputs.homeManagerModules);
 
   nixpkgs.config.allowUnfree = true;
 
-  home = {
-    username = "kent";
-
-    stateVersion = "25.05";
-
-    sessionVariables = {
-      AWS_PROFILE = "andros-dev-1.SoftwareEngineer";
-      CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
-    };
+  home.sessionVariables = {
+    AWS_PROFILE = "andros-dev-1.SoftwareEngineer";
+    CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
   };
 
   programs = {
     obsidian.enable = true;
 
-    git.settings.user.name = "Kent Smith";
-    git.settings.user.email = "kent.smith@andros.co";
-
-    nixvim.plugins = {
-      obsidian.settings = {
-        workspaces = [
-          {
-            name = "work";
-            path = "~/Documents/vault/work";
-          }
-        ];
-      };
-    };
+    nixvim.plugins.obsidian.settings.workspaces = [
+      {
+        name = "work";
+        path = "~/Documents/vault/work";
+      }
+    ];
   };
 }
