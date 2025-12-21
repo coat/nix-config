@@ -1,12 +1,11 @@
 {
   pkgs,
-  config,
-  lib,
   ...
 }: {
   imports = [
     ./global
     ./features/desktop
+    ./features/dev.nix
     ./features/games.nix
     ./features/awesome
   ];
