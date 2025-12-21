@@ -1,8 +1,4 @@
-{
-  pkgs,
-  localstack-tap,
-  ...
-}: {
+{pkgs, ...}: {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [colima];
@@ -22,6 +18,8 @@
   system.stateVersion = 6;
 
   system = {
+    primaryUser = "kent";
+
     defaults = {
       dock = {
         autohide = true;
@@ -84,6 +82,7 @@
       "docker"
       "docker-compose"
       "localstack-cli"
+      "mlbt"
     ];
 
     casks = [
@@ -95,6 +94,7 @@
 
     taps = [
       "localstack/tap"
+      "mlb-rs/mlbt"
     ];
   };
 
