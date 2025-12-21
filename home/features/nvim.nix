@@ -2,12 +2,7 @@
   config,
   pkgs,
   ...
-}: let
-  mkDotfilesSymlink = link: {
-    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/projects/nix-config/${link}";
-    force = true;
-  };
-in {
+}: {
   programs.neovim = {
     enable = true;
     extraPackages = with pkgs; [
@@ -22,5 +17,8 @@ in {
     ];
   };
 
-  xdg.configFile."nvim" = mkDotfilesSymlink "home/features/nvim";
+  home.file."${config.xdg.configHome}/nvim" = {
+    source = ./nvim;
+    recursive = true;
+  };
 }
