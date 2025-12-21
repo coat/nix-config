@@ -67,33 +67,40 @@
 
     pkgsFor = mkPkgsFor nixpkgs;
 
+    # Shared home-manager modules for stylix theming
+    stylixHomeModules = [
+      stylix.homeModules.stylix
+      ./modules/stylix.nix
+      {
+        stylix = {
+          autoEnable = false;
+          targets.btop.enable = true;
+          targets.fzf.enable = true;
+          targets.nixvim.enable = true;
+          targets.starship.enable = true;
+          targets.tmux.enable = true;
+        };
+      }
+    ];
+
     # Usage see: https://docs.clan.lol
     clan = clan-core.lib.clan {
       inherit self;
       imports = [./clan.nix];
       specialArgs = {inherit inputs self outputs;};
     };
+
     mkDevcontainer = system:
       home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.${system};
         extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./users/vscode/default.nix
-          nixvim.homeModules.nixvim
-          nix-index-database.homeModules.nix-index
-          stylix.homeModules.stylix
-          ./modules/stylix.nix
-          {
-            stylix = {
-              autoEnable = false;
-              targets.btop.enable = true;
-              targets.fzf.enable = true;
-              targets.nixvim.enable = true;
-              targets.starship.enable = true;
-              targets.tmux.enable = true;
-            };
-          }
-        ];
+        modules =
+          [
+            ./users/vscode/default.nix
+            nixvim.homeModules.nixvim
+            nix-index-database.homeModules.nix-index
+          ]
+          ++ stylixHomeModules;
       };
   in {
     inherit (clan.config) nixosModules clanInternals;
@@ -133,12 +140,12 @@
         {
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
-          home-manager.sharedModules = [
-            nixvim.homeModules.nixvim
-            nix-index-database.homeModules.nix-index
-            stylix.homeModules.stylix
-            ./modules/stylix.nix
-          ];
+          home-manager.sharedModules =
+            [
+              nixvim.homeModules.nixvim
+              nix-index-database.homeModules.nix-index
+            ]
+            ++ stylixHomeModules;
           home-manager.users.kent = import ./users/kent/darwin.nix;
         }
       ];
