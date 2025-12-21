@@ -1,4 +1,6 @@
 {self, ...}: let
+  sshKeys = import "${self}/modules/ssh-keys.nix";
+
   # Common overlays for all machines
   commonOverlays = [
     self.overlays.additions
@@ -46,7 +48,7 @@ in {
     # This service adds a root password and SSH access.
     admin = {
       roles.default.tags.all = {};
-      roles.default.settings.allowedKeys."sadbeast" = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINGpEusv/bS34Q1JQxZXikdcwnq1vToz2d+HgV+E8NRX";
+      roles.default.settings.allowedKeys."sadbeast" = sshKeys.primary;
     };
 
     sadbeast-user = {
