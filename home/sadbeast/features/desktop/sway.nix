@@ -20,6 +20,7 @@
       nerd-fonts.iosevka
       light
       slurp
+      sway-launcher-desktop
       swayimg
       wl-clipboard
       dmenu-wayland
@@ -76,12 +77,19 @@
             app_id = "galculator";
           };
         }
+        {
+          command = "floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 10";
+          criteria = {
+            app_id = "^launcher$";
+          };
+        }
       ];
 
       keybindings = let
         modifier = config.wayland.windowManager.sway.config.modifier;
       in
         lib.mkOptionDefault {
+          "${modifier}+d" = "exec foot -a launcher -e ${pkgs.sway-launcher-desktop}/bin/sway-launcher-desktop";
           "${modifier}+p" = "exec passmenu";
           "${modifier}+Shift+Return" = "exec qutebrowser";
           "${modifier}+y" = "exec grim ~/scrn-$(date +\"%Y-%m-%d-%H-%M-%S\").png";
