@@ -13,6 +13,7 @@
       lutris
       shattered-pixel-dungeon
       tiled
+      uxn
       (retroarch.withCores (cores:
         with cores; [
           mesen
