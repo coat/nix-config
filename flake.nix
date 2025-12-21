@@ -115,7 +115,7 @@
       };
 
       "nix-on-droid" = mkHomeConfiguration {
-        pkgs = pkgsFor.x86_64-linux;
+        pkgs = pkgsFor.aarch64-linux;
         modules = [./users/nix-on-droid];
       };
 
