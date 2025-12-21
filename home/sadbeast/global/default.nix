@@ -146,19 +146,11 @@
 
   home = {
     packages = with pkgs; [
-      devcontainer
-      httpie
-      imhex
-      jq
       joypixels
-      lazygit
-      mise
       sops
       unzip
       uxn
-      zig
       zip
-      zls
     ];
 
     # persistence = {
