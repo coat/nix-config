@@ -4,15 +4,34 @@
   plugins.snacks = {
     enable = true;
     settings = {
-      indent = {enabled = true;};
-      input = {enabled = true;};
-      notifier = {enabled = true;};
-      scope = {enabled = true;};
-      scroll = {enabled = true;};
-      statuscolumn = {enabled = false;};
-      words = {enabled = true;};
-      bigfile = {enabled = true;};
-      quickfile = {enabled = true;};
+      indent = {
+        enabled = true;
+      };
+      input = {
+        enabled = true;
+      };
+      notifier = {
+        enabled = true;
+        level = lib.nixvim.mkRaw ''vim.log.levels.WARN'';
+      };
+      scope = {
+        enabled = true;
+      };
+      scroll = {
+        enabled = true;
+      };
+      statuscolumn = {
+        enabled = false;
+      };
+      words = {
+        enabled = true;
+      };
+      bigfile = {
+        enabled = true;
+      };
+      quickfile = {
+        enabled = true;
+      };
       terminal = {
         win = {
           keys = {
@@ -43,8 +62,73 @@
           };
         };
       };
-      picker = {enabled = true;};
-      explorer = {enabled = true;};
+      picker = {
+        enabled = true;
+      };
+      explorer = {
+        enabled = true;
+      };
+      dashboard = {
+        enabled = true;
+        sections = [
+          {section = "header";}
+          {
+            section = "keys";
+            gap = 1;
+            padding = 1;
+          }
+          {
+            section = "startup";
+            enabled = false;
+          }
+        ];
+        preset = {
+          keys = [
+            {
+              icon = " ";
+              key = "f";
+              desc = "Find File";
+              action = ":lua Snacks.dashboard.pick('files')";
+            }
+            {
+              icon = " ";
+              key = "n";
+              desc = "New File";
+              action = ":ene | startinsert";
+            }
+            {
+              icon = " ";
+              key = "g";
+              desc = "Find Text";
+              action = ":lua Snacks.dashboard.pick('live_grep')";
+            }
+            {
+              icon = " ";
+              key = "r";
+              desc = "Recent Files";
+              action = ":lua Snacks.dashboard.pick('oldfiles')";
+            }
+            {
+              icon = " ";
+              key = "c";
+              desc = "Config";
+              action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.expand('~/projects/nix-config')})";
+            }
+            {
+              icon = " ";
+              key = "s";
+              desc = "Restore Session";
+              section = "session";
+            }
+            {
+              icon = " ";
+              key = "q";
+              desc = "Quit";
+              action = ":qa";
+            }
+          ];
+        };
+      };
     };
   };
 
@@ -215,7 +299,10 @@
       options.desc = "Grep";
     }
     {
-      mode = ["n" "x"];
+      mode = [
+        "n"
+        "x"
+      ];
       key = "<leader>sw";
       action = lib.nixvim.mkRaw ''function() Snacks.picker.grep_word() end'';
       options.desc = "Visual selection or word";
@@ -427,13 +514,19 @@
       options.desc = "Profiler Scratch Buffer";
     }
     {
-      mode = ["n" "x"];
+      mode = [
+        "n"
+        "x"
+      ];
       key = "<leader>gB";
       action = lib.nixvim.mkRaw ''function() Snacks.gitbrowse() end'';
       options.desc = "Git Browse (open)";
     }
     {
-      mode = ["n" "x"];
+      mode = [
+        "n"
+        "x"
+      ];
       key = "<leader>gY";
       action = lib.nixvim.mkRaw ''
         function()

@@ -21,7 +21,14 @@
       };
     };
     adapters = {
-      zig.enable = true;
+      zig = {
+        enable = true;
+        settings = {
+          dap = {
+            adapter = "lldb";
+          };
+        };
+      };
       rspec.enable = true;
     };
   };

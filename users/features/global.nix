@@ -15,7 +15,10 @@
   ];
 
   programs = {
-    nixvim.imports = [./nixvim.nix];
+    nixvim = {
+      imports = [./nixvim.nix];
+      _module.args.inputs = inputs;
+    };
 
     btop = {
       enable = true;

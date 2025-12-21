@@ -24,6 +24,11 @@
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
 
     systems.follows = "clan-core/systems";
+
+    amp-nvim = {
+      url = "github:sourcegraph/amp.nvim";
+      flake = false;
+    };
   };
 
   outputs = {

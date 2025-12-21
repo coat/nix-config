@@ -9,6 +9,7 @@
   home = {
     packages = with pkgs; [
       act
+      alejandra
       amp-cli
       awscli2
       docker-buildx

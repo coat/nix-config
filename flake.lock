@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "amp-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1761228898,
+        "narHash": "sha256-/ynaY2MGLKfoljy18jnfU+KDxm3tJOTgZqxMOEerwyU=",
+        "owner": "sourcegraph",
+        "repo": "amp.nvim",
+        "rev": "621f1ca375fc2887d30a4ac32a8b6c582d28f9c0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sourcegraph",
+        "repo": "amp.nvim",
+        "type": "github"
+      }
+    },
     "charm": {
       "inputs": {
         "nixpkgs": [
@@ -378,6 +394,7 @@
     },
     "root": {
       "inputs": {
+        "amp-nvim": "amp-nvim",
         "charm": "charm",
         "clan-core": "clan-core",
         "darwin": "darwin",
