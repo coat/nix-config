@@ -10,7 +10,7 @@
           luadbi-mysql # Database abstraction layer
         ];
       };
-      xkb.options = "ctrl:swapcaps";
+      xkb.options = "caps:ctrl_modifier";
     };
   };
 }
