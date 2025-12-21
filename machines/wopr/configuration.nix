@@ -1,8 +1,4 @@
-{
-  pkgs,
-  config,
-  ...
-}: {
+{...}: {
   imports = [
     ./hardware-configuration.nix
 
@@ -10,6 +6,7 @@
     ../../modules/global.nix
     ../../modules/desktop.nix
     ../../modules/wireless.nix
+    ../../modules/wireguard.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
