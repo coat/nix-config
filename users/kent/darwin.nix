@@ -8,6 +8,7 @@
       extraImports = [
         ../features/devcontainers.nix
         ../features/dev.nix
+        ../features/desktop/dev.nix
       ];
     })
   ];
