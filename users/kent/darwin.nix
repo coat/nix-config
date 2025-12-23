@@ -1,7 +1,15 @@
 {
   imports = [
-    ./home.nix
-    ../features/devcontainers.nix
+    (import ../common/home-base.nix {
+      username = "kent";
+      realName = "Kent Smith";
+      email = "kent.smith@andros.co";
+      homeDirectory = "/Users/kent";
+      extraImports = [
+        ../features/devcontainers.nix
+        ../features/dev.nix
+      ];
+    })
   ];
 
   nixpkgs.config.allowUnfree = true;
