@@ -3,7 +3,6 @@
     ./hardware-configuration.nix
     ../../users/sadbeast/nixos.nix
     ../../modules/desktop-host.nix
-    ../../modules/wireless.nix
   ];
 
   networking.hostName = "wopr";

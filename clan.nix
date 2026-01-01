@@ -51,6 +51,17 @@ in {
       roles.default.settings.allowedKeys."sadbeast" = sshKeys.primary;
     };
 
+    wifi = {
+      module.name = "wifi";
+      module.input = "clan-core";
+
+      roles.default = {
+        machines."wopr" = {
+          settings.networks.home = {};
+        };
+      };
+    };
+
     sadbeast-user = {
       module.name = "users";
       roles.default = {
