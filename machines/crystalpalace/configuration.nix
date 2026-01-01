@@ -3,9 +3,15 @@
     inputs.nixarr.nixosModules.default
     ../../modules/global.nix
     ../../modules/nixarr.nix
+    ../../modules/docker.nix
     ../../modules/samba.nix
     ../../users/sadbeast/nixos.nix
   ];
+
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [8080];
+  };
 
   services = {
     avahi = {
