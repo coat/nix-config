@@ -16,6 +16,9 @@
       settings = {
         PasswordAuthentication = false;
       };
+      extraConfig = ''
+        AcceptEnv COLORTERM
+      '';
     };
   };
 
