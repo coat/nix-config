@@ -22,6 +22,7 @@
       gimp
       lagrange
       pavucontrol
+      signal-desktop
       vlc
       waypipe
     ];
