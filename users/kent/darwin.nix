@@ -16,7 +16,8 @@
   nixpkgs.config.allowUnfree = true;
 
   home.sessionVariables = {
-    AWS_PROFILE = "andros-dev-1.SoftwareEngineer";
+    AWS_REGION = "us-east-1";
+    AWS_PROFILE = "CredSimple.SoftwareEngineer";
     CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
   };
 
