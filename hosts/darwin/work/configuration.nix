@@ -62,12 +62,10 @@
   homebrew = {
     enable = true;
     brews = [
-      "aichat"
       "awscli-local"
       "docker"
       "docker-compose"
       "localstack-cli"
-      "mlbt"
     ];
 
     casks = [
@@ -79,7 +77,7 @@
 
     taps = [
       "localstack/tap"
-      "mlb-rs/mlbt"
+      "huseyinbabal/tap"
     ];
   };
 
