@@ -46,21 +46,6 @@
       CustomUserPreferences = {
         NSGlobalDomain = {
         };
-        "com.amethyst.Amethyst" = {
-          "focus-follows-mouse" = false;
-          "enables-layout-hud" = true;
-          "enables-layout-hud-on-space-change" = false;
-          "smart-window-margins" = true;
-          "float-small-windows" = true;
-          SUEnableAutomaticChecks = false;
-          SUSendProfileInfo = false;
-          floating = [
-            {
-              id = "com.apple.systempreferences";
-              "window-titles" = [];
-            }
-          ];
-        };
       };
     };
     keyboard = {
@@ -86,10 +71,10 @@
     ];
 
     casks = [
-      "amethyst"
       "firefox"
       "font-iosevka"
       "ghostty"
+      "nikitabobko/tap/aerospace"
     ];
 
     taps = [

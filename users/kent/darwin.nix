@@ -9,6 +9,7 @@
         ../features/devcontainers.nix
         ../features/dev.nix
         ../features/desktop/dev.nix
+        ../features/desktop/aerospace.nix
       ];
     })
   ];
