@@ -19,7 +19,6 @@
   programs = {
     gh = {
       enable = true;
-      extensions = [pkgs.gh-copilot];
       settings.aliases = {
         prs = "pr list";
       };
