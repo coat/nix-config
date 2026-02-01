@@ -20,12 +20,6 @@
             eval "$(/opt/homebrew/bin/brew shellenv)"
         fi
 
-        #   precmd() {
-        #       print -Pn "\e]133;A\e\\"
-        #   }
-        #   # precmd () {print -Pn "\e]0;\a"}
-
-        # this makes opening a terminal window in current directory work
         function osc7-pwd() {
             emulate -L zsh # also sets localoptions for us
             setopt extendedglob
@@ -37,6 +31,16 @@
             (( ZSH_SUBSHELL )) || osc7-pwd
         }
         add-zsh-hook -Uz chpwd chpwd-osc7-pwd
+
+        function precmd {
+            if ! builtin zle; then
+                print -n "\e]133;D\e\\"
+            fi
+        }
+
+        function preexec {
+            print -n "\e]133;C\e\\"
+        }
 
         # function to list all the profiles in ~/.aws/config
         function aws_profiles() {
