@@ -42,6 +42,12 @@
         };
       };
 
+      output = {
+        "*" = {
+          bg = "${config.lib.stylix.colors.withHashtag.base00} solid_color";
+        };
+      };
+
       window.commands = [
         {
           command = "floating enable";
