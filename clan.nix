@@ -31,15 +31,15 @@ in {
       tags = ["personal"];
     };
     crystalpalace = {
-      deploy.targetHost = "root@crystalpalace.local";
+      deploy.targetHost = "root@crystalpalace";
       tags = ["personal"];
     };
     joshua = {
-      deploy.targetHost = "root@joshua.local";
+      deploy.targetHost = "root@joshua";
       tags = ["personal"];
     };
     wopr = {
-      deploy.targetHost = "root@wopr.local";
+      deploy.targetHost = "root@wopr";
       tags = ["personal"];
     };
     falken = {
@@ -102,7 +102,7 @@ in {
       # nixpkgs.pkgs = mkPkgs inputs.nixpkgs-stable "x86_64-linux";
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
       imports = [./users/sadbeast/server.nix];
-      clan.core.networking.buildHost = "root@crystalpalace.local";
+      clan.core.networking.buildHost = "root@crystalpalace";
     };
     crystalpalace = {inputs, ...}: {
       # nixpkgs.pkgs = mkPkgs inputs.nixpkgs-stable "x86_64-linux";
