@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation {
   pname = "fab-agon-emulator";
-  version = "0.9.96";
+  version = "1.1.0";
 
   dontBuild = true;
 
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "https://github.com/tomm/fab-agon-emulator/releases/download/0.9.96/fab-agon-emulator-v0.9.96-linux-x86_64.tar.bz2";
-    sha256 = "sha256-hagPy9zsApJWXKfLtlb5+vu6xl9pV7J++kYMRG1P4PI=";
+    url = "https://github.com/tomm/fab-agon-emulator/releases/download/1.1.0/fab-agon-emulator-v1.1.0-linux-x86_64.tar.bz2";
+    sha256 = "sha256-7kmd7YaY9K6eduIQi3f6nv11rOclZ17VPdka8cV2VfY=";
   };
 
   # unpackPhase = ''
