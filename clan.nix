@@ -7,10 +7,17 @@
     self.overlays.modifications
   ];
 
-  mkPkgs = nixpkgsSrc: system:
+  mkPkgs = nixpkgsSrc: system: let
+    lib = nixpkgsSrc.lib;
+  in
     import nixpkgsSrc {
       inherit system;
       config.allowUnfree = true;
+      config.allowInsecurePredicate = pkg:
+        builtins.elem (lib.getName pkg) [
+          "librewolf-bin"
+          "librewolf-bin-unwrapped"
+        ];
       overlays = commonOverlays;
     };
 in {
