@@ -35,7 +35,7 @@ in {
 
     opts = {
       autowrite = true;
-      clipboard = mkRaw ''vim.env.SSH_CONNECTION and "" or "unnamedplus"'';
+      clipboard = mkRaw ''vim.env.SSH_CONNECTION and "" or "unnamed"'';
       completeopt = "menu,menuone,noselect";
       conceallevel = 2;
       confirm = true;
