@@ -1,5 +1,5 @@
 {config, ...}: {
-  imports = [./wireguard-secrets.nix];
+  imports = [./wireguard.nix];
 
   nixarr = {
     enable = true;
