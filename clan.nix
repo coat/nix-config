@@ -48,16 +48,7 @@ in {
     };
   };
 
-  # Docs: See https://docs.clan.lol/reference/clanServices
   inventory.instances = {
-    # Docs: https://docs.clan.lol/reference/clanServices/admin/
-    # Admin service for managing machines
-    # This service adds a root password and SSH access.
-    admin = {
-      roles.default.tags.all = {};
-      roles.default.settings.allowedKeys."sadbeast" = sshKeys.primary;
-    };
-
     wifi = {
       module.name = "wifi";
       module.input = "clan-core";
@@ -103,23 +94,28 @@ in {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
       imports = [./users/sadbeast/server.nix];
       clan.core.networking.buildHost = "root@crystalpalace";
+      users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
     };
     crystalpalace = {inputs, ...}: {
       # nixpkgs.pkgs = mkPkgs inputs.nixpkgs-stable "x86_64-linux";
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
       imports = [./users/sadbeast/server.nix];
+      users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
     };
     joshua = {inputs, ...}: {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
       imports = [./users/sadbeast/joshua-nixos.nix];
+      users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
     };
     wopr = {inputs, ...}: {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "x86_64-linux";
       imports = [./users/sadbeast/wopr-nixos.nix];
+      users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
     };
     falken = {inputs, ...}: {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs "aarch64-linux";
       imports = [./users/kent/falken-nixos.nix];
+      users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
 
       clan.core.deployment.requireExplicitUpdate = true;
     };
