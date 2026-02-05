@@ -19,7 +19,7 @@
 
   home = {
     packages = with pkgs; [
-      galculator
+      # galculator
       gimp
       lagrange
       pavucontrol

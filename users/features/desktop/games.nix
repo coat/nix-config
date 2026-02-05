@@ -18,7 +18,6 @@
 
   home = {
     packages = with pkgs; [
-      # discord
       ez80asm
       fab-agon-emulator
       # fallout-ce
