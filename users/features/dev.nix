@@ -10,6 +10,7 @@
       httpie
       jq
       lazygit
+      opencode
       pgcli
       ssm-session-manager-plugin
       tree-sitter
