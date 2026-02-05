@@ -12,6 +12,7 @@
       lazygit
       opencode
       pgcli
+      ruby
       ssm-session-manager-plugin
       tree-sitter
     ];
