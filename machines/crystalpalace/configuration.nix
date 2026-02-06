@@ -8,6 +8,8 @@
     ../../users/sadbeast/nixos.nix
   ];
 
+  boot.loader.systemd-boot.configurationLimit = 3;
+
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [8080];
