@@ -25,7 +25,7 @@
     config = {
       modifier = "Mod4";
 
-      defaultWorkspace = "1";
+      defaultWorkspace = "workspace number 1";
 
       bars = [];
 
