@@ -13,6 +13,11 @@
 
       config-version = 2
 
+      default-root-container-layout = 'tiles'
+      default-root-container-orientation = 'auto'
+
+      automatically-unhide-macos-hidden-apps = true
+
       # In i3, all workspaces are phantom
       persistent-workspaces = []
 
@@ -25,6 +30,12 @@
 
       # Mouse follows focus when focused monitor changes
       on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+      [workspace-to-monitor-force-assignment]
+      1 = 1
+      2 = 2
+      3 = 3
+      4 = 3
 
       [mode.main.binding]
           # See: https://nikitabobko.github.io/AeroSpace/goodies#open-a-new-window-with-applescript
@@ -48,10 +59,10 @@
 
           # Consider using 'join-with' command as a 'split' replacement if you want to enable
           # normalizations
-          alt-b = 'split horizontal'
+          alt-shift-v = 'split horizontal'
           alt-v = 'split vertical'
 
-          alt-f = 'fullscreen'
+          alt-shift-f = 'fullscreen'
 
           alt-s = 'layout v_accordion' # 'layout stacking' in i3
           alt-w = 'layout h_accordion' # 'layout tabbed' in i3
