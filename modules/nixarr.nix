@@ -17,9 +17,9 @@
       vpn.enable = true;
     };
 
-    bazarr.enable = true;
+    jellyfin.enable = true;
+    jellyseerr.enable = true;
     lidarr.enable = true;
-    plex.enable = true;
     prowlarr.enable = true;
     radarr.enable = true;
     readarr.enable = true;
@@ -28,11 +28,6 @@
 
   services = {
     flaresolverr = {
-      enable = true;
-      openFirewall = true;
-    };
-
-    overseerr = {
       enable = true;
       openFirewall = true;
     };
