@@ -14,8 +14,6 @@
     })
   ];
 
-  nixpkgs.config.allowUnfree = true;
-
   home.sessionVariables = {
     AWS_REGION = "us-east-1";
     AWS_PROFILE = "CredSimple.SoftwareEngineer";

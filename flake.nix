@@ -16,6 +16,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     llm-agents.url = "github:numtide/llm-agents.nix";
+    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
 
     nixarr.url = "github:rasmus-kirk/nixarr";
     nixarr.inputs.nixpkgs.follows = "nixpkgs";
@@ -141,9 +142,11 @@
       specialArgs = {inherit inputs outputs;};
       modules = [
         ./hosts/darwin/work/configuration.nix
+        {nixpkgs.overlays = outputs.overlays.all;}
         nix-index-database.darwinModules.nix-index
         home-manager.darwinModules.home-manager
         {
+          home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.extraSpecialArgs = {inherit inputs outputs;};
           home-manager.sharedModules =
