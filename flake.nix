@@ -6,9 +6,6 @@
     amp-nvim.url = "github:sourcegraph/amp.nvim";
     amp-nvim.flake = false;
 
-    charm.url = "github:charmbracelet/nur";
-    charm.inputs.nixpkgs.follows = "nixpkgs";
-
     clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
 
@@ -17,6 +14,8 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    llm-agents.url = "github:numtide/llm-agents.nix";
 
     nixarr.url = "github:rasmus-kirk/nixarr";
     nixarr.inputs.nixpkgs.follows = "nixpkgs";
@@ -35,7 +34,6 @@
 
   outputs = {
     self,
-    charm,
     clan-core,
     darwin,
     home-manager,
@@ -69,10 +67,7 @@
                   "librewolf-bin-unwrapped"
                 ];
             };
-            overlays = [
-              outputs.overlays.additions
-              outputs.overlays.modifications
-            ];
+            overlays = outputs.overlays.all;
           }
       );
 
@@ -163,3 +158,4 @@
     };
   };
 }
+

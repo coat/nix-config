@@ -6,11 +6,13 @@
   home = {
     packages = with pkgs; [
       act
-      amp-cli
       docker-buildx
       gcc
-      github-copilot-cli
       imhex
+      pkgs.llm-agents.amp
+      pkgs.llm-agents.copilot-cli
+      pkgs.llm-agents.opencode
+      pkgs.llm-agents.spec-kit
     ];
   };
 }

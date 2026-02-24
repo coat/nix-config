@@ -1,12 +1,6 @@
 {self, ...}: let
   sshKeys = import "${self}/modules/ssh-keys.nix";
 
-  # Common overlays for all machines
-  commonOverlays = [
-    self.overlays.additions
-    self.overlays.modifications
-  ];
-
   mkPkgs = nixpkgsSrc: system: let
     lib = nixpkgsSrc.lib;
   in
@@ -18,7 +12,7 @@
           "librewolf-bin"
           "librewolf-bin-unwrapped"
         ];
-      overlays = commonOverlays;
+      overlays = self.overlays.all;
     };
 in {
   # Ensure this is unique among all clans you want to use.

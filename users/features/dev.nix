@@ -10,7 +10,6 @@
       httpie
       jq
       lazygit
-      opencode
       pgcli
       ruby
       ssm-session-manager-plugin
