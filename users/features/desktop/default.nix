@@ -24,6 +24,7 @@
       lagrange
       pavucontrol
       signal-desktop
+      transmission_4
       vlc
       waypipe
     ];
