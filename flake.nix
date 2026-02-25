@@ -3,6 +3,8 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
+    nixpkgs-working.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
+
     amp-nvim.url = "github:sourcegraph/amp.nvim";
     amp-nvim.flake = false;
 
@@ -41,6 +43,7 @@
     nix-index-database,
     nixarr,
     nixpkgs,
+    nixpkgs-working,
     nixvim,
     stylix,
     systems,
@@ -161,4 +164,3 @@
     };
   };
 }
-
