@@ -1,5 +1,9 @@
 {
   self,
+  homeManagerSharedModules ? [
+    inputs.nixvim.homeModules.nixvim
+    inputs.nix-index-database.homeModules.nix-index
+  ],
   inputs,
   outputs,
   config,
@@ -17,9 +21,6 @@
       nixosConfig = config;
     };
 
-    sharedModules = [
-      inputs.nixvim.homeModules.nixvim
-      inputs.nix-index-database.homeModules.nix-index
-    ];
+    sharedModules = homeManagerSharedModules;
   };
 }

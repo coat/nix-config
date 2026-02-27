@@ -54,31 +54,25 @@
     lib = nixpkgs.lib // home-manager.lib;
     forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
 
+    mkPkgs = import ./modules/mk-pkgs.nix {
+      inherit lib;
+      overlays = outputs.overlays.all;
+    };
+
     mkPkgsFor = nixpkgsSrc:
       lib.genAttrs (import systems) (
-        system:
-          import nixpkgsSrc {
-            inherit system;
-            config = {
-              allowUnfree = true;
-              allowUnfreePredicate = pkg:
-                builtins.elem (lib.getName pkg) [
-                  "copilot-language-server"
-                ];
-              allowInsecurePredicate = pkg:
-                builtins.elem (lib.getName pkg) [
-                  "librewolf-bin"
-                  "librewolf-bin-unwrapped"
-                ];
-            };
-            overlays = outputs.overlays.all;
-          }
+        system: mkPkgs nixpkgsSrc system
       );
 
     pkgsFor = mkPkgsFor nixpkgs;
 
-    # Shared home-manager modules for stylix theming
-    stylixHomeModules = [
+    # Shared home-manager modules for all targets.
+    homeManagerSharedModules = [
+      nixvim.homeModules.nixvim
+      nix-index-database.homeModules.nix-index
+    ];
+
+    homeManagerStylixModules = [
       stylix.homeModules.stylix
       ./modules/stylix.nix
       {
@@ -97,7 +91,14 @@
     clan = clan-core.lib.clan {
       inherit self;
       imports = [./clan.nix];
-      specialArgs = {inherit inputs self outputs;};
+      specialArgs = {
+        inherit
+          homeManagerSharedModules
+          inputs
+          outputs
+          self
+          ;
+      };
     };
 
     mkDevcontainer = system:
@@ -107,10 +108,9 @@
         modules =
           [
             ./users/vscode/default.nix
-            nixvim.homeModules.nixvim
-            nix-index-database.homeModules.nix-index
           ]
-          ++ stylixHomeModules;
+          ++ homeManagerSharedModules
+          ++ homeManagerStylixModules;
       };
   in {
     inherit (clan.config) nixosModules clanInternals;
@@ -143,22 +143,19 @@
 
     darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
       specialArgs = {inherit inputs outputs;};
-      modules = [
+      modules = with home-manager; [
         ./hosts/darwin/work/configuration.nix
         {nixpkgs.overlays = outputs.overlays.all;}
         nix-index-database.darwinModules.nix-index
-        home-manager.darwinModules.home-manager
+        darwinModules.home-manager
         {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.extraSpecialArgs = {inherit inputs outputs;};
-          home-manager.sharedModules =
-            [
-              nixvim.homeModules.nixvim
-              nix-index-database.homeModules.nix-index
-            ]
-            ++ stylixHomeModules;
-          home-manager.users.kent = import ./users/kent/darwin.nix;
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = {inherit inputs outputs;};
+            sharedModules = homeManagerSharedModules ++ homeManagerStylixModules;
+            users.kent = import ./users/kent/darwin.nix;
+          };
         }
       ];
     };

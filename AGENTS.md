@@ -7,6 +7,22 @@
 - **Rebuild NixOS locally**: `sudo nixos-rebuild switch --flake .#<machine>`
 - **Rebuild Darwin**: `sudo darwin-rebuild switch --flake .#`
 
+## Validation Checks
+- **NixOS output eval**: `nix eval --no-write-lock-file 'path:.#nixosConfigurations.<machine>.config.system.stateVersion'`
+- **Home-manager output eval**: `nix eval --no-write-lock-file 'path:.#homeConfigurations."<name>".config.home.stateVersion'`
+- **Darwin output eval**: `nix eval --no-write-lock-file 'path:.#darwinConfigurations."<name>".config.system.stateVersion'`
+- **Clan inventory eval**: `nix eval --no-write-lock-file 'path:.#clan.inventory.machines'`
+- **Clan instances eval**: `nix eval --no-write-lock-file 'path:.#clan.inventory.instances'`
+
+## Where To Edit
+- **Add/update clan machine metadata**: `clan.nix` in `machineConfigs`
+- **Add/update clan user role instances**: `clan.nix` in `userInstanceConfigs`
+- **Add/update wifi mappings**: `clan.nix` in `wifiInstanceConfig`
+- **Host-specific NixOS service/config**: `machines/<machine>/configuration.nix`
+- **Shared NixOS modules**: `modules/`
+- **Home-manager user profiles**: `users/<user>/`
+- **Darwin host config**: `hosts/darwin/...`
+
 ## Architecture
 - **Flake-based NixOS config** using clan-core for multi-machine management
 - `machines/` - NixOS machine configs (cheyenne, crystalpalace, falken, joshua, wopr)
