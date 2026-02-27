@@ -3,7 +3,7 @@
     address = "10.30.153.91";
     dns = "10.0.0.243";
     peer = {
-      publicKey = "sy1NqWlIaEIfiR2txshRIANdZ7rKBlxiZNaJqQgzrmY=";
+      publicKey = "nZQHWs1zFbPChSfQVrM8KyrPSFaAzxAsHQ0Sdhxi03U=";
       allowedIPs = "0.0.0.0/0";
       endpoint = "158.173.153.141:1337";
       persistentKeepalive = 25;
