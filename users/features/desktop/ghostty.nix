@@ -1,10 +1,17 @@
 {
+  pkgs,
+  lib,
+  ...
+}: {
   programs.ghostty = {
     enable = true;
+    package =
+      if pkgs.stdenv.isDarwin
+      then null
+      else pkgs.ghostty;
     enableZshIntegration = true;
-    installVimSyntax = true;
+    installVimSyntax = lib.mkForce (!pkgs.stdenv.isDarwin);
     settings = {
-      font-size = 12;
       window-decoration = false;
       resize-overlay = "never";
     };

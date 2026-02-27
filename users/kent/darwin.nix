@@ -6,9 +6,10 @@
       email = "kent.smith@andros.co";
       homeDirectory = "/Users/kent";
       extraImports = [
-        ../features/dev.nix
-        ../features/desktop/dev.nix
         ../features/desktop/aerospace.nix
+        ../features/desktop/dev.nix
+        ../features/desktop/ghostty.nix
+        ../features/dev.nix
       ];
     })
   ];
