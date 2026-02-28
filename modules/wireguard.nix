@@ -1,11 +1,11 @@
 {config, ...}: let
   wg = {
-    address = "10.30.153.91";
+    address = "10.25.206.38/32";
     dns = "10.0.0.243";
     peer = {
-      publicKey = "nZQHWs1zFbPChSfQVrM8KyrPSFaAzxAsHQ0Sdhxi03U=";
+      publicKey = "MelF5Wr2At8Bm3Z5aN4HXHXoJ7C2g9CazbeD+bmxjhI=";
       allowedIPs = "0.0.0.0/0";
-      endpoint = "158.173.153.141:1337";
+      endpoint = "149.22.95.154:1337";
       persistentKeepalive = 25;
     };
   };
@@ -38,20 +38,5 @@ in {
       Endpoint = ${wg.peer.endpoint}
       EOF
     '';
-  };
-
-  networking.wg-quick.interfaces.wg0 = {
-    autostart = false;
-    address = ["${wg.address}/32"];
-    dns = [wg.dns];
-    privateKeyFile = config.clan.core.vars.generators.wireguard-vpn.files.wg-key.path;
-    peers = [
-      {
-        publicKey = wg.peer.publicKey;
-        allowedIPs = [wg.peer.allowedIPs];
-        endpoint = wg.peer.endpoint;
-        persistentKeepalive = wg.peer.persistentKeepalive;
-      }
-    ];
   };
 }

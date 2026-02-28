@@ -2,7 +2,7 @@
   imports = [
     ./global.nix
     ./desktop.nix
-    ./wireguard.nix
+    ./wireguard-desktop.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
