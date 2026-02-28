@@ -1,8 +1,10 @@
-{...}: {
+{inputs, ...}: {
   imports = [
     ./global.nix
     ./desktop.nix
     ./wireguard-desktop.nix
+    inputs.microvm.nixosModules.host
+    ./microvm.nix
   ];
 
   boot.loader.systemd-boot.enable = true;

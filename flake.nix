@@ -20,6 +20,9 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows = "nixpkgs";
 
+    microvm.url = "github:microvm-nix/microvm.nix";
+    microvm.inputs.nixpkgs.follows = "nixpkgs";
+
     nixarr.url = "github:rasmus-kirk/nixarr";
     nixarr.inputs.nixpkgs.follows = "nixpkgs";
 
