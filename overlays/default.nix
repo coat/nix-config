@@ -6,10 +6,11 @@
     import ../pkgs {pkgs = final;};
 
   modifications = final: prev: {
-    devcontainer = (import inputs.nixpkgs-working {
-      inherit (final) system;
-      config.allowUnfree = true;
-    }).devcontainer;
+    devcontainer =
+      (import inputs.nixpkgs-working {
+        inherit (final) system;
+        config.allowUnfree = true;
+      }).devcontainer;
   };
 
   llm-agents = inputs.llm-agents.overlays.default;
