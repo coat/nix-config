@@ -3,7 +3,7 @@
     inputs.nixarr.nixosModules.default
     ../../modules/global.nix
     ../../modules/nixarr.nix
-    ../../modules/docker.nix
+    ../../modules/romm.nix
     ../../modules/samba.nix
     ../../users/sadbeast/nixos.nix
   ];
