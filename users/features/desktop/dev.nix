@@ -7,7 +7,6 @@
     packages = with pkgs; [
       act
       docker-buildx
-      gcc
       imhex
       pkgs.llm-agents.amp
       pkgs.llm-agents.copilot-cli
