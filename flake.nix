@@ -140,13 +140,15 @@
         ./hosts/darwin/work/configuration.nix
         {nixpkgs.overlays = outputs.overlays.all;}
         nix-index-database.darwinModules.nix-index
+        stylix.darwinModules.stylix
+        ./modules/stylix.nix
         darwinModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             extraSpecialArgs = {inherit inputs outputs;};
-            sharedModules = homeManagerSharedModules ++ homeManagerStylixModules;
+            sharedModules = homeManagerSharedModules;
             users.kent = import ./users/kent/darwin.nix;
           };
         }
