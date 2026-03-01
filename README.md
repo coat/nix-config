@@ -32,6 +32,16 @@ which will rebuild darwin nixos and run home-manager switch.
 
 `clan machines update` and `nixos-rebuild switch` will run home-manager.
 
+## microvm
+
+```sh
+mkdir -p ~/microvm/dev/ssh-host-keys
+ssh-keygen -t ed25519 -N "" -f ~/microvm/dev/ssh-host-keys/ssh_host_ed25519_key
+sudo nixos-rebuild switch --flake .#wopr
+sudo systemctl start microvm@devvm
+ssh 192.168.83.2
+```
+
 # References
 - This was initially setup using
   [https://github.com/Misterio77/nix-starter-configs](https://github.com/Misterio77/nix-starter-configs)
