@@ -7,6 +7,8 @@
 }: let
   vars = config.clan.core.vars.generators.romm;
 in {
+  imports = [./podman.nix];
+
   clan.core.vars.generators.romm = {
     share = true;
     files.romm-env.secret = true;
@@ -45,25 +47,6 @@ in {
       EOF
     '';
   };
-
-  # Runtime
-  virtualisation.podman = {
-    enable = true;
-    autoPrune.enable = true;
-    dockerCompat = true;
-  };
-
-  # Enable container name DNS for all Podman networks.
-  networking.firewall.interfaces = let
-    matchAll =
-      if !config.networking.nftables.enable
-      then "podman+"
-      else "podman*";
-  in {
-    "${matchAll}".allowedUDPPorts = [53];
-  };
-
-  virtualisation.oci-containers.backend = "podman";
 
   # Containers
   virtualisation.oci-containers.containers."romm" = {

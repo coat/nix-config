@@ -3,6 +3,7 @@
     inputs.nixarr.nixosModules.default
     ../../modules/global.nix
     ../../modules/nixarr.nix
+    ../../modules/dispatcharr.nix
     ../../modules/romm.nix
     ../../modules/samba.nix
     ../../users/sadbeast/nixos.nix
@@ -12,7 +13,7 @@
 
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [8080];
+    allowedTCPPorts = [3000 8080];
   };
 
   fileSystems."/mnt/files" = {
