@@ -11,6 +11,10 @@
       jq
       lazygit
       pgcli
+      pkgs.llm-agents.amp
+      pkgs.llm-agents.copilot-cli
+      pkgs.llm-agents.opencode
+      pkgs.llm-agents.spec-kit
       ruby
       ssm-session-manager-plugin
       tree-sitter
