@@ -9,7 +9,6 @@
       dmenu-wayland
       grim
       iosevka
-      light
       nerd-fonts.iosevka
       slurp
       sway-launcher-desktop
@@ -76,8 +75,8 @@
           "XF86AudioLowerVolume" = "exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 2%- && wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed 's/[^0-9]//g' > $XDG_RUNTIME_DIR/wob.sock";
           "XF86AudioMute" = "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle && (wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q MUTED && echo 0 > $XDG_RUNTIME_DIR/wob.sock) || wpctl get-volume @DEFAULT_AUDIO_SINK@ > $XDG_RUNTIME_DIR/wob.sock";
 
-          "XF86MonBrightnessUp" = "exec light -A 5 && light -G | cut -d'.' -f1 > $XDG_RUNTIME_DIR/wob.sock";
-          "XF86MonBrightnessDown" = "exec light -U 5 && light -G | cut -d'.' -f1 > $XDG_RUNTIME_DIR/wob.sock";
+          "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 5%+ && ${pkgs.brightnessctl}/bin/brightnessctl -m | cut -d',' -f4 | tr -d '%' > $XDG_RUNTIME_DIR/wob.sock";
+          "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 5%- && ${pkgs.brightnessctl}/bin/brightnessctl -m | cut -d',' -f4 | tr -d '%' > $XDG_RUNTIME_DIR/wob.sock";
         };
 
       startup = [
