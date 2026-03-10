@@ -9,10 +9,11 @@ Create a new ephemeral MicroVM declaration in this NixOS configuration.
 
 ## Steps
 
-1. **Read existing VMs** in `modules/microvm.nix` to find used IP addresses, tapIds, and MAC addresses. Choose the next free values:
+1. **Read existing VMs** in `modules/microvm.nix` to find used IP addresses, tapIds, MAC addresses, and vsockCids. Choose the next free values:
    - IP: `192.168.83.X/24` (start from .2, increment)
    - tapId: `microvmN` (start from 0, increment)
    - MAC: `02:00:00:00:00:XX` (start from 01, increment hex)
+   - vsockCid: integer (start from 3, increment; 0-2 are reserved)
 
 2. **Add a new `microvm.vms.<name>vm` entry** in `modules/microvm.nix` following the existing pattern:
 
@@ -28,6 +29,7 @@ Create a new ephemeral MicroVM declaration in this NixOS configuration.
            tapId = "microvmN";
            mac = "02:00:00:00:00:XX";
            workspace = "/home/sadbeast/microvm/<name>";
+           vsockCid = N;
            inherit inputs outputs homeManagerSharedModules;
          })
        ];

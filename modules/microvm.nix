@@ -40,6 +40,7 @@ in {
           tapId = "microvm0";
           mac = "02:00:00:00:00:01";
           workspace = "/home/sadbeast/microvm/dev";
+          vsockCid = 3;
           inherit inputs outputs homeManagerSharedModules;
         })
       ];

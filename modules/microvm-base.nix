@@ -4,6 +4,7 @@
   tapId,
   mac,
   workspace,
+  vsockCid,
   inputs,
   outputs,
   homeManagerSharedModules,
@@ -22,6 +23,8 @@ in {
     hypervisor = "cloud-hypervisor";
     vcpu = 8;
     mem = 4096;
+
+    vsock.cid = vsockCid;
 
     interfaces = [
       {
