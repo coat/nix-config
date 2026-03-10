@@ -86,8 +86,7 @@
         }
       ];
 
-      terminal = "${pkgs.foot}/bin/foot";
-      # terminal = "${pkgs.ghostty}/bin/ghostty";
+      terminal = lib.mkDefault "${pkgs.ghostty}/bin/ghostty";
     };
 
     extraConfig = ''
