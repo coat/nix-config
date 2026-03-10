@@ -10,4 +10,6 @@
   services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
 
   system.stateVersion = "24.11";
+
+  users.groups.libvirtd.members = ["sadbeast"];
 }

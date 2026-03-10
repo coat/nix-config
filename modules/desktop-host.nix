@@ -3,6 +3,7 @@
     ./global.nix
     ./desktop.nix
     ./wireguard-desktop.nix
+    ./virt-manager.nix
     inputs.microvm.nixosModules.host
     ./microvm.nix
   ];
