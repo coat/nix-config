@@ -19,10 +19,10 @@
 
   home = {
     packages = with pkgs; [
-      # galculator
       gimp
       lagrange
       pavucontrol
+      qalculate-gtk
       signal-desktop
       transmission_4
       vlc

@@ -51,7 +51,7 @@
         {
           command = "floating enable";
           criteria = {
-            app_id = "galculator";
+            app_id = "qalculate-gtk";
           };
         }
         {
