@@ -13,7 +13,6 @@
       pgcli
       pkgs.llm-agents.amp
       pkgs.llm-agents.copilot-cli
-      pkgs.llm-agents.opencode
       pkgs.llm-agents.spec-kit
       ruby
       ssm-session-manager-plugin
@@ -26,6 +25,21 @@
       enable = true;
       settings.aliases = {
         prs = "pr list";
+      };
+    };
+
+    opencode = {
+      enable = true;
+      package = pkgs.llm-agents.opencode;
+      settings = {
+        mcp = {
+          jira = {
+            type = "remote";
+            url = "https://mcp.atlassian.com/v1/sse";
+            enabled = true;
+            oauth = {};
+          };
+        };
       };
     };
   };
