@@ -1,11 +1,11 @@
-{config, ...}: let
+{...}: let
   wg = {
-    address = "10.25.206.38/32";
+    address = "10.237.0.149/32";
     dns = "10.0.0.243";
     peer = {
-      publicKey = "MelF5Wr2At8Bm3Z5aN4HXHXoJ7C2g9CazbeD+bmxjhI=";
+      publicKey = "lpBPIwqrXhVvgejt67gCC98IY84jP5toK+gbfJ2VuiM=";
       allowedIPs = "0.0.0.0/0";
-      endpoint = "149.22.95.154:1337";
+      endpoint = "173.239.198.129:1337";
       persistentKeepalive = 25;
     };
   };
