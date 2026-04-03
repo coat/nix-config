@@ -15,4 +15,6 @@
       };
     }
   ];
+
+  users.users.sadbeast.extraGroups = ["video" "audio"];
 }
