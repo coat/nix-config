@@ -37,10 +37,14 @@
     };
   };
 
-  programs.nixvim = {
-    imports = [
-      ../nixvim/obsidian.nix
-    ];
+  programs = {
+    nixvim = {
+      imports = [
+        ../nixvim/obsidian.nix
+      ];
+    };
+
+    chromium.enable = true;
   };
 
   gtk.enable = true;
