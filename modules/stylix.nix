@@ -14,6 +14,8 @@
 
       monospace.package = nerd-fonts.iosevka;
       monospace.name = "Iosevka";
+
+      sizes.terminal = 12;
     };
   };
 }
