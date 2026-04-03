@@ -6,15 +6,16 @@
     packages = with pkgs; [
       alejandra
       awscli2
+      devenv
       duckdb
       httpie
       jq
       lazygit
       pgcli
-      pkgs.llm-agents.amp
-      pkgs.llm-agents.copilot-cli
+      # pkgs.llm-agents.amp
       pkgs.llm-agents.spec-kit
       ruby
+      sox
       ssm-session-manager-plugin
       tree-sitter
     ];
@@ -26,6 +27,11 @@
       settings.aliases = {
         prs = "pr list";
       };
+    };
+
+    claude-code = {
+      enable = true;
+      package = pkgs.llm-agents.claude-code;
     };
 
     opencode = {
