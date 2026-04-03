@@ -42,6 +42,15 @@
 
         locations."/".return = "301 https://linktr.ee/Thinklikeanesthetician";
       };
+
+      virtualHosts."gnarlyboutique.com" = {
+        serverAliases = ["www.gnarlyboutique.com" "gnarlyboutique.com"];
+
+        addSSL = true;
+        enableACME = true;
+
+        locations."/".return = "301 https://gnarly.boutique";
+      };
     };
 
     # soju = {
