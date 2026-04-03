@@ -13,13 +13,14 @@
       tags = ["personal"];
       system = "x86_64-linux";
       userModule = ./users/sadbeast/server.nix;
-      buildHost = "root@crystalpalace";
+      buildHost = "root@joshua";
     };
     crystalpalace = {
       targetHost = "root@crystalpalace";
       tags = ["personal"];
       system = "x86_64-linux";
       userModule = ./users/sadbeast/server.nix;
+      buildHost = "root@joshua";
     };
     joshua = {
       targetHost = "root@joshua";
