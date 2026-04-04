@@ -9,33 +9,28 @@
 
   machineConfigs = {
     cheyenne = {
-      targetHost = "root@cheyenne.sadbeast.com";
       tags = ["personal"];
       system = "x86_64-linux";
       userModule = ./users/sadbeast/server.nix;
       buildHost = "root@joshua";
     };
     crystalpalace = {
-      targetHost = "root@crystalpalace";
       tags = ["personal"];
       system = "x86_64-linux";
       userModule = ./users/sadbeast/server.nix;
       buildHost = "root@joshua";
     };
     joshua = {
-      targetHost = "root@joshua";
       tags = ["personal"];
       system = "x86_64-linux";
       userModule = ./users/sadbeast/joshua-nixos.nix;
     };
     wopr = {
-      targetHost = "root@wopr";
       tags = ["personal"];
       system = "x86_64-linux";
       userModule = ./users/sadbeast/wopr-nixos.nix;
     };
     falken = {
-      targetHost = "root@192.168.0.101";
       tags = ["work"];
       system = "aarch64-linux";
       userModule = ./users/kent/falken-nixos.nix;
@@ -44,7 +39,6 @@
   };
 
   mkInventoryMachine = cfg: {
-    deploy.targetHost = cfg.targetHost;
     inherit (cfg) tags;
   };
 
@@ -111,6 +105,29 @@ in {
   inventory.instances =
     {
       wifi = mkWifiInstance wifiInstanceConfig;
+      internet = {
+        module.input = "clan-core";
+        roles.default.machines.cheyenne = {
+          settings.host = "cheyenne.sadbeast.com";
+        };
+        roles.default.machines.crystalpalace = {
+          settings.host = "192.168.0.2";
+        };
+        roles.default.machines.joshua = {
+          settings.host = "192.168.0.3";
+        };
+        roles.default.machines.wopr = {
+          settings.host = "192.168.0.4";
+        };
+      };
+      zerotier = {
+        module.name = "zerotier";
+        module.input = "clan-core";
+        roles.controller.machines.cheyenne = {};
+        roles.moon.machines.cheyenne.settings.stableEndpoints = ["149.248.36.246"];
+        roles.peer.tags.personal = {};
+        roles.peer.tags.work = {};
+      };
     }
     // lib.mapAttrs (_: mkUsersInstance) userInstanceConfigs;
 
