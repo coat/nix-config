@@ -13,7 +13,7 @@
   pkgs,
   ...
 }: let
-  sshKeys = import ./ssh-keys.nix;
+  sshKeys = import ../lib/ssh-keys.nix;
 in {
   imports = [
     inputs.home-manager.nixosModules.default

@@ -1,8 +1,8 @@
 {self, ...}: let
   lib = self.inputs.nixpkgs.lib;
 
-  sshKeys = import "${self}/modules/ssh-keys.nix";
-  mkPkgs = import ./modules/mk-pkgs.nix {
+  sshKeys = import "${self}/lib/ssh-keys.nix";
+  mkPkgs = import ./lib/mk-pkgs.nix {
     inherit lib;
     overlays = self.overlays.all;
   };

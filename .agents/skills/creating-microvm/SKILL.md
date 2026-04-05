@@ -75,5 +75,5 @@ Create a new ephemeral MicroVM declaration in this NixOS configuration.
 
 - `modules/microvm.nix` — Host bridge network config + VM declarations
 - `modules/microvm-base.nix` — Base guest config function (network, shares, home-manager)
-- `modules/ssh-keys.nix` — SSH authorized keys
+- `lib/ssh-keys.nix` — SSH authorized keys
 - `microvms/` — Optional per-VM project-specific configs

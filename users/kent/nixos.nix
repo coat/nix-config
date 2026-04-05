@@ -1,5 +1,5 @@
 {pkgs, ...}: let
-  sshKeys = import ../../modules/ssh-keys.nix;
+  sshKeys = import ../../lib/ssh-keys.nix;
 in
   import ../../modules/user-account.nix {
     inherit pkgs;

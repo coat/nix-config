@@ -57,7 +57,7 @@
     lib = nixpkgs.lib // home-manager.lib;
     forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
 
-    mkPkgs = import ./modules/mk-pkgs.nix {
+    mkPkgs = import ./lib/mk-pkgs.nix {
       inherit lib;
       overlays = outputs.overlays.all;
     };
