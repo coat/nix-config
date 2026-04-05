@@ -8,25 +8,24 @@
         forwardAgent = true;
       };
 
-      "falken" = {
+      "cheyenne" = {
         user = "sadbeast";
-        hostname = "sadbeast.com";
-        port = 6973;
+        hostname = "cheyenne.sadbeast.com";
       };
 
       "crystalpalace" = {
         user = "sadbeast";
-        hostname = "192.168.0.2";
+        hostname = "crystalpalace.local";
       };
 
       "joshua" = {
         user = "sadbeast";
-        hostname = "192.168.0.3";
+        hostname = "joshua.local";
       };
 
-      "cheyenne" = {
+      "wopr" = {
         user = "sadbeast";
-        hostname = "cheyenne.sadbeast.com";
+        hostname = "wopr.local";
       };
     };
   };
