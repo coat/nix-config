@@ -9,7 +9,7 @@
 
     vpn = {
       enable = true;
-      wgConf = config.clan.core.vars.generators.wireguard-vpn.files.wg-conf.path;
+      wgConf = "/run/pia-wg/wg.conf";
     };
 
     transmission = {

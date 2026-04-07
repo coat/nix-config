@@ -27,8 +27,8 @@
 - **Flake-based NixOS config** using clan-core for multi-machine management
 - `flake.nix` - Flake inputs/outputs, devcontainer and darwin configs
 - `clan.nix` - Clan machine definitions, user/wifi/zerotier instances, mk* helpers
-- `machines/` - NixOS machine configs (cheyenne, crystalpalace, falken, joshua, wopr)
-- `hosts/` - Non-clan hosts (darwin/macOS)
+- `machines/` - Clan-managed NixOS machine configs (cheyenne, crystalpalace, falken, joshua, wopr)
+- `hosts/` - Non-clan hosts (darwin/macOS) — kept separate because clan auto-discovers machines/
 - `lib/` - Shared utility functions and data (mk-pkgs, ssh-keys)
 - `modules/` - Shared NixOS modules (desktop, docker, wireguard, etc.)
 - `users/` - Home-manager user configs (kent, sadbeast, vscode, nix-on-droid)
