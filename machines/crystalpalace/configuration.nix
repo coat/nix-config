@@ -16,6 +16,8 @@
 
   boot.loader.systemd-boot.configurationLimit = 3;
 
+  services.avahi.interfaces = ["enp1s0"];
+
   networking.firewall = {
     enable = true;
     allowedTCPPorts = [3000 8080];
