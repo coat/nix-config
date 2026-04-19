@@ -31,6 +31,7 @@
           };
         };
       };
+      gopls.enable = true;
       nil_ls.enable = true;
       postgres_lsp.enable = true;
       rubocop.enable = true;
