@@ -62,6 +62,8 @@
       documents = "${homeDir}/docs";
       download = "${homeDir}/downloads";
       pictures = "${homeDir}/pics";
+
+      setSessionVariables = false;
     };
   };
 }
