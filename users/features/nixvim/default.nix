@@ -91,7 +91,7 @@ in {
       virtualedit = "block";
       wildmode = "longest:full,full";
       winminwidth = 5;
-      wrap = false;
+      wrap = true;
     };
 
     plugins = {
