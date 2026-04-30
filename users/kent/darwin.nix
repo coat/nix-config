@@ -1,4 +1,4 @@
-{
+{pkgs, ...}: {
   imports = [
     (import ../common/home-base.nix {
       username = "kent";
@@ -15,10 +15,16 @@
     })
   ];
 
-  home.sessionVariables = {
-    AWS_REGION = "us-east-1";
-    AWS_PROFILE = "CredSimple.SoftwareEngineer";
-    CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
+  home = {
+    packages = with pkgs; [
+      nodejs
+    ];
+
+    sessionVariables = {
+      AWS_REGION = "us-east-1";
+      AWS_PROFILE = "CredSimple.SoftwareEngineer";
+      CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
+    };
   };
 
   programs = {
