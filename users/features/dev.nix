@@ -11,7 +11,7 @@
       httpie
       jq
       lazygit
-      pgcli
+      # pgcli
       # pkgs.llm-agents.amp
       pkgs.llm-agents.spec-kit
       ruby
