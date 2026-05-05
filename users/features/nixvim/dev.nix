@@ -14,6 +14,9 @@
 
     plugins = {
       lint.enable = true;
+
+      opencode.enable = true;
+
       treesitter = {
         enable = true;
 

@@ -38,14 +38,8 @@
       enable = true;
       package = pkgs.llm-agents.opencode;
       settings = {
-        mcp = {
-          jira = {
-            type = "remote";
-            url = "https://mcp.atlassian.com/v1/sse";
-            enabled = true;
-            oauth = {};
-          };
-        };
+        lsp = true;
+        plugin = ["opencode-devcontainers"];
       };
     };
   };

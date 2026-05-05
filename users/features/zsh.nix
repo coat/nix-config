@@ -87,6 +87,16 @@
         function alp() {
           aws_profiles
         }
+
+        # function to exec into a devcontainer by branch name
+        function dcsh() {
+          local branch=''${1:-$(git rev-parse --abbrev-ref HEAD 2>/dev/null)}
+          if [[ -z "$branch" ]]; then
+            echo "Usage: dcsh <branch-name>"
+            return 1
+          fi
+          docker exec -it "''${branch}_devcontainer-app-1" bash
+        }
       '';
 
       defaultKeymap = "emacs";
