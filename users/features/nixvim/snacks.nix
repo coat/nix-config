@@ -64,6 +64,22 @@
       };
       picker = {
         enabled = true;
+        actions = {
+          opencode_send = lib.nixvim.mkRaw ''function(...) return require("opencode").snacks_picker_send(...) end'';
+        };
+        win = {
+          input = {
+            keys = {
+              "<a-a>" = {
+                __unkeyed-1 = "opencode_send";
+                mode = [
+                  "n"
+                  "i"
+                ];
+              };
+            };
+          };
+        };
       };
       explorer = {
         enabled = true;

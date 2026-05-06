@@ -8,14 +8,13 @@
       ./gitsigns.nix
       ./lsp.nix
       ./neotest.nix
+      ./opencode.nix
       ./todo-comments.nix
       ./trouble.nix
     ];
 
     plugins = {
       lint.enable = true;
-
-      opencode.enable = true;
 
       treesitter = {
         enable = true;
