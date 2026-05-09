@@ -30,6 +30,7 @@
         };
       };
       rspec.enable = true;
+      minitest.enable = true;
     };
   };
 
