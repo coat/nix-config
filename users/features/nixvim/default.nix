@@ -83,6 +83,7 @@ in {
       splitkeep = "screen";
       splitright = true;
       tabstop = 2;
+      title = true;
       termguicolors = true;
       timeoutlen = 300;
       undofile = true;
