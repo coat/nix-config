@@ -34,8 +34,19 @@
       gopls.enable = true;
       nil_ls.enable = true;
       postgres_lsp.enable = true;
-      rubocop.enable = true;
-      ruby_lsp.enable = true;
+      # Ruby LSPs resolve from $PATH so they pick up the project's devShell
+      # wrappers (composed bundle with project gems). Launch nvim from inside
+      # `nix develop` for these to work.
+      rubocop = {
+        enable = true;
+        package = null;
+        cmd = ["rubocop" "--lsp"];
+      };
+      ruby_lsp = {
+        enable = true;
+        package = null;
+        cmd = ["ruby-lsp"];
+      };
       terraformls.enable = true;
       ts_ls.enable = true;
       zls.enable = true;
