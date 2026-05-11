@@ -34,14 +34,7 @@
       gopls.enable = true;
       nil_ls.enable = true;
       postgres_lsp.enable = true;
-      # Ruby LSPs resolve from $PATH so they pick up the project's devShell
-      # wrappers (composed bundle with project gems). Launch nvim from inside
-      # `nix develop` for these to work.
-      rubocop = {
-        enable = true;
-        package = null;
-        cmd = ["rubocop" "--lsp"];
-      };
+
       ruby_lsp = {
         enable = true;
         package = null;
@@ -151,6 +144,61 @@
 
   # Diagnostics configuration
   extraConfigLua = ''
+    do
+      local function has_file(dir, name)
+        return vim.fn.filereadable(dir .. "/" .. name) == 1
+      end
+
+      local function find_ruby_project_root(bufnr)
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+        if fname == "" then
+          return nil
+        end
+        local dir = vim.fn.fnamemodify(fname, ":p:h")
+        local prev = ""
+        while dir ~= prev do
+          if has_file(dir, ".standard.yml") or has_file(dir, ".rubocop.yml") then
+            return dir
+          end
+          prev = dir
+          dir = vim.fn.fnamemodify(dir, ":h")
+        end
+        return nil
+      end
+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "ruby",
+        callback = function(args)
+          local bufnr = args.buf
+          local root = find_ruby_project_root(bufnr)
+          if not root then
+            return
+          end
+
+          local lsp_clients = vim.lsp.get_clients({bufnr = bufnr})
+          for _, c in ipairs(lsp_clients) do
+            if c.name == "rubocop" or c.name == "standardrb" then
+              return
+            end
+          end
+
+          if has_file(root, ".standard.yml") then
+            vim.lsp.start({
+              name = "standardrb",
+              cmd = {"standardrb", "--lsp"},
+              root_dir = root,
+            }, {bufnr = bufnr})
+          elseif has_file(root, ".rubocop.yml") then
+            vim.lsp.start({
+              name = "rubocop",
+              cmd = {"rubocop", "--lsp"},
+              root_dir = root,
+            }, {bufnr = bufnr})
+          end
+        end,
+      })
+    end
+
     vim.diagnostic.config({
       underline = true,
       update_in_insert = false,
