@@ -7,6 +7,8 @@
 
   networking.hostName = "wopr";
 
+  networking.firewall.allowedTCPPorts = [3000];
+
   services.logind.settings.Login.HandleLidSwitchExternalPower = "ignore";
 
   system.stateVersion = "24.11";
