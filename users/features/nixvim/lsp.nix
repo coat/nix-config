@@ -39,6 +39,13 @@
         enable = true;
         package = null;
         cmd = ["ruby-lsp"];
+        settings = {
+          rubyLsp = {
+            featuresConfiguration = {
+              codeLens = true;
+            };
+          };
+        };
       };
       terraformls.enable = true;
       ts_ls.enable = true;
@@ -110,8 +117,18 @@
         }
         {
           key = "<leader>cC";
-          action = lib.nixvim.mkRaw ''vim.lsp.codelens.refresh'';
-          options.desc = "Refresh & Display Codelens";
+          action = lib.nixvim.mkRaw ''
+            function()
+              if vim.g.codelens_enabled then
+                vim.lsp.codelens.clear()
+                vim.g.codelens_enabled = false
+              else
+                vim.lsp.codelens.refresh()
+                vim.g.codelens_enabled = true
+              end
+            end
+          '';
+          options.desc = "Toggle codelens";
         }
         {
           key = "<leader>cR";
@@ -144,6 +161,23 @@
 
   # Diagnostics configuration
   extraConfigLua = ''
+    -- ruby-lsp custom command handlers
+    vim.lsp.commands["rubyLsp.openFile"] = function(cmd, _)
+      local uri_frag = cmd.arguments[1][1]
+      local uri, line = uri_frag:match("^(.+)%%23L(%d+)$")
+      if not uri then
+        uri, line = uri_frag:match("^(.+)#L(%d+)$")
+      end
+      if not uri then
+        uri = uri_frag
+      end
+      local bufnr = vim.uri_to_bufnr(uri)
+      vim.fn.bufload(bufnr)
+      vim.api.nvim_set_option_value("buflisted", true, { buf = bufnr })
+      vim.api.nvim_set_current_buf(bufnr)
+      vim.api.nvim_win_set_cursor(0, { tonumber(line) or 1, 0 })
+    end
+
     do
       local function has_file(dir, name)
         return vim.fn.filereadable(dir .. "/" .. name) == 1

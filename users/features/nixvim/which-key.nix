@@ -11,6 +11,11 @@
           mode = ["n" "x"];
         }
         {
+          __unkeyed-1 = "<leader>a";
+          group = "ai";
+          mode = ["n" "x"];
+        }
+        {
           __unkeyed-1 = "<leader>c";
           group = "code";
           mode = ["n" "x"];
