@@ -1,7 +1,10 @@
 {
   imports = [
     ../../modules/global.nix
+    ../../modules/docker.nix
+    ../../modules/docker-registry.nix
     ../../users/sadbeast/nixos.nix
+    ../../users/teamdraft/nixos.nix
   ];
 
   networking.firewall = {
@@ -18,6 +21,33 @@
         enableACME = true;
 
         root = "/srv/www/sadbeast.com";
+      };
+
+      virtualHosts."teamdraft.party" = {
+        forceSSL = true;
+        enableACME = true;
+
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:3000";
+          proxyWebsockets = true;
+          recommendedProxySettings = true;
+        };
+      };
+
+      virtualHosts."registry.teamdraft.party" = {
+        forceSSL = true;
+        enableACME = true;
+
+        locations."/" = {
+          proxyPass = "http://127.0.0.1:5000";
+          recommendedProxySettings = true;
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_read_timeout 900;
+            proxy_buffering off;
+            proxy_request_buffering off;
+          '';
+        };
       };
 
       # virtualHosts."irc.sadbeast.com" = {
