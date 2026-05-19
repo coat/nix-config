@@ -3,4 +3,5 @@
 {pkgs ? import <nixpkgs> {}, ...}: {
   ez80asm = pkgs.callPackage ./ez80asm {};
   fab-agon-emulator = pkgs.callPackage ./fab-agon-emulator {};
+  foot-terminfo = pkgs.callPackage ./foot-terminfo {};
 }
