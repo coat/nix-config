@@ -15,5 +15,8 @@
 
   llm-agents = inputs.llm-agents.overlays.default;
 
-  all = [additions modifications llm-agents];
+  all = final: prev:
+    (additions final prev)
+    // (modifications final prev)
+    // (llm-agents final prev);
 }
