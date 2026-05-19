@@ -4,36 +4,45 @@
   sshKeys = import "${self}/lib/ssh-keys.nix";
   mkPkgs = import ./lib/mk-pkgs.nix {
     inherit lib;
-    overlays = self.overlays.all;
+    overlays = [self.overlays.all];
   };
 
+  # Each machine declares its tags, system, and the *profile* + *user* that
+  # parameterise module composition. Per-host customisations live in
+  # machines/<host>/configuration.nix (NixOS) and machines/<host>/home.nix
+  # (home-manager, optional, auto-detected).
   machineConfigs = {
     cheyenne = {
       tags = ["personal"];
       system = "x86_64-linux";
-      userModule = ./users/sadbeast/server.nix;
+      profile = "server";
+      user = "sadbeast";
       buildHost = "root@joshua";
     };
     crystalpalace = {
       tags = ["personal"];
       system = "x86_64-linux";
-      userModule = ./users/sadbeast/server.nix;
+      profile = "server";
+      user = "sadbeast";
       buildHost = "root@joshua";
     };
     joshua = {
       tags = ["personal"];
       system = "x86_64-linux";
-      userModule = ./users/sadbeast/joshua-nixos.nix;
+      profile = "desktop";
+      user = "sadbeast";
     };
     wopr = {
       tags = ["personal"];
       system = "x86_64-linux";
-      userModule = ./users/sadbeast/wopr-nixos.nix;
+      profile = "desktop";
+      user = "sadbeast";
     };
     falken = {
       tags = ["work"];
       system = "aarch64-linux";
-      userModule = ./users/kent/falken-nixos.nix;
+      profile = "vm";
+      user = "kent";
       requireExplicitUpdate = true;
     };
   };
@@ -42,11 +51,21 @@
     inherit (cfg) tags;
   };
 
-  mkMachine = cfg: {inputs, ...}:
+  mkMachine = name: cfg: {inputs, ...}: let
+    hostHome = ./machines + "/${name}/home.nix";
+    hasHostHome = builtins.pathExists hostHome;
+  in
     {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs cfg.system;
-      imports = [cfg.userModule];
+      imports = [
+        ./modules/home-manager.nix
+        (./users + "/${cfg.user}/${cfg.profile}.nix")
+        (./users + "/${cfg.user}/nixos.nix")
+      ];
       users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
+      home-manager.users.${cfg.user}.imports =
+        [(./users + "/${cfg.user}/home.nix")]
+        ++ lib.optional hasHostHome hostHome;
     }
     // lib.optionalAttrs (cfg ? buildHost) {
       clan.core.networking.buildHost = cfg.buildHost;
@@ -59,7 +78,7 @@
     sadbeast-user = {
       tags = ["personal"];
       user = "sadbeast";
-      groups = ["wheel" "media"];
+      groups = ["wheel" "media" "docker" "audio" "input"];
     };
     kent-user = {
       tags = ["work"];
@@ -132,7 +151,7 @@ in {
     // lib.mapAttrs (_: mkUsersInstance) userInstanceConfigs;
 
   # Additional NixOS configuration can be added here.
-  # machines/jon/configuration.nix will be automatically imported.
+  # machines/<host>/configuration.nix is automatically imported by clan.
   # See: https://docs.clan.lol/guides/more-machines/#automatic-registration
-  machines = lib.mapAttrs (_: mkMachine) machineConfigs;
+  machines = lib.mapAttrs mkMachine machineConfigs;
 }

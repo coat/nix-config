@@ -5,6 +5,5 @@ in
     inherit pkgs;
     name = "sadbeast";
     sshKeys = sshKeys.sadbeast;
-    extraGroups = ["docker" "audio" "input"];
     enableSubIds = true;
   }

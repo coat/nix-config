@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   imports = [
-    ./desktop-base.nix
-    ../features/desktop/games.nix
+    ../../users/sadbeast/desktop-home.nix
+    ../../users/features/desktop/games.nix
   ];
 
   programs.bluetuith.enable = true;

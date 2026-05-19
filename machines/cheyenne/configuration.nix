@@ -3,7 +3,6 @@
     ../../modules/global.nix
     ../../modules/docker.nix
     ../../modules/docker-registry.nix
-    ../../users/sadbeast/nixos.nix
     ../../users/teamdraft/nixos.nix
   ];
 
@@ -28,7 +27,7 @@
         enableACME = true;
 
         locations."/" = {
-          proxyPass = "http://127.0.0.1:3000";
+          proxyPass = "http://127.0.0.1:8080";
           proxyWebsockets = true;
           recommendedProxySettings = true;
         };
@@ -50,22 +49,6 @@
         };
       };
 
-      # virtualHosts."irc.sadbeast.com" = {
-      #   listen = [
-      #     {
-      #       addr = "127.0.0.1";
-      #       port = 1667;
-      #       ssl = true;
-      #     }
-      #   ];
-      #   addSSL = true;
-      #   enableACME = true;
-      #
-      #   locations."/" = {
-      #     proxyPass = "unix:/run/soju/irc.sock";
-      #   };
-      # };
-
       virtualHosts."miramiraspa.com" = {
         addSSL = true;
         enableACME = true;
@@ -82,10 +65,6 @@
         locations."/".return = "301 https://gnarly.boutique";
       };
     };
-
-    # soju = {
-    #   enable = true;
-    # };
 
     stargazer = {
       enable = true;

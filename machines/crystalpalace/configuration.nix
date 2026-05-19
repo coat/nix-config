@@ -12,7 +12,6 @@
     ../../modules/samba.nix
     ../../modules/immich.nix
     ../../modules/forgejo-runner.nix
-    ../../users/sadbeast/nixos.nix
   ];
 
   boot.loader.systemd-boot.configurationLimit = 3;

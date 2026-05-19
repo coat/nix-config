@@ -5,6 +5,8 @@
     ./stylix.nix
   ];
 
+  programs.dconf.enable = true;
+
   services = {
     avahi = {
       enable = true;

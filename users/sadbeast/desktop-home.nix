@@ -1,7 +1,6 @@
 {
-  # Common desktop home-manager configuration
+  # sadbeast's home-manager desktop bundle. Imported by per-host home.nix files.
   imports = [
-    ./home.nix
     ../features/desktop
     ../features/desktop/dev.nix
     ../features/dev.nix
