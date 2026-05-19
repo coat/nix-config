@@ -1,50 +1,33 @@
 # nix-config
 
-Welcome to my NixOS configurations. I have no idea what I'm doing.
+NixOS + home-manager + nix-darwin configuration, orchestrated with
+[clan-core](https://clan.lol).
 
-## machines
+## Machines
 
-Most machines are managed using [clan](https://clan.lol). After making changes,
-run:
+| Host          | OS / role                        | Profile  | Managed by                    |
+| ------------- | -------------------------------- | -------- | ----------------------------- |
+| joshua        | desktop (sway)                   | desktop  | clan                          |
+| wopr          | laptop (sway) + microvm host     | desktop  | clan                          |
+| cheyenne      | public-facing web/gemini server  | server   | clan                          |
+| crystalpalace | media + arr-stack server         | server   | clan                          |
+| falken        | aarch64 work VM (awesome WM)     | vm       | clan                          |
+| kents-MacBook-Pro | work mac                     | —        | nix-darwin (see `hosts/`)     |
 
-```sh
-clan machines update
-```
+## Operating
 
-to update every machine remotely. `clan machines update wopr` to update a
-specific machine.
+- Remote rebuild (clan): `clan machines update <host>`
+- Local rebuild (on the machine): `sudo nixos-rebuild switch --flake .#<host>`
+- Darwin: `sudo darwin-rebuild switch --flake .#`
+- Devcontainer HM: `home-manager switch --flake .#devcontainer-<arch>-<os>`
 
-From an actual machine, if no secrets have been changed, you can run `sudo
-nixos-rebuild switch --flake .#<machine>`.
+For the full structure, runbooks ("Add a machine", "Add a user", "Add a darwin
+host", "Add a microvm"), and conventions, see [AGENTS.md](./AGENTS.md).
 
-## hosts
+## References
 
-Some machines are not managed using clan, like darwin. After making changes,
-run:
-
-```sh
-sudo darwin-rebuild switch --flake .#
-```
-
-which will rebuild darwin nixos and run home-manager switch.
-
-## home-manager
-
-`clan machines update` and `nixos-rebuild switch` will run home-manager.
-
-## microvm
-
-```sh
-mkdir -p ~/microvm/dev/ssh-host-keys
-ssh-keygen -t ed25519 -N "" -f ~/microvm/dev/ssh-host-keys/ssh_host_ed25519_key
-sudo nixos-rebuild switch --flake .#wopr
-sudo systemctl start microvm@devvm
-ssh 192.168.83.2
-```
-
-# References
-- This was initially setup using
-  [https://github.com/Misterio77/nix-starter-configs](https://github.com/Misterio77/nix-starter-configs)
-
-- [Encypted Btrfs Root with Opt-in State on
+- Originally bootstrapped from
+  [Misterio77/nix-starter-configs](https://github.com/Misterio77/nix-starter-configs),
+  since migrated to clan-core.
+- [Encrypted Btrfs Root with Opt-in State on
   NixOS](https://mt-caret.github.io/blog/2020-06-29-optin-state.html)
