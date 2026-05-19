@@ -2,9 +2,35 @@
   inputs,
   homeManagerSharedModules,
   outputs,
+  lib,
   ...
 }: let
   microvmBase = import ./microvm-base.nix;
+
+  vmDir = ../microvms;
+  vmFiles = builtins.readDir vmDir;
+  vmNames =
+    map (n: lib.removeSuffix ".nix" n)
+    (builtins.filter (n: lib.hasSuffix ".nix" n) (builtins.attrNames vmFiles));
+
+  mkVm = name: let
+    cfg = import (vmDir + "/${name}.nix");
+  in {
+    inherit name;
+    value = {
+      autostart = false;
+      config = {
+        imports = [
+          inputs.microvm.nixosModules.microvm
+          (microvmBase (cfg
+            // {
+              hostName = name;
+              inherit inputs outputs homeManagerSharedModules;
+            }))
+        ];
+      };
+    };
+  };
 in {
   systemd.network.netdevs."20-microbr".netdevConfig = {
     Kind = "bridge";
@@ -29,21 +55,5 @@ in {
     internalInterfaces = ["microbr"];
   };
 
-  microvm.vms.devvm = {
-    autostart = false;
-    config = {
-      imports = [
-        inputs.microvm.nixosModules.microvm
-        (microvmBase {
-          hostName = "devvm";
-          ipAddress = "192.168.83.2/24";
-          tapId = "microvm0";
-          mac = "02:00:00:00:00:01";
-          workspace = "/home/sadbeast/microvm/dev";
-          vsockCid = 3;
-          inherit inputs outputs homeManagerSharedModules;
-        })
-      ];
-    };
-  };
+  microvm.vms = builtins.listToAttrs (map mkVm vmNames);
 }
