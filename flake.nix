@@ -44,9 +44,7 @@
     darwin,
     home-manager,
     nix-index-database,
-    nixarr,
     nixpkgs,
-    nixpkgs-working,
     nixvim,
     stylix,
     systems,
@@ -59,7 +57,7 @@
 
     mkPkgs = import ./lib/mk-pkgs.nix {
       inherit lib;
-      overlays = outputs.overlays.all;
+      overlays = [outputs.overlays.all];
     };
 
     mkPkgsFor = nixpkgsSrc:
@@ -69,7 +67,7 @@
 
     pkgsFor = mkPkgsFor nixpkgs;
 
-    # Shared home-manager modules for all targets.
+    # Shared home-manager modules for clan + standalone + darwin.
     homeManagerSharedModules = [
       nixvim.homeModules.nixvim
       nix-index-database.homeModules.nix-index
@@ -94,16 +92,62 @@
       };
     };
 
-    mkDevcontainer = system:
+    # Standalone home-manager (devcontainers, nix-on-droid).
+    # Each entry: { system, module }.
+    standaloneHomeConfigs = {
+      "devcontainer-x86_64-linux" = {
+        system = "x86_64-linux";
+        module = ./users/vscode/default.nix;
+      };
+      "devcontainer-aarch64-darwin" = {
+        system = "aarch64-darwin";
+        module = ./users/vscode/default.nix;
+      };
+      "devcontainer-aarch64-linux" = {
+        system = "aarch64-linux";
+        module = ./users/vscode/default.nix;
+      };
+    };
+
+    mkStandaloneHome = cfg:
       home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.${system};
+        pkgs = pkgsFor.${cfg.system};
         extraSpecialArgs = {inherit inputs outputs;};
         modules =
-          [
-            ./users/vscode/default.nix
-          ]
+          [cfg.module]
           ++ homeManagerSharedModules
           ++ homeManagerStylixModules;
+      };
+
+    # Darwin hosts. Each entry: { system, user, hostConfig }.
+    darwinHostConfigs = {
+      "kents-MacBook-Pro" = {
+        system = "aarch64-darwin";
+        user = "kent";
+        hostConfig = ./hosts/darwin/work/configuration.nix;
+      };
+    };
+
+    mkDarwin = cfg:
+      darwin.lib.darwinSystem {
+        specialArgs = {inherit inputs outputs;};
+        modules = [
+          cfg.hostConfig
+          {nixpkgs.overlays = [outputs.overlays.all];}
+          nix-index-database.darwinModules.nix-index
+          stylix.darwinModules.stylix
+          ./modules/stylix.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = {inherit inputs outputs;};
+              sharedModules = homeManagerSharedModules;
+              users.${cfg.user} = import (./users + "/${cfg.user}/darwin.nix");
+            };
+          }
+        ];
       };
   in {
     inherit (clan.config) nixosModules clanInternals;
@@ -126,33 +170,10 @@
 
     nixosConfigurations = clan.config.nixosConfigurations;
 
-    # Standalone home-manager configs for non-NixOS targets only.
+    # Standalone home-manager configs for non-NixOS targets (devcontainers).
     # NixOS machines use clan + integrated home-manager.
-    homeConfigurations = {
-      "devcontainer-x86_64-linux" = mkDevcontainer "x86_64-linux";
-      "devcontainer-aarch64-darwin" = mkDevcontainer "aarch64-darwin";
-      "devcontainer-aarch64-linux" = mkDevcontainer "aarch64-linux";
-    };
+    homeConfigurations = lib.mapAttrs (_: mkStandaloneHome) standaloneHomeConfigs;
 
-    darwinConfigurations."kents-MacBook-Pro" = darwin.lib.darwinSystem {
-      specialArgs = {inherit inputs outputs;};
-      modules = with home-manager; [
-        ./hosts/darwin/work/configuration.nix
-        {nixpkgs.overlays = outputs.overlays.all;}
-        nix-index-database.darwinModules.nix-index
-        stylix.darwinModules.stylix
-        ./modules/stylix.nix
-        darwinModules.home-manager
-        {
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            extraSpecialArgs = {inherit inputs outputs;};
-            sharedModules = homeManagerSharedModules;
-            users.kent = import ./users/kent/darwin.nix;
-          };
-        }
-      ];
-    };
+    darwinConfigurations = lib.mapAttrs (_: mkDarwin) darwinHostConfigs;
   };
 }
