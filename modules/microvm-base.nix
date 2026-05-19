@@ -17,11 +17,22 @@
 in {
   imports = [
     inputs.home-manager.nixosModules.default
+    ./home-manager-stylix.nix
   ];
+
+  _module.args.inputs = inputs;
+
+  nix.settings = {
+    experimental-features = "ca-derivations nix-command flakes";
+    auto-optimise-store = false;
+    substituters = ["https://cache.numtide.com"];
+    trusted-public-keys = ["niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="];
+    trusted-users = ["@wheel"];
+  };
 
   microvm = {
     hypervisor = "cloud-hypervisor";
-    vcpu = 8;
+    vcpu = 4;
     mem = 4096;
 
     vsock.cid = vsockCid;
@@ -113,22 +124,7 @@ in {
       inherit inputs outputs;
       nixosConfig = config;
     };
-    sharedModules =
-      homeManagerSharedModules
-      ++ [
-        inputs.stylix.homeModules.stylix
-        ./stylix.nix
-        {
-          stylix = {
-            autoEnable = false;
-            targets.btop.enable = true;
-            targets.fzf.enable = true;
-            targets.nixvim.enable = true;
-            targets.starship.enable = true;
-            targets.tmux.enable = true;
-          };
-        }
-      ];
+    sharedModules = homeManagerSharedModules;
     users.sadbeast.imports = [
       ../users/sadbeast/home.nix
       ../users/features/dev.nix

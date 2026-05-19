@@ -1,4 +1,7 @@
 {inputs, ...}: {
+  # Wires HM-level stylix for hosts that do NOT load the NixOS stylix module
+  # (servers, standalone home-manager, microvm guests). Desktop hosts get HM
+  # stylix auto-propagated from `inputs.stylix.nixosModules.stylix`.
   home-manager.sharedModules = [
     inputs.stylix.homeModules.stylix
     ./stylix.nix
