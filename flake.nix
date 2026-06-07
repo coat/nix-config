@@ -1,14 +1,11 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
-
-    nixpkgs-working.url = "github:nixos/nixpkgs/0182a361324364ae3f436a63005877674cf45efb";
 
     amp-nvim.url = "github:sourcegraph/amp.nvim";
     amp-nvim.flake = false;
 
-    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/main.tar.gz";
+    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/25.11.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
 
     darwin.url = "github:lnl7/nix-darwin";
@@ -16,9 +13,6 @@
 
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    llm-agents.url = "github:numtide/llm-agents.nix";
-    llm-agents.inputs.nixpkgs.follows = "nixpkgs";
 
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
@@ -71,6 +65,7 @@
     homeManagerSharedModules = [
       nixvim.homeModules.nixvim
       nix-index-database.homeModules.nix-index
+      {programs.nixvim.nixpkgs.source = nixpkgs;}
     ];
 
     homeManagerStylixModules = [

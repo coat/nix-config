@@ -8,14 +8,15 @@
       awscli2
       devenv
       duckdb
+      glow
       httpie
       jq
       lazygit
+      # nono
       pgcli
-      # pkgs.llm-agents.amp
-      pkgs.llm-agents.spec-kit
       ruby
       sox
+      spec-kit
       ssm-session-manager-plugin
       tree-sitter
     ];
@@ -31,12 +32,10 @@
 
     claude-code = {
       enable = true;
-      package = pkgs.llm-agents.claude-code;
     };
 
     opencode = {
       enable = true;
-      package = pkgs.llm-agents.opencode;
       settings = {
         lsp = true;
         plugin = ["opencode-devcontainers"];

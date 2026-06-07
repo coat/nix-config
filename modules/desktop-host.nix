@@ -14,5 +14,7 @@
 
   nix.settings.auto-optimise-store = false;
 
+  nix.settings.trusted-users = ["@wheel"];
+
   programs.sway.enable = true;
 }
