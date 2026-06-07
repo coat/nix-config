@@ -26,6 +26,4 @@
       uris = ["qemu:///system"];
     };
   };
-
-  gtk.gtk4.theme = null;
 }
