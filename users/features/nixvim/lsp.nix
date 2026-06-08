@@ -1,4 +1,29 @@
-{lib, ...}: {
+{pkgs, lib, ...}: let
+  ruby-lsp-wrapper = pkgs.writeShellScriptBin "ruby-lsp-wrapper" ''
+    # The gem-installed binstub calls Gem.use_gemdeps, which resolves gems
+    # from the nearest Gemfile.  Point it at the composed .ruby-lsp/Gemfile
+    # (which eval_gemfile's the project Gemfile + adds LSP gems) so it can
+    # resolve ruby-lsp + project deps correctly.
+    if [ -f "$PWD/.ruby-lsp/Gemfile" ]; then
+      export BUNDLE_GEMFILE="$PWD/.ruby-lsp/Gemfile"
+
+      # If the project uses a devenv ruby bundle, make sure its gems are
+      # discoverable — even before direnv has loaded in neovim.
+      # Use only bash builtins; the LSP process may have a minimal PATH.
+      if [ -d "$PWD/.devenv/state/.bundle/ruby" ]; then
+        for rd in "$PWD/.devenv/state/.bundle/ruby"/*; do
+          if [ -d "$rd" ]; then
+            export GEM_HOME="$rd"
+            export GEM_PATH="$GEM_HOME/gems''${GEM_PATH:+:$GEM_PATH}"
+            export PATH="$GEM_HOME/bin''${PATH:+:$PATH}"
+            break
+          fi
+        done
+      fi
+    fi
+    exec ruby-lsp "$@"
+  '';
+in {
   plugins.lsp = {
     enable = true;
     inlayHints = false;
@@ -38,7 +63,7 @@
       ruby_lsp = {
         enable = true;
         package = null;
-        cmd = ["ruby-lsp"];
+        cmd = [ (lib.getExe ruby-lsp-wrapper) ];
         settings = {
           rubyLsp = {
             featuresConfiguration = {
@@ -216,22 +241,39 @@
             end
           end
 
+          -- RuboCop is handled by ruby-lsp's built-in RuboCop addon (run from the
+          -- project bundle), so we no longer start a standalone rubocop client.
+          -- Keep standardrb as a fallback for projects using Standard.
           if has_file(root, ".standard.yml") then
             vim.lsp.start({
               name = "standardrb",
               cmd = {"standardrb", "--lsp"},
               root_dir = root,
             }, {bufnr = bufnr})
-          elseif has_file(root, ".rubocop.yml") then
-            vim.lsp.start({
-              name = "rubocop",
-              cmd = {"rubocop", "--lsp"},
-              root_dir = root,
-            }, {bufnr = bufnr})
           end
         end,
       })
     end
+
+    -- ruby-lsp resolves its gems from the project environment (GEM_HOME, PATH)
+    -- that direnv injects. If the client started before direnv finished loading
+    -- (or nvim was launched outside the project), (re)start it once the env is ready.
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "DirenvLoaded",
+      callback = function()
+        vim.schedule(function()
+          local bufnr = vim.api.nvim_get_current_buf()
+          if vim.bo[bufnr].filetype ~= "ruby" then
+            return
+          end
+          if vim.tbl_isempty(vim.lsp.get_clients({ name = "ruby_lsp", bufnr = bufnr })) then
+            pcall(vim.cmd, "LspStart ruby_lsp")
+          else
+            pcall(vim.cmd, "LspRestart ruby_lsp")
+          end
+        end)
+      end,
+    })
 
     vim.diagnostic.config({
       underline = true,

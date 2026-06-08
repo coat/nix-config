@@ -14,6 +14,10 @@
     ];
 
     plugins = {
+      # Load per-directory direnv environments (e.g. devenv's GEM_HOME/PATH) so
+      # project-local LSPs like ruby-lsp can find their gems. Fires `User DirenvLoaded`.
+      direnv.enable = true;
+
       lint.enable = true;
 
       treesitter = {
