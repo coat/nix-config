@@ -16,6 +16,8 @@
 
   boot.loader.systemd-boot.configurationLimit = 3;
 
+  systemd.services.transmission.serviceConfig.TimeoutStartSec = "10min";
+
   services.avahi.interfaces = ["enp1s0"];
 
   networking.firewall = {

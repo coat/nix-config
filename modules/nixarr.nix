@@ -16,6 +16,12 @@
       enable = true;
       peerPort = 51413;
       vpn.enable = true;
+      extraSettings = {
+        download-queue-enabled = true;
+        download-queue-size = 3;
+        seed-queue-enabled = true;
+        seed-queue-size = 20;
+      };
     };
 
     jellyfin = {
