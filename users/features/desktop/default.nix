@@ -27,6 +27,7 @@
       transmission_4
       vlc
       waypipe
+      zoom-us
     ];
 
     pointerCursor = {
