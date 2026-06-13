@@ -6,6 +6,8 @@
   };
 
   services = {
+    resolved.settings.Resolve.MulticastDNS = "no";
+
     avahi = {
       enable = true;
       nssmdns4 = true;
