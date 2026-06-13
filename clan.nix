@@ -57,6 +57,11 @@
   in
     {
       nixpkgs.pkgs = mkPkgs inputs.nixpkgs cfg.system;
+      nix.gc = {
+        automatic = true;
+        dates = "weekly";
+        options = "--delete-older-than 14d";
+      };
       imports = [
         ./modules/home-manager.nix
         (./users + "/${cfg.user}/${cfg.profile}.nix")

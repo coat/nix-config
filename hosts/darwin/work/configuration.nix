@@ -6,6 +6,12 @@
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "ca-derivations nix-command flakes";
 
+  nix.gc = {
+    automatic = true;
+    interval = {Weekday = 1;};
+    options = "--delete-older-than 14d";
+  };
+
   # Enable alternative shell support in nix-darwin.
   # programs.fish.enable = true;
   programs.zsh.enable = true;
