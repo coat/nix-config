@@ -25,11 +25,6 @@
 
   security = {
     polkit.enable = true;
-    # rtkit is optional but recommended
     rtkit.enable = true;
-
-    pam.services = {
-      swaylock = {};
-    };
   };
 }

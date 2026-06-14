@@ -42,4 +42,11 @@
       };
     };
   };
+
+  xdg.configFile."opencode/devcontainers/config.json".text = ''
+    {
+      "portRangeStart": 13000,
+      "portRangeEnd": 13099
+    }
+  '';
 }

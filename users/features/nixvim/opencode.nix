@@ -7,13 +7,6 @@
 
   plugins.opencode.enable = true;
 
-  xdg.configFile."opencode/devcontainers/config.json".text = ''
-    {
-      "portRangeStart": 13000,
-      "portRangeEnd": 13099
-    }
-  '';
-
   keymaps = [
     {
       mode = [

@@ -7,8 +7,6 @@
     ./foot.nix
     ./ghostty.nix
     ./qutebrowser.nix
-    ./sway.nix
-    ./waybar.nix
   ];
 
   fonts.fontconfig.enable = true;
@@ -27,7 +25,6 @@
       transmission_4
       vlc
       waypipe
-      zoom-us
     ];
 
     pointerCursor = {

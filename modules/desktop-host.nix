@@ -17,4 +17,6 @@
   nix.settings.trusted-users = ["@wheel"];
 
   programs.sway.enable = true;
+
+  security.pam.services.swaylock = {};
 }

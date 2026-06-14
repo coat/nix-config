@@ -6,17 +6,9 @@
 
   networking.hostName = "falken";
 
-  services.xserver = {
-    enable = true;
-
-    windowManager.awesome = {
-      enable = true;
-      luaModules = with pkgs.luaPackages; [
-        luarocks # is the package manager for Lua modules
-        awesome-wm-widgets # Community collection of widgets
-      ];
-    };
-  };
+  services.xserver.enable = true;
+  services.xserver.windowManager.i3.enable = true;
+  services.displayManager.defaultSession = "none+i3";
 
   virtualisation.vmware.guest.enable = true;
 
