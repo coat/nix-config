@@ -10,7 +10,6 @@
     ../../modules/dispatcharr.nix
     ../../modules/romm.nix
     ../../modules/samba.nix
-    ../../modules/immich.nix
     ../../modules/forgejo-runner.nix
   ];
 

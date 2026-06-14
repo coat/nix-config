@@ -1,4 +1,4 @@
-{config, ...}: {
+{
   imports = [./wireguard.nix];
 
   nixarr = {
@@ -28,11 +28,6 @@
       enable = true;
       openFirewall = true;
     };
-    jellyseerr.enable = true;
-    lidarr = {
-      enable = true;
-      openFirewall = true;
-    };
     prowlarr = {
       enable = true;
       openFirewall = true;
@@ -41,11 +36,12 @@
       enable = true;
       openFirewall = true;
     };
-    sonarr = {
-      enable = true;
-      openFirewall = true;
-    };
+
+    seerr.enable = true;
     seerr.openFirewall = true;
+
+    sonarr.enable = true;
+    sonarr.openFirewall = true;
   };
 
   services = {
