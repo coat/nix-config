@@ -5,7 +5,7 @@
     enable = true;
 
     mediaDir = "/mnt/files/media";
-    stateDir = "/mnt/files/media/.state/nixarr";
+    stateDir = "/var/lib/nixarr";
 
     vpn = {
       enable = true;
