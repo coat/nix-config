@@ -1,10 +1,10 @@
-{pkgs, ...}: {
+{pkgs, ...}: let
+  identity = import ./identity.nix;
+in {
   imports = [
     (import ../common/home-base.nix {
-      username = "kent";
-      realName = "Kent Smith";
-      email = "kent.smith@andros.co";
-      homeDirectory = "/Users/kent";
+      inherit (identity) username realName email;
+      homeDirectory = "/Users/${identity.username}";
       extraImports = [
         ../features/desktop/aerospace.nix
         ../features/desktop/dev.nix

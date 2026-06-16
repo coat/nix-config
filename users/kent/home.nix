@@ -1,9 +1,9 @@
-{
+let
+  identity = import ./identity.nix;
+in {
   imports = [
     (import ../common/home-base.nix {
-      username = "kent";
-      realName = "Kent Smith";
-      email = "kent.smith@andros.co";
+      inherit (identity) username realName email;
       extraImports = [
         ../features/dev.nix
         ../features/desktop/dev.nix

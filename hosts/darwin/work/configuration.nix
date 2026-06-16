@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  username,
+  ...
+}: {
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [colima];
@@ -24,7 +28,7 @@
   system.stateVersion = 6;
 
   system = {
-    primaryUser = "kent";
+    primaryUser = username;
 
     defaults = {
       dock = {
@@ -71,24 +75,17 @@
       "awscli-local"
       "docker"
       "docker-compose"
-      "localstack-cli"
     ];
 
     casks = [
-      "firefox"
       "font-iosevka"
       "ghostty"
       "nikitabobko/tap/aerospace"
     ];
-
-    taps = [
-      "localstack/tap"
-      "huseyinbabal/tap"
-    ];
   };
 
-  users.users.kent = {
-    home = "/Users/kent";
+  users.users.${username} = {
+    home = "/Users/${username}";
     shell = pkgs.zsh;
     uid = 501; # default macOS uid for first user
   };

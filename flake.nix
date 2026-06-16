@@ -115,17 +115,22 @@
       };
 
     # Darwin hosts. Each entry: { system, user, hostConfig }.
-    darwinHostConfigs = {
+    darwinHostConfigs = let
+      workIdentity = import ./users/kent/identity.nix;
+    in {
       "kents-MacBook-Pro" = {
         system = "aarch64-darwin";
-        user = "kent";
+        user = workIdentity.username;
         hostConfig = ./hosts/darwin/work/configuration.nix;
       };
     };
 
     mkDarwin = cfg:
       darwin.lib.darwinSystem {
-        specialArgs = {inherit inputs outputs;};
+        specialArgs = {
+          inherit inputs outputs;
+          username = cfg.user;
+        };
         modules = [
           cfg.hostConfig
           {nixpkgs.overlays = [outputs.overlays.all];}
