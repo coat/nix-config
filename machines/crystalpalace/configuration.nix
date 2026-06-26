@@ -11,6 +11,7 @@
     ../../modules/romm.nix
     ../../modules/samba.nix
     ../../modules/forgejo-runner.nix
+    ../../modules/monitoring.nix
   ];
 
   boot.loader.systemd-boot.configurationLimit = 3;
