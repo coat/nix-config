@@ -16,7 +16,11 @@
 
   boot.loader.systemd-boot.configurationLimit = 3;
 
-  systemd.services.transmission.serviceConfig.TimeoutStartSec = "10min";
+  systemd.services.transmission.serviceConfig = {
+    TimeoutStartSec = "10min";
+    Restart = "always";
+    RestartSec = "30s";
+  };
 
   services.avahi.interfaces = ["enp1s0"];
 
