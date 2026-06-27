@@ -1,4 +1,8 @@
-{pkgs, lib, ...}: let
+{
+  pkgs,
+  lib,
+  ...
+}: let
   ruby-lsp-wrapper = pkgs.writeShellScriptBin "ruby-lsp-wrapper" ''
     # The gem-installed binstub calls Gem.use_gemdeps, which resolves gems
     # from the nearest Gemfile.  Point it at the composed .ruby-lsp/Gemfile
@@ -63,7 +67,7 @@ in {
       ruby_lsp = {
         enable = true;
         package = null;
-        cmd = [ (lib.getExe ruby-lsp-wrapper) ];
+        cmd = [(lib.getExe ruby-lsp-wrapper)];
         settings = {
           rubyLsp = {
             featuresConfiguration = {
