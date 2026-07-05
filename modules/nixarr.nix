@@ -20,7 +20,11 @@
         download-queue-enabled = true;
         download-queue-size = 3;
         seed-queue-enabled = true;
-        seed-queue-size = 20;
+        seed-queue-size = 5;
+        blocklist-enabled = false;
+        cache-size-mb = 128;
+        peer-limit-global = 200;
+        peer-limit-per-torrent = 50;
       };
     };
 
@@ -48,6 +52,39 @@
     flaresolverr = {
       enable = true;
       openFirewall = true;
+    };
+  };
+
+  systemd.services = {
+    radarr.serviceConfig = {
+      MemoryMax = "384M";
+      CPUQuota = "50%";
+      IOSchedulingClass = "idle";
+      IOSchedulingPriority = 7;
+    };
+    sonarr.serviceConfig = {
+      MemoryMax = "384M";
+      CPUQuota = "50%";
+      IOSchedulingClass = "idle";
+      IOSchedulingPriority = 7;
+    };
+    prowlarr.serviceConfig = {
+      MemoryMax = "384M";
+      CPUQuota = "50%";
+      IOSchedulingClass = "idle";
+      IOSchedulingPriority = 7;
+    };
+    seerr.serviceConfig = {
+      MemoryMax = "384M";
+      CPUQuota = "50%";
+      IOSchedulingClass = "idle";
+      IOSchedulingPriority = 7;
+    };
+    flaresolverr.serviceConfig = {
+      MemoryMax = "768M";
+      CPUQuota = "100%";
+      IOSchedulingClass = "idle";
+      IOSchedulingPriority = 7;
     };
   };
 }
