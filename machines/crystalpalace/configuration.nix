@@ -1,4 +1,5 @@
 {
+  lib,
   inputs,
   pkgs,
   ...
@@ -7,11 +8,9 @@
     inputs.nixarr.nixosModules.default
     ../../modules/global.nix
     ../../modules/nixarr.nix
-    ../../modules/dispatcharr.nix
     ../../modules/romm.nix
     ../../modules/samba.nix
-    ../../modules/forgejo-runner.nix
-    ../../modules/monitoring.nix
+    # ../../modules/monitoring.nix
   ];
 
   boot.loader.systemd-boot.configurationLimit = 3;
@@ -22,7 +21,23 @@
       TimeoutStartSec = "10min";
       Restart = "always";
       RestartSec = "30s";
+      MemoryMax = "5G";
+      IOSchedulingClass = lib.mkForce "best-effort";
+      IOSchedulingPriority = lib.mkForce 4;
+      CPUQuota = "200%";
     };
+  };
+
+  systemd.targets."podman-compose-romm-root".wantedBy = lib.mkForce [];
+
+  systemd.services."podman-romm".serviceConfig = {
+    MemoryMax = "768M";
+    CPUQuota = "200%";
+  };
+
+  systemd.services."podman-romm-db".serviceConfig = {
+    MemoryMax = "512M";
+    CPUQuota = "100%";
   };
 
   services.avahi.interfaces = ["enp1s0"];
