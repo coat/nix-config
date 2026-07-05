@@ -287,6 +287,23 @@
       fi
     '';
   };
+
+  cleanupScript = pkgs.writeShellApplication {
+    name = "pia-transmission-cleanup";
+    runtimeInputs = with pkgs; [transmission_4 coreutils gawk];
+    text = ''
+      RPC=192.168.15.1:9091
+      REMOVED=0
+
+      while read -r id pct status; do
+        if [[ "$pct" == "100%" && "$status" == "Stopped" ]]; then
+          ip netns exec wg transmission-remote "$RPC" -t "$id" -r >/dev/null 2>&1 && REMOVED=$((REMOVED+1))
+        fi
+      done < <(ip netns exec wg transmission-remote "$RPC" -l 2>/dev/null | awk 'NR>1 && !/^Sum:/ {print $1, $2, $8}')
+
+      echo "Cleanup: removed $REMOVED stopped completed torrents"
+    '';
+  };
 in {
   clan.core.vars.generators.pia-credentials = {
     share = true;
@@ -386,6 +403,26 @@ in {
       OnBootSec = "3min";
       OnUnitActiveSec = "14min";
       Unit = "pia-port-forward.service";
+    };
+  };
+
+  systemd.services.pia-transmission-cleanup = {
+    description = "Remove idle completed transmission torrents";
+    after = ["wg.service" "transmission.service"];
+    wants = ["transmission.service"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "${cleanupScript}/bin/pia-transmission-cleanup";
+    };
+  };
+
+  systemd.timers.pia-transmission-cleanup = {
+    description = "Weekly cleanup of idle completed torrents";
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnCalendar = "weekly";
+      Persistent = true;
+      Unit = "pia-transmission-cleanup.service";
     };
   };
 }

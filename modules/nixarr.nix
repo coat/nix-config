@@ -43,6 +43,7 @@
         cache-size-mb = 128;
         peer-limit-global = 200;
         peer-limit-per-torrent = 50;
+        seed-idle-limit = 10080;
       };
     };
 
