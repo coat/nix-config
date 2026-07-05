@@ -122,8 +122,17 @@
     name = "pia-wg-watchdog";
     runtimeInputs = with pkgs; [iputils iproute2 systemd];
     text = ''
-      if ! ip netns exec wg ping -c1 -W3 8.8.8.8 > /dev/null 2>&1; then
-        echo "VPN health check failed, reconnecting..."
+      fail=0
+      for attempt in 1 2 3; do
+        if ip netns exec wg ping -c1 -W3 8.8.8.8 > /dev/null 2>&1; then
+          fail=0
+          break
+        fi
+        fail=$attempt
+        sleep 5
+      done
+      if [ "$fail" -ne 0 ]; then
+        echo "VPN health check failed after 3 attempts, reconnecting..."
         systemctl restart pia-wg-connect.service
         systemctl restart wg.service
         systemctl restart transmission.service
@@ -233,7 +242,7 @@
       wait_for_transmission() {
         local _i
         for _i in $(seq 1 30); do
-          if ip netns exec wg transmission-remote "$RPC" -si >/dev/null 2>&1; then
+          if ip netns exec wg timeout 5 transmission-remote "$RPC" -si >/dev/null 2>&1; then
             return 0
           fi
           sleep 2
@@ -256,7 +265,7 @@
         # port and the port announced to the swarm, so it must equal the forward.
         # Applied live via RPC and re-asserted every run, since nixarr resets
         # settings.json back to the declared peerPort whenever transmission restarts.
-        ip netns exec wg transmission-remote "$RPC" -p "$port" >/dev/null
+        ip netns exec wg timeout 15 transmission-remote "$RPC" -p "$port" >/dev/null
         echo "transmission peer-port set to $port and opened in netns firewall"
       }
 
