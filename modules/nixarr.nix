@@ -67,6 +67,12 @@
   };
 
   systemd.tmpfiles.rules = [
+    # o+rx on transmission's home: sonarr/radarr run with PrivateUsers=true,
+    # where foreign uids/gids collapse to nobody/nogroup, so group-based access
+    # to the downloads dir fails inside their sandbox and imports error with
+    # "path does not exist or is not accessible". World-traverse fixes it; the
+    # dir holds no secrets (settings.json itself stays 0600).
+    "d /var/lib/nixarr/transmission 0755 transmission media -"
     "d /var/lib/nixarr/transmission/downloads 0775 transmission media -"
     "d /var/lib/nixarr/transmission/incomplete 0755 transmission media -"
     "d /var/lib/nixarr/transmission/watch 0775 transmission media -"
