@@ -23,6 +23,12 @@
         seed-queue-enabled = true;
         seed-queue-size = 5;
         blocklist-enabled = false;
+        # Active torrents do random writes + verification read-back; keep that
+        # on the SSD, away from the SMR USB media drive which collapses under
+        # random writes (and starves Jellyfin reads). Completed files move to
+        # download-dir as a single sequential copy, which the drive handles.
+        incomplete-dir = "/var/lib/nixarr/transmission/incomplete";
+        incomplete-dir-enabled = true;
         cache-size-mb = 128;
         peer-limit-global = 200;
         peer-limit-per-torrent = 50;
@@ -48,6 +54,10 @@
     sonarr.enable = true;
     sonarr.openFirewall = true;
   };
+
+  systemd.tmpfiles.rules = [
+    "d /var/lib/nixarr/transmission/incomplete 0755 transmission media -"
+  ];
 
   services = {
     flaresolverr = {

@@ -16,6 +16,14 @@
 
   boot.loader.systemd-boot.configurationLimit = 3;
 
+  # Bound dirty page cache so writeback to the slow USB media drive happens in
+  # small steady increments instead of multi-GB storms that stall all disk I/O
+  # (Jellyfin streams and transmission's session thread block behind them).
+  boot.kernel.sysctl = {
+    "vm.dirty_background_bytes" = 134217728; # 128M
+    "vm.dirty_bytes" = 536870912; # 512M
+  };
+
   systemd.services.transmission = {
     partOf = ["wg.service"];
     serviceConfig = {
