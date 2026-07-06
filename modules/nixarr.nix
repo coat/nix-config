@@ -17,6 +17,7 @@
       peerPort = 51413;
       vpn.enable = true;
       extraSettings = {
+        rpc-host-whitelist = "transmission.local";
         download-queue-enabled = true;
         download-queue-size = 3;
         seed-queue-enabled = true;

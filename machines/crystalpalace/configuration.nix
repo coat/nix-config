@@ -10,6 +10,7 @@
     ../../modules/nixarr.nix
     ../../modules/romm.nix
     ../../modules/samba.nix
+    ../../modules/local-hostnames.nix
     # ../../modules/monitoring.nix
   ];
 
