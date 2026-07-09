@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   programs.nixvim = {
     imports = [
-      ./amp.nix
       ./cmp.nix
       ./conform.nix
       ./dap.nix

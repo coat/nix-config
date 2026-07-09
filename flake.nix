@@ -2,9 +2,6 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    amp-nvim.url = "github:sourcegraph/amp.nvim";
-    amp-nvim.flake = false;
-
     clan-core.url = "https://git.clan.lol/clan/clan-core/archive/25.11.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
 
