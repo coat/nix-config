@@ -6,6 +6,7 @@
     ../features/desktop/waybar.nix
     ../features/desktop/dev.nix
     ../features/dev.nix
+    ../features/senpai.nix
   ];
 
   home.packages = [pkgs.zoom-us];
