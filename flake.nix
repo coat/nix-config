@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/25.11.tar.gz";
+    clan-core.url = "https://git.clan.lol/clan/clan-core/archive/26.05.tar.gz";
     clan-core.inputs.nixpkgs.follows = "nixpkgs";
 
     darwin.url = "github:lnl7/nix-darwin";
