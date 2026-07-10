@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  lib,
+  pkgs,
+  ...
+}: let
   identity = import ./identity.nix;
 in {
   imports = [
@@ -17,15 +21,16 @@ in {
 
   home = {
     packages = with pkgs; [
+      _1password-cli
+      colima
       foot-terminfo
-      nodejs
+      fzf
     ];
 
-    sessionVariables = {
-      AWS_REGION = "us-east-1";
-      AWS_PROFILE = "CredSimple.SoftwareEngineer";
-      CODEARTIFACT_AUTH_CMD = "aws codeartifact get-authorization-token --domain andros --domain-owner 111491220182 --region us-east-2 --query authorizationToken --output text";
-    };
+    # sessionVariables = {
+    #   AWS_REGION = "us-east-1";
+    #   AWS_PROFILE = "";
+    # };
   };
 
   programs = {
@@ -37,14 +42,5 @@ in {
         path = "~/Documents/vault/work";
       }
     ];
-
-    opencode.settings.mcp = {
-      jira = {
-        type = "remote";
-        url = "https://mcp.atlassian.com/v1/sse";
-        enabled = true;
-        oauth = {};
-      };
-    };
   };
 }

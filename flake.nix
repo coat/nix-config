@@ -122,9 +122,9 @@
 
     # Darwin hosts. Each entry: { system, user, hostConfig }.
     darwinHostConfigs = let
-      workIdentity = import ./users/kent/identity.nix;
+      workIdentity = import ./users/kent.smith/identity.nix;
     in {
-      "kents-MacBook-Pro" = {
+      "k-smith-3qcj" = {
         system = "aarch64-darwin";
         user = workIdentity.username;
         hostConfig = ./hosts/darwin/work/configuration.nix;
