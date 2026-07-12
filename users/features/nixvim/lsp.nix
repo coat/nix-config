@@ -3,6 +3,24 @@
   lib,
   ...
 }: let
+  # Projects that keep bundler-managed gems in a project-local state dir
+  # (devenv's .devenv/state/.bundle, or a flake shellHook using
+  # .direnv/state/.bundle) need GEM_HOME/GEM_PATH/PATH exported for gem
+  # binstubs to resolve - even before direnv has loaded in neovim.
+  # Use only bash builtins; the LSP process may have a minimal PATH.
+  rubyGemEnv = ''
+    for state in "$PWD/.devenv/state" "$PWD/.direnv/state"; do
+      for rd in "$state/.bundle/ruby"/*; do
+        if [ -d "$rd" ]; then
+          export GEM_HOME="$rd"
+          export GEM_PATH="$GEM_HOME/gems''${GEM_PATH:+:$GEM_PATH}"
+          export PATH="$GEM_HOME/bin''${PATH:+:$PATH}"
+          break 2
+        fi
+      done
+    done
+  '';
+
   ruby-lsp-wrapper = pkgs.writeShellScriptBin "ruby-lsp-wrapper" ''
     # The gem-installed binstub calls Gem.use_gemdeps, which resolves gems
     # from the nearest Gemfile.  Point it at the composed .ruby-lsp/Gemfile
@@ -10,22 +28,14 @@
     # resolve ruby-lsp + project deps correctly.
     if [ -f "$PWD/.ruby-lsp/Gemfile" ]; then
       export BUNDLE_GEMFILE="$PWD/.ruby-lsp/Gemfile"
-
-      # If the project uses a devenv ruby bundle, make sure its gems are
-      # discoverable — even before direnv has loaded in neovim.
-      # Use only bash builtins; the LSP process may have a minimal PATH.
-      if [ -d "$PWD/.devenv/state/.bundle/ruby" ]; then
-        for rd in "$PWD/.devenv/state/.bundle/ruby"/*; do
-          if [ -d "$rd" ]; then
-            export GEM_HOME="$rd"
-            export GEM_PATH="$GEM_HOME/gems''${GEM_PATH:+:$GEM_PATH}"
-            export PATH="$GEM_HOME/bin''${PATH:+:$PATH}"
-            break
-          fi
-        done
-      fi
     fi
+    ${rubyGemEnv}
     exec ruby-lsp "$@"
+  '';
+
+  standardrb-wrapper = pkgs.writeShellScriptBin "standardrb-wrapper" ''
+    ${rubyGemEnv}
+    exec standardrb "$@"
   '';
 in {
   plugins.lsp = {
@@ -251,7 +261,7 @@ in {
           if has_file(root, ".standard.yml") then
             vim.lsp.start({
               name = "standardrb",
-              cmd = {"standardrb", "--lsp"},
+              cmd = {"${lib.getExe standardrb-wrapper}", "--lsp"},
               root_dir = root,
             }, {bufnr = bufnr})
           end
