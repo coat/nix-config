@@ -290,18 +290,23 @@
 
   cleanupScript = pkgs.writeShellApplication {
     name = "pia-transmission-cleanup";
-    runtimeInputs = with pkgs; [transmission_4 coreutils gawk];
+    runtimeInputs = with pkgs; [transmission_4 coreutils gawk gnugrep iproute2];
     text = ''
       RPC=192.168.15.1:9091
       REMOVED=0
 
-      while read -r id pct status; do
-        if [[ "$pct" == "100%" && "$status" == "Stopped" ]]; then
+      # Query each torrent individually: the -l table's Have column ("8.90 GB")
+      # splits into two awk fields, so positional parsing of Status is unreliable.
+      # Ratio/idle-stopped torrents report "Finished"; "Stopped" is a manual pause.
+      while read -r id; do
+        info=$(ip netns exec wg transmission-remote "$RPC" -t "$id" -i 2>/dev/null)
+        if grep -q "Percent Done: 100%" <<<"$info" \
+          && grep -qE "State: (Stopped|Finished)" <<<"$info"; then
           ip netns exec wg transmission-remote "$RPC" -t "$id" -r >/dev/null 2>&1 && REMOVED=$((REMOVED+1))
         fi
-      done < <(ip netns exec wg transmission-remote "$RPC" -l 2>/dev/null | awk 'NR>1 && !/^Sum:/ {print $1, $2, $8}')
+      done < <(ip netns exec wg transmission-remote "$RPC" -l 2>/dev/null | awk 'NR>1 && !/^Sum:/ {gsub(/\*$/, "", $1); print $1}')
 
-      echo "Cleanup: removed $REMOVED stopped completed torrents"
+      echo "Cleanup: removed $REMOVED stopped/finished completed torrents (data kept)"
     '';
   };
 in {

@@ -38,12 +38,12 @@
         # torrents after import once seeding goals are met.
         ratio-limit = 2;
         ratio-limit-enabled = true;
-        idle-seeding-limit = 4320; # minutes; stop seeds idle for 3 days
+        idle-seeding-limit = 10080; # minutes; stop seeds idle for 7 days
         idle-seeding-limit-enabled = true;
-        cache-size-mb = 128;
+        cache-size-mb = 32;
+        preallocation = 2; # full — avoid fragmentation on the SSD
         peer-limit-global = 200;
         peer-limit-per-torrent = 50;
-        seed-idle-limit = 10080;
       };
     };
 
@@ -87,14 +87,29 @@
   };
 
   systemd.services = {
+    # Jellyfin is the interactive, user-facing service: give it CPU and IO
+    # priority over the batch services so playback doesn't stutter when
+    # imports/downloads are running.
+    jellyfin.serviceConfig = {
+      CPUWeight = 500; # default is 100; batch services stay at default
+      IOWeight = 500;
+      IOSchedulingClass = "best-effort";
+      IOSchedulingPriority = 0; # highest best-effort priority
+    };
+    # The arrs' cgroup memory is mostly page cache from multi-GB import
+    # copies, and dirty pages drain no faster than the SMR drive writes
+    # back — a hard 384M cap OOM-killed them mid-import in a loop.
+    # MemoryHigh reclaims/throttles instead; MemoryMax is a last resort.
     radarr.serviceConfig = {
-      MemoryMax = "384M";
+      MemoryHigh = "512M";
+      MemoryMax = "1G";
       CPUQuota = "50%";
       IOSchedulingClass = "idle";
       IOSchedulingPriority = 7;
     };
     sonarr.serviceConfig = {
-      MemoryMax = "384M";
+      MemoryHigh = "512M";
+      MemoryMax = "1G";
       CPUQuota = "50%";
       IOSchedulingClass = "idle";
       IOSchedulingPriority = 7;
