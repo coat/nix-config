@@ -8,7 +8,6 @@ import nixpkgsSrc {
     allowUnfree = true;
     allowUnfreePredicate = pkg:
       builtins.elem (lib.getName pkg) [
-        "copilot-language-server"
       ];
     allowInsecurePredicate = pkg:
       builtins.elem (lib.getName pkg) [
