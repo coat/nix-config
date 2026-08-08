@@ -6,10 +6,8 @@ in {
       ./autocmds.nix
       ./cmp.nix
       ./flash.nix
-      ./gitsigns.nix
       ./grug-far.nix
       ./keymaps.nix
-      ./lsp.nix
       ./lualine.nix
       ./noice.nix
       ./snacks.nix
