@@ -11,6 +11,7 @@
     ../../modules/romm.nix
     ../../modules/samba.nix
     ../../modules/local-hostnames.nix
+    ../../modules/searxng.nix
     # ../../modules/monitoring.nix
   ];
 

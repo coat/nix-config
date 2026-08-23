@@ -16,6 +16,11 @@
     grafana = "http://127.0.0.1:3010";
   };
 
+  # Names that get an mDNS alias but bring their own nginx vhost (see modules/searxng.nix).
+  aliasOnly = ["searx"];
+
+  aliases = lib.genAttrs (lib.attrNames proxies ++ aliasOnly) (_: null);
+
   lanInterface = "enp1s0";
 
   publishAlias = pkgs.writeShellApplication {
@@ -47,7 +52,7 @@ in {
         DynamicUser = true;
       };
     })
-  proxies;
+  aliases;
 
   services.nginx = {
     enable = true; # already on via nixarr's transmission vhost; harmless
