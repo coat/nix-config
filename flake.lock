@@ -296,6 +296,38 @@
         "type": "github"
       }
     },
+    "live-server-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783441855,
+        "narHash": "sha256-IcacGXT/3mGRI8LsL19yLMzu8WjGjwU3cu3MQWYjQ8A=",
+        "owner": "selimacerbas",
+        "repo": "live-server.nvim",
+        "rev": "f98bae79fd30274524412f7514549d84391d6bb2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "selimacerbas",
+        "repo": "live-server.nvim",
+        "type": "github"
+      }
+    },
+    "markdown-preview-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783441854,
+        "narHash": "sha256-vKG1nbnLXSyPp7ErcLcKU2PvJqcMYhIvBi5pm3juIXw=",
+        "owner": "selimacerbas",
+        "repo": "markdown-preview.nvim",
+        "rev": "faf50b5e233df953a1fd6946d0a8d758bf2e38a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "selimacerbas",
+        "repo": "markdown-preview.nvim",
+        "type": "github"
+      }
+    },
     "microvm": {
       "inputs": {
         "nixpkgs": [
@@ -463,6 +495,8 @@
         "clan-core": "clan-core",
         "darwin": "darwin",
         "home-manager": "home-manager",
+        "live-server-nvim": "live-server-nvim",
+        "markdown-preview-nvim": "markdown-preview-nvim",
         "microvm": "microvm",
         "nix-index-database": "nix-index-database",
         "nixarr": "nixarr",

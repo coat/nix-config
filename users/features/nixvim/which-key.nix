@@ -91,6 +91,11 @@
           mode = ["n" "x"];
         }
         {
+          __unkeyed-1 = "<leader>m";
+          group = "markdown";
+          mode = ["n" "x"];
+        }
+        {
           __unkeyed-1 = "<leader>o";
           group = "obsidian";
           mode = ["n" "x"];

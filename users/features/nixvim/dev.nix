@@ -6,6 +6,7 @@
       ./dap.nix
       ./gitsigns.nix
       ./lsp.nix
+      ./markdown-preview.nix
       ./neotest.nix
       ./opencode.nix
       ./todo-comments.nix

@@ -11,6 +11,12 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    live-server-nvim.url = "github:selimacerbas/live-server.nvim";
+    live-server-nvim.flake = false;
+
+    markdown-preview-nvim.url = "github:selimacerbas/markdown-preview.nvim";
+    markdown-preview-nvim.flake = false;
+
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 
