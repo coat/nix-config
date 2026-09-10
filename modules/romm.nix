@@ -48,6 +48,30 @@ in {
     '';
   };
 
+  # Reached over ZeroTier by cheyenne, which terminates TLS for the public
+  # romm.sadbeast.com name (see modules/romm-proxy.nix). Headers are set by hand
+  # rather than via recommendedProxySettings so the scheme cheyenne saw survives
+  # this second hop -- otherwise RomM would build http:// URLs behind https://.
+  services.nginx.virtualHosts."romm.sadbeast.com" = {
+    locations."/" = {
+      proxyPass = "http://127.0.0.1:8080";
+      proxyWebsockets = true;
+      extraConfig = ''
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $http_x_forwarded_proto;
+        proxy_set_header X-Forwarded-Host $host;
+
+        client_max_body_size 0;
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_read_timeout 3600;
+        proxy_send_timeout 3600;
+      '';
+    };
+  };
+
   # Containers
   virtualisation.oci-containers.containers."romm" = {
     image = "rommapp/romm:latest";

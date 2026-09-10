@@ -4,6 +4,7 @@
     ../../modules/docker.nix
     ../../modules/docker-registry.nix
     ../../modules/soju.nix
+    ../../modules/romm-proxy.nix
     ../../users/teamdraft/nixos.nix
   ];
 
