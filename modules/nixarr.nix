@@ -1,4 +1,4 @@
-{
+{lib, ...}: {
   imports = [./wireguard.nix];
 
   nixarr = {
@@ -87,6 +87,28 @@
   };
 
   systemd.services = {
+    # nixpkgs binds only download-dir/incomplete-dir/watch-dir into transmission's
+    # RootDirectory=/run/transmission, so anything outside them is invisible to
+    # the daemon. Bind just the one library subdir holding the long-term
+    # Minerva_Myrient seeds — not all of mediaDir, which would hand transmission
+    # write access to the whole movie/show/music/rom library.
+    transmission.serviceConfig.BindPaths = ["/mnt/files/media/library/Minerva_Myrient"];
+
+    # That bind source has to exist before the unit's namespace is set up, and
+    # neither of the obvious tools can do it: systemd-tmpfiles refuses the
+    # "unsafe path transition" from /mnt/files (owned by sadbeast) to
+    # /mnt/files/media (root), and an ExecStartPre= runs too late because
+    # BindPaths= is applied first. nixpkgs hits the same wall for download-dir
+    # and solves it with this oneshot — but declares it with only Before=/
+    # PartOf=, so nothing actually pulls it into the transaction. requiredBy
+    # fixes that; without it transmission dies with 226/NAMESPACE.
+    transmission-setup = {
+      requiredBy = ["transmission.service"];
+      script = lib.mkAfter ''
+        install -d -m 0775 -o transmission -g media /mnt/files/media/library/Minerva_Myrient
+      '';
+    };
+
     # Jellyfin is the interactive, user-facing service: give it CPU and IO
     # priority over the batch services so playback doesn't stutter when
     # imports/downloads are running.

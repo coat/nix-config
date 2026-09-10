@@ -300,6 +300,11 @@
       # Ratio/idle-stopped torrents report "Finished"; "Stopped" is a manual pause.
       while read -r id; do
         info=$(ip netns exec wg transmission-remote "$RPC" -t "$id" -i 2>/dev/null)
+        # Only reap torrents still sitting in the downloads dir. Long-term seeds
+        # are relocated into the media library on purpose; they are 100% done
+        # and go Finished/Stopped like any other, so without this guard the
+        # cleanup would silently deregister them.
+        grep -q "Location: /var/lib/nixarr/transmission/downloads" <<<"$info" || continue
         if grep -q "Percent Done: 100%" <<<"$info" \
           && grep -qE "State: (Stopped|Finished)" <<<"$info"; then
           ip netns exec wg transmission-remote "$RPC" -t "$id" -r >/dev/null 2>&1 && REMOVED=$((REMOVED+1))
