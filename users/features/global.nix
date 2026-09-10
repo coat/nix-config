@@ -27,9 +27,9 @@
     fzf = {
       enable = true;
       defaultCommand = "fd -H -E .git --type f";
-      changeDirWidgetCommand = "fd --type d";
-      fileWidgetCommand = "fd --type f";
-      historyWidgetOptions = [
+      changeDirWidget.command = "fd --type d";
+      fileWidget.command = "fd --type f";
+      historyWidget.options = [
         "--sort"
         "--exact"
       ];

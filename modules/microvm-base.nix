@@ -23,7 +23,7 @@ in {
   _module.args.inputs = inputs;
 
   nix.settings = {
-    experimental-features = "ca-derivations nix-command flakes";
+    experimental-features = ["ca-derivations" "nix-command" "flakes"];
     auto-optimise-store = false;
     substituters = ["https://cache.numtide.com"];
     trusted-public-keys = ["niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="];

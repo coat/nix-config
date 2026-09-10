@@ -5,7 +5,7 @@
   ...
 }: let
   pinentryPackage =
-    if pkgs.stdenv.isDarwin
+    if pkgs.stdenv.hostPlatform.isDarwin
     then pkgs.pinentry_mac
     else if config.gtk.enable
     then pkgs.pinentry-gnome3
@@ -17,7 +17,7 @@ in {
     pinentry.package = pinentryPackage;
   };
 
-  home.packages = lib.optional config.gtk.enable pkgs.gcr;
+  home.packages = lib.optional config.gtk.enable pkgs.gcr_3;
 
   programs = let
     fixGpg =
@@ -47,7 +47,7 @@ in {
     };
   };
 
-  systemd.user.services = lib.mkIf pkgs.stdenv.isLinux {
+  systemd.user.services = lib.mkIf pkgs.stdenv.hostPlatform.isLinux {
     # Link /run/user/$UID/gnupg to ~/.gnupg-sockets
     # So that SSH config does not have to know the UID
     link-gnupg-sockets = {

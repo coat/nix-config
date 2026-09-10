@@ -1,7 +1,7 @@
 {pkgs, ...}: {
   programs.qutebrowser = {
     package =
-      if pkgs.stdenv.isDarwin
+      if pkgs.stdenv.hostPlatform.isDarwin
       then null
       else pkgs.qutebrowser;
     enable = true;
