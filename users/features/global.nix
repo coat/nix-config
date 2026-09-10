@@ -46,6 +46,7 @@
   home = {
     packages = with pkgs; [
       comma
+      herdr
       home-manager
     ];
   };
