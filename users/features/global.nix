@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./git.nix
+    ./herdr.nix
     ./nixvim
     ./tmux.nix
     ./zsh.nix
@@ -46,7 +47,6 @@
   home = {
     packages = with pkgs; [
       comma
-      herdr
       home-manager
     ];
   };
