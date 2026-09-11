@@ -22,9 +22,15 @@ in {
   home = {
     packages = with pkgs; [
       _1password-cli
+      acli
       colima
       foot-terminfo
       fzf
+      google-cloud-sdk
+      gws
+      ollama
+      opencode
+      rtk
     ];
 
     # sessionVariables = {

@@ -50,7 +50,7 @@
         ];
       };
       menuExtraClock.ShowAMPM = false;
-      menuExtraClock.ShowDate = 2;
+      menuExtraClock.ShowDate = 1;
       menuExtraClock.ShowDayOfMonth = true;
       menuExtraClock.ShowDayOfWeek = true;
       #universalaccess.reduceMotion = true;
@@ -71,6 +71,8 @@
         };
       };
       WindowManager.EnableStandardClickToShowDesktop = false;
+
+      screencapture.location = "~/Pictures";
     };
     keyboard = {
       enableKeyMapping = true;
@@ -86,8 +88,10 @@
   homebrew = {
     enable = true;
     brews = [
+      "datadog-labs/pack/pup"
       "docker"
       "docker-compose"
+      "getsentry/tools/sentry"
     ];
 
     casks = [
@@ -95,6 +99,10 @@
       "font-iosevka"
       "ghostty"
       "nikitabobko/tap/aerospace"
+    ];
+
+    taps = [
+      "datadog-labs/pack"
     ];
   };
 
