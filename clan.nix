@@ -42,7 +42,7 @@
       tags = ["work"];
       system = "aarch64-linux";
       profile = "vm";
-      user = "kent";
+      user = "kent.smith";
       requireExplicitUpdate = true;
     };
   };
@@ -85,9 +85,9 @@
       user = "sadbeast";
       groups = ["wheel" "media" "docker" "audio" "input"];
     };
-    kent-user = {
+    "kent.smith-user" = {
       tags = ["work"];
-      user = "kent";
+      user = "kent.smith";
       groups = ["wheel" "docker"];
     };
   };
