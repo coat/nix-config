@@ -5,7 +5,8 @@
     settings = {
       legacy_commands = false;
 
-      new_notes_location = "notes";
+      new_notes_location = "notes_subdir";
+      notes_subdir = "notes";
     };
   };
 
