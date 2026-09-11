@@ -1,8 +1,36 @@
-{lib, ...}: {
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}: let
+  nixarr-py = "${inputs.nixarr}/nixarr/lib/nixarr-py";
+  jellyfin = config.nixarr.jellyfin.package;
+  # nixarr keys the jellyfin OpenAPI spec hash on jellyfin.version, and its
+  # table lags nixpkgs. Fill in versions upstream does not know yet; drop an
+  # entry once nixarr adds it (https://github.com/rasmus-kirk/nixarr).
+  jellyfinSpecHashes = {
+    "12.0" = "sha256-hu9rbOp+R0tbsjT0Tl639uj0WM5tfYT6uZ6NH0p1zjk=";
+  };
+in {
   imports = [./wireguard.nix];
 
   nixarr = {
     enable = true;
+
+    # python-deps.nix only calls fetchurl for the spec, so a wrapped fetchurl
+    # can swap in our hash before the missing-attribute lookup is forced.
+    nixarr-py.package = (pkgs.callPackage nixarr-py {inherit jellyfin;}).overridePythonAttrs (_: {
+      dependencies = pkgs.callPackage "${nixarr-py}/python-deps.nix" {
+        inherit jellyfin;
+        fetchurl = args:
+          pkgs.fetchurl (args
+            // lib.optionalAttrs (jellyfinSpecHashes ? ${jellyfin.version}) {
+              hash = jellyfinSpecHashes.${jellyfin.version};
+            });
+      };
+    });
 
     mediaDir = "/mnt/files/media";
     stateDir = "/var/lib/nixarr";
