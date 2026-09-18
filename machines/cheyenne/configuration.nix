@@ -5,6 +5,7 @@
     ../../modules/docker-registry.nix
     ../../modules/soju.nix
     ../../modules/romm-proxy.nix
+    ../../modules/pair-relay.nix
     ../../users/teamdraft/nixos.nix
   ];
 
