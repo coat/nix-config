@@ -1,4 +1,7 @@
-{
+# Guest config shared by every microvms/*.nix. Extra attrs in the VM file
+# (user, authorizedKeys, homeImports, sshProxyPort) are optional overrides;
+# sshProxyPort is consumed host-side in microvm.nix and ignored here.
+cfg @ {
   hostName,
   ipAddress,
   tapId,
@@ -8,12 +11,21 @@
   inputs,
   outputs,
   homeManagerSharedModules,
+  user ? "sadbeast",
+  ...
 }: {
   config,
   pkgs,
   ...
 }: let
   sshKeys = import ../lib/ssh-keys.nix;
+  authorizedKeys = cfg.authorizedKeys or sshKeys.${user};
+  homeImports =
+    cfg.homeImports
+    or [
+      (../users + "/${user}/home.nix")
+      ../users/features/dev.nix
+    ];
 in {
   imports = [
     inputs.home-manager.nixosModules.default
@@ -55,15 +67,8 @@ in {
       {
         tag = "workspace";
         source = workspace;
-        mountPoint = "/home/sadbeast/workspace";
+        mountPoint = "/home/${user}/workspace";
         proto = "virtiofs";
-      }
-      {
-        tag = "ssh-host-keys";
-        source = "${workspace}/ssh-host-keys";
-        mountPoint = "/etc/ssh/host-keys";
-        proto = "virtiofs";
-        readOnly = true;
       }
     ];
 
@@ -94,21 +99,31 @@ in {
 
   services.resolved.enable = true;
 
+  # sshd generates the key on first boot; /var is a persistent volume, so the
+  # host key survives rebuilds without any host-side setup.
   services.openssh = {
     enable = true;
+    settings = {
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+      AllowUsers = [user];
+    };
     hostKeys = [
       {
-        path = "/etc/ssh/host-keys/ssh_host_ed25519_key";
+        path = "/var/lib/ssh/ssh_host_ed25519_key";
         type = "ed25519";
       }
     ];
   };
 
-  users.users.sadbeast = {
+  # uid 1000 is pinned because virtiofs maps ids 1:1 and microvm.nix chowns
+  # the host-side workspace to 1000.
+  users.users.${user} = {
     isNormalUser = true;
+    uid = 1000;
     shell = pkgs.zsh;
     extraGroups = ["wheel"];
-    openssh.authorizedKeys.keys = sshKeys.sadbeast;
+    openssh.authorizedKeys.keys = authorizedKeys;
   };
 
   programs.zsh.enable = true;
@@ -125,10 +140,7 @@ in {
       nixosConfig = config;
     };
     sharedModules = homeManagerSharedModules;
-    users.sadbeast.imports = [
-      ../users/sadbeast/home.nix
-      ../users/features/dev.nix
-    ];
+    users.${user}.imports = homeImports;
   };
 
   system.stateVersion = "25.11";

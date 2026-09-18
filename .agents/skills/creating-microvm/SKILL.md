@@ -9,7 +9,9 @@ Create a new ephemeral MicroVM declaration in this NixOS configuration.
 
 `modules/microvm.nix` enumerates every `microvms/*.nix` file and instantiates
 each as a guest via `modules/microvm-base.nix`. The filename becomes the VM
-name (so `microvms/devvm.nix` → `microvm.vms.devvm`).
+name (so `microvms/devvm.nix` → `microvm.vms.devvm`). The module is imported
+by `modules/desktop-host.nix`, so every desktop-profile host (currently
+`joshua`, `wopr`) can run any VM; nothing is tied to one host.
 
 ## Steps
 
@@ -36,36 +38,43 @@ name (so `microvms/devvm.nix` → `microvm.vms.devvm`).
    The filename (without `.nix`) becomes the hostname and the
    `microvm.vms.<name>` key — no separate registration needed.
 
-3. **Optional: project-specific packages.** If extra build tools are wanted,
-   add `extraImports` (TODO: not yet wired — for now, edit
-   `modules/microvm-base.nix` directly or open an issue).
+   Optional attrs (see `microvms/pairvm.nix` for an example):
+   - `user` — guest login user (default `sadbeast`). Needs
+     `users/<user>/home.nix` and a `sshKeys.<user>` list in
+     `lib/ssh-keys.nix`, unless `authorizedKeys` / `homeImports` are given.
+   - `authorizedKeys` — SSH keys for that user (default `sshKeys.<user>`).
+   - `homeImports` — HM modules (default `users/<user>/home.nix` +
+     `users/features/dev.nix`).
+   - `sshProxyPort` — host-side `systemd-socket-proxyd` listener on that
+     port forwarding to the guest's sshd, plus a firewall opening. Use when
+     someone outside the host needs to SSH into the VM.
 
-4. **Create workspace directory and SSH host keys** on the host that owns the
-   VM (currently `wopr`):
+3. **Optional: project-specific packages.** Pass `homeImports` with extra
+   feature modules, or edit `modules/microvm-base.nix` for guest-wide changes.
 
-   ```bash
-   mkdir -p ~/microvm/<name>/ssh-host-keys
-   ssh-keygen -t ed25519 -N "" -f ~/microvm/<name>/ssh-host-keys/ssh_host_ed25519_key
-   ```
-
-5. **Verify** the configuration evaluates:
+4. **Verify** the configuration evaluates on a desktop host:
 
    ```bash
    nix eval --no-write-lock-file \
-     'path:.#nixosConfigurations.wopr.config.microvm.vms.<name>vm.config.config.system.stateVersion'
+     'path:.#nixosConfigurations.joshua.config.microvm.vms.<name>vm.config.config.system.stateVersion'
    ```
 
-6. **Format** with `nix fmt`.
+5. **Format** with `nix fmt`.
 
-7. **Report back** with:
+6. **Report back** with:
    - VM name and IP address
+   - How to deploy: `clan machines update <host>` (or `sudo nixos-rebuild switch --flake .#<host>`)
    - How to start: `sudo systemctl start microvm@<name>vm`
-   - How to SSH: `ssh sadbeast@192.168.83.X`
+   - How to SSH: `ssh <user>@192.168.83.X` (or `ssh -p <sshProxyPort> <user>@<host>` from off-host)
    - Workspace path inside VM: `~/workspace`
+
+No manual host prep is needed: `microvm-virtiofsd@<name>` creates the workspace dir as
+uid 1000 before start, and the guest's SSH host key is generated on first boot
+into the persistent `/var` volume.
 
 ## Key Files
 
 - `microvms/<name>vm.nix` — per-VM args record.
-- `modules/microvm.nix` — host bridge network + `microvm.vms` enumeration.
-- `modules/microvm-base.nix` — base guest config function (network, shares, home-manager).
+- `modules/microvm.nix` — host bridge network, workspace prep, SSH proxies, `microvm.vms` enumeration.
+- `modules/microvm-base.nix` — base guest config function (network, shares, user, home-manager).
 - `lib/ssh-keys.nix` — SSH authorized keys.
