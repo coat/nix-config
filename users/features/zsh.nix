@@ -118,6 +118,8 @@
       };
 
       shellAliases = {
+        # NixOS defaults to --color=tty, which drops color when piped (ls | tail)
+        ls = "ls --color=always";
         ll = "ls -l";
         nix-shell = "nix-shell --run $SHELL";
       };
