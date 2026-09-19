@@ -2,6 +2,7 @@
   pkgs,
   lib,
   config,
+  nixosConfig ? null,
   ...
 }: let
   # Plugins built by nix (see pkgs/herdr-*). Each package's $out is the
@@ -113,9 +114,39 @@
       }
     ];
   };
-in
-  lib.mkMerge [
+  # Saved SSH machines (what `herdr machine add` writes). Profile ids must be
+  # 32 lowercase hex chars; deriving them from the label keeps them stable
+  # across hosts. The entry naming the current host is dropped.
+  thisHost = nixosConfig.networking.hostName or null;
+  machineCatalog = {
+    version = 1;
+    ssh =
+      map (name: {
+        id = builtins.hashString "md5" name;
+        label = name;
+        target = name;
+        session = "default";
+        enabled = true;
+      })
+      (builtins.filter (name: name != thisHost) config.herdr.machines);
+  };
+in {
+  options.herdr.machines = lib.mkOption {
+    type = lib.types.listOf lib.types.str;
+    default = [];
+    description = "SSH config host aliases to list as herdr machines.";
+  };
+
+  config = lib.mkMerge [
     {
+      # Managed read-only like plugins.json: `herdr machine add/remove` will
+      # fail; edit herdr.machines instead. force restores the link if a CLI
+      # write renamed over it.
+      xdg.stateFile."herdr/client/endpoints.json" = lib.mkIf (config.herdr.machines != []) {
+        source = (pkgs.formats.json {}).generate "herdr-endpoints.json" machineCatalog;
+        force = true;
+      };
+
       home = {
         # Managed read-only: `herdr plugin install/enable/disable` will fail to
         # write the registry. Add plugins to the list above instead.
@@ -196,4 +227,5 @@ in
       };
       programs.opencode.tui.plugin = ["./herdr-tui-session.js"];
     })
-  ]
+  ];
+}

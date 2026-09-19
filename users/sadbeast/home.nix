@@ -11,4 +11,7 @@
       ];
     })
   ];
+
+  # Targets are aliases from features/ssh.nix; the current host is skipped.
+  herdr.machines = ["cheyenne" "crystalpalace" "joshua" "wopr" "pairvm"];
 }
