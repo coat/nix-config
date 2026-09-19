@@ -225,6 +225,10 @@ in {
     # permissions), so it stays mutable and the hook is merged in at activation
     # instead of managed as a whole.
     (lib.mkIf config.programs.claude-code.enable {
+      # Upstream agent skill (herdr.dev/docs/agent-skill), linked from the
+      # pinned source so it tracks the installed herdr version.
+      home.file.".claude/skills/herdr".source = "${pkgs.herdr.src}/skills/herdr";
+
       # force: replaces a copy left by an earlier `herdr integration install`.
       home.file.${claudeHookPath} = {
         source = claudeHook;
