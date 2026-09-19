@@ -37,6 +37,7 @@
       system = "x86_64-linux";
       profile = "desktop";
       user = "sadbeast";
+      buildHost = "root@joshua";
     };
     falken = {
       tags = ["work"];
