@@ -7,4 +7,5 @@
   herdr-auto-title = pkgs.callPackage ./herdr-auto-title {};
   herdr-radar = pkgs.callPackage ./herdr-radar {};
   herdr-worktreeinclude-local = pkgs.callPackage ./herdr-worktreeinclude-local {};
+  pair-invite = pkgs.callPackage ./pair-invite {};
 }

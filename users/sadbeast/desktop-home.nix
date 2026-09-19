@@ -9,7 +9,7 @@
     ../features/senpai.nix
   ];
 
-  home.packages = [pkgs.zoom-us];
+  home.packages = [pkgs.pair-invite pkgs.zoom-us];
 
   programs.librewolf.profiles.sadbeast = {};
   programs.nixvim.plugins = {

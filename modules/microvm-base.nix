@@ -1,5 +1,5 @@
 # Guest config shared by every microvms/*.nix. Extra attrs in the VM file
-# (user, authorizedKeys, homeImports, sshProxyPort) are optional overrides;
+# (user, authorizedKeys, homeImports, userCA, sshProxyPort) are optional overrides;
 # sshProxyPort is consumed host-side in microvm.nix and ignored here.
 cfg @ {
   hostName,
@@ -15,6 +15,7 @@ cfg @ {
   ...
 }: {
   config,
+  lib,
   pkgs,
   ...
 }: let
@@ -114,6 +115,11 @@ in {
         type = "ed25519";
       }
     ];
+    # Certificates signed by userCA (a public key file) are accepted for
+    # principals matching the login user; see pkgs/pair-invite.
+    extraConfig = lib.optionalString (cfg ? userCA) ''
+      TrustedUserCAKeys ${cfg.userCA}
+    '';
   };
 
   # uid 1000 is pinned because virtiofs maps ids 1:1 and microvm.nix chowns
