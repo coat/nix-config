@@ -13,7 +13,7 @@
       sansSerif.name = "Fira Sans";
 
       monospace.package = nerd-fonts.iosevka;
-      monospace.name = "Iosevka";
+      monospace.name = "Iosevka Nerd Font";
 
       sizes.terminal = 12;
     };

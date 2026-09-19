@@ -8,7 +8,6 @@
     packages = with pkgs; [
       dmenu-wayland
       grim
-      iosevka
       nerd-fonts.iosevka
       slurp
       sway-launcher-desktop

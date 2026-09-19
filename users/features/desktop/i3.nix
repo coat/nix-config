@@ -7,7 +7,6 @@
     dmenu
     i3lock
     i3status
-    iosevka
     nerd-fonts.iosevka
     nsxiv
     scrot
