@@ -13,6 +13,7 @@
         targets.nixvim.enable = true;
         targets.starship.enable = true;
         targets.tmux.enable = true;
+        targets.herdr.enable = true;
       };
     }
   ];

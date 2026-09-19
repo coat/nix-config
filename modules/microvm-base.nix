@@ -79,6 +79,13 @@ in {
         mountPoint = "/var";
         size = 8192;
       }
+      # Root is tmpfs; keep herdr session state, agent logins and shell
+      # history across VM restarts.
+      {
+        image = "home.img";
+        mountPoint = "/home";
+        size = 4096;
+      }
     ];
 
     writableStoreOverlay = "/nix/.rw-store";
@@ -131,6 +138,10 @@ in {
     extraGroups = ["wheel"];
     openssh.authorizedKeys.keys = authorizedKeys;
   };
+
+  # The workspace share is mounted before users are created, so systemd
+  # makes /home/<user> as root and NixOS then leaves the existing dir alone.
+  systemd.tmpfiles.rules = ["d /home/${user} 0700 ${user} users -"];
 
   programs.zsh.enable = true;
   security.sudo.wheelNeedsPassword = false;
