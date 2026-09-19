@@ -12,6 +12,7 @@
     herdr-auto-title
     herdr-worktreeinclude-local
     herdr-radar
+    herdr-navigator
   ];
 
   # Herdr's plugin registry (~/.config/herdr/plugins.json). Only the fields
@@ -44,6 +45,16 @@
   '';
   radarConfig = pkgs.writeTextDir "config.toml" radarConfigText;
 
+  navigatorId = pkgs.herdr-navigator.passthru.herdrPlugin.id;
+
+  # herdr-navigator writes a default config on first run if none exists.
+  # Its F5 self-update runs `herdr plugin install`, which cannot write the
+  # read-only registry, so the daily release check is off.
+  navigatorConfigText = ''
+    [picker]
+    check_updates = false
+  '';
+
   # Dark theme closest to the stylix scheme (base16 eighties). Anything but
   # "terminal" also lets herdr-radar pick its light/dark palette from the
   # name; with follow_appearance off that is its only input.
@@ -52,6 +63,13 @@
 
     [keys]
     prefix = "ctrl+a"
+
+    # prefix+t is unbound by default (rename_tab is prefix+shift+t).
+    [[keys.command]]
+    key = "prefix+t"
+    type = "plugin_action"
+    command = "${navigatorId}.open"
+    description = "jump to anything"
 
     [theme]
     name = "one-dark"
@@ -203,6 +221,7 @@ in {
         };
 
         file.".config/herdr/plugins/config/${radarId}/config.toml".text = radarConfigText;
+        file.".config/herdr/plugins/config/${navigatorId}/config.toml".text = navigatorConfigText;
 
         # lib/font.js checks for <name>-<hash>.ttf in the user font dir; linking
         # each file from the package keeps the hashed name without knowing it at
