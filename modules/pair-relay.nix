@@ -18,7 +18,11 @@ in {
     listenStreams = [(toString port)];
   };
 
-  systemd.services.pair-relay.serviceConfig.ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd [${ztIp}]:${toString port}";
+  # socket-proxyd splits HOST:PORT on the last colon and doesn't understand
+  # [v6]:port, so give the address a name instead of passing it literally.
+  networking.hosts.${ztIp} = ["${host}.zt"];
+
+  systemd.services.pair-relay.serviceConfig.ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${host}.zt:${toString port}";
 
   networking.firewall.allowedTCPPorts = [port];
 }
