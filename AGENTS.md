@@ -56,3 +56,4 @@ nix eval --no-write-lock-file 'path:.#homeConfigurations."<name>".config.home.st
 - Add a user → `.agents/skills/adding-user/SKILL.md`
 - Add a darwin host → `.agents/skills/adding-darwin-host/SKILL.md`
 - Add a microvm guest → `.agents/skills/creating-microvm/SKILL.md`
+- Update / audit herdr plugin packages → `.agents/skills/updating-herdr-plugins/SKILL.md`

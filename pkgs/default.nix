@@ -5,6 +5,7 @@
   fab-agon-emulator = pkgs.callPackage ./fab-agon-emulator {};
   foot-terminfo = pkgs.callPackage ./foot-terminfo {};
   herdr-auto-title = pkgs.callPackage ./herdr-auto-title {};
+  herdr-navigator = pkgs.callPackage ./herdr-navigator {};
   herdr-radar = pkgs.callPackage ./herdr-radar {};
   herdr-worktreeinclude-local = pkgs.callPackage ./herdr-worktreeinclude-local {};
   pair-invite = pkgs.callPackage ./pair-invite {};
