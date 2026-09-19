@@ -8,7 +8,6 @@
       ./lsp.nix
       ./markdown-preview.nix
       ./neotest.nix
-      ./opencode.nix
       ./todo-comments.nix
       ./trouble.nix
     ];
