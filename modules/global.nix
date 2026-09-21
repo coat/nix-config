@@ -1,4 +1,6 @@
 {pkgs, ...}: {
+  imports = [./zerotier-hosts.nix];
+
   environment.systemPackages = [pkgs.ghostty.terminfo];
   programs = {
     zsh.enable = true;
