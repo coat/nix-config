@@ -15,6 +15,13 @@
       '';
 
       initContent = ''
+        # make opening things work in a herdr pane
+        if [[ -n $HERDR_ENV && -z $WAYLAND_DISPLAY ]] && command -v systemctl >/dev/null; then
+          eval "$(systemctl --user show-environment 2>/dev/null \
+            | grep -E '^(WAYLAND_DISPLAY|DISPLAY|XDG_CURRENT_DESKTOP|XDG_SESSION_TYPE|SWAYSOCK)=' \
+            | sed 's/^/export /')"
+        fi
+
         #make sure brew is on the path for Apple Silicon
         if [[ $(uname -m) == 'arm64' ]]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
