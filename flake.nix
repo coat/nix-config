@@ -72,6 +72,7 @@
       nixvim.homeModules.nixvim
       nix-index-database.homeModules.nix-index
       {programs.nixvim.nixpkgs.source = nixpkgs;}
+      ./modules/stylix-hm.nix
     ];
 
     homeManagerStylixModules = [

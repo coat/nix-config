@@ -10,7 +10,7 @@
       then null
       else pkgs.ghostty;
     enableZshIntegration = true;
-    installVimSyntax = lib.mkForce (!pkgs.stdenv.isDarwin);
+    installVimSyntax = lib.mkForce (!pkgs.stdenv.hostPlatform.isDarwin);
     settings = {
       window-decoration = false;
       resize-overlay = "never";
