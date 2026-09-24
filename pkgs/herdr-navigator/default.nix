@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
 }:
@@ -23,6 +24,20 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-1fvQ8hyarP1WQwqIRvqKCkttwAMj3wGieue91/VNll8=";
+
+  # Darwin-only upstream test-fixture bug. These three tests key
+  # `path_to_workspaces` on the literal string "/tmp", but the lookup side
+  # goes through `Entry::key()` → `canonical_str` → `fs::canonicalize`. On
+  # darwin /tmp is a symlink to private/tmp, so the lookup key resolves to
+  # "/private/tmp" and never matches what the test inserted. Linux has no
+  # such symlink, which is why upstream CI is green. The shipped binary is
+  # unaffected — it canonicalizes on both sides.
+  # Re-check on each bump: drop this once upstream tests use a tempdir.
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+    "--skip=app::tests::source_specific_reuse_distinguishes_same_path_workspaces"
+    "--skip=app::tests::close_target_matches_entry_kind"
+    "--skip=sources::tests::persisted_workspace_kind_survives_label_changes_and_legacy_labels_migrate"
+  ];
 
   # $out is the plugin_root. Every manifest command points at the cargo
   # output dir (./target/release/…); rewrite them to the installed binary so
