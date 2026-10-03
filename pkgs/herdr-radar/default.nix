@@ -8,13 +8,13 @@
   # Needed at eval time (ghostty's font-codepoint-map), so they are written
   # down here; the build fails if they drift from what the source computes.
   ranges = [
-    ["E1A0" "E1B7"]
+    ["E1A0" "E1BA"]
     ["E1C0" "E1C5"]
   ];
 in
   stdenvNoCC.mkDerivation rec {
     pname = "herdr-radar";
-    version = "1.3.12";
+    version = "1.4.2";
 
     meta = with lib; {
       description = "Herdr plugin: vendor logos, lifecycle glyphs and workspace grouping for the sidebar";
@@ -27,7 +27,7 @@ in
       owner = "hhdebb";
       repo = "herdr-radar";
       rev = "v${version}";
-      hash = "sha256-Ki9L3SsohzKIA8R5gkXfh4njCxdjFI3S0hLHBbV8mZg=";
+      hash = "sha256-fnpdFGVL2iltBDH2CLeyysr6B4w1I6aTXYIOTOaHMdo=";
     };
 
     nativeBuildInputs = [nodejs];
