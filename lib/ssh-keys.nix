@@ -14,7 +14,10 @@
 
   # Guests allowed into the shared `pair` account on pairvm only
   # (microvms/pairvm.nix). Never reference this list from a host account.
-  pairGuests = [];
+  pairGuests = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPGV+vQrN5NCgyrrxF3OQ7yrdJaKRkBktV2SZ6bXQdAi"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHW1xazbQQh1zY9qE2I+MmTdfMgyPEXUvrzvNuiGgWSK"
+  ];
 
   # Primary key used for admin access
   primary = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINGpEusv/bS34Q1JQxZXikdcwnq1vToz2d+HgV+E8NRX";
