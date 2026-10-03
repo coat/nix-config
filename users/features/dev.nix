@@ -1,6 +1,11 @@
-{pkgs, ...}: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   imports = [
     ./nixvim/dev.nix
+    "${inputs.hunk}/nix/home-manager.nix"
   ];
   home = {
     packages = with pkgs; [
@@ -27,6 +32,17 @@
       enable = true;
       settings.aliases = {
         prs = "pr list";
+      };
+    };
+
+    hunk = {
+      enable = true;
+      enableClaudeIntegration = true;
+      enableGitIntegration = true;
+      settings = {
+        theme = "terminal";
+        agent_notes = true;
+        prompt_save_view_preferences = false;
       };
     };
 
