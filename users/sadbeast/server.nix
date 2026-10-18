@@ -1,4 +1,5 @@
 # sadbeast's additions on server-profile machines.
 {
-  users.users.sadbeast.extraGroups = ["video" "audio"];
+  # Hardware video decode (jellyfin, etc.); audio comes from clan.nix.
+  users.users.sadbeast.extraGroups = ["video"];
 }

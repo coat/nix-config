@@ -1,10 +1,12 @@
+# Deploy account for teamdraft.party on cheyenne (imported by its
+# configuration.nix, not a clan user).
 {pkgs, ...}: let
   sshKeys = import ../../lib/ssh-keys.nix;
-in
-  import ../../modules/user-account.nix {
-    inherit pkgs;
-    name = "teamdraft";
-    sshKeys = sshKeys.sadbeast;
+in {
+  users.users.teamdraft = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    openssh.authorizedKeys.keys = sshKeys.sadbeast;
     extraGroups = ["docker"];
-    enableSubIds = false;
-  }
+  };
+}
