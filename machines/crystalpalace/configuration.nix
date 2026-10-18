@@ -50,7 +50,13 @@
     CPUQuota = "100%";
   };
 
-  services.avahi.interfaces = ["enp1s0"];
+  services.avahi = {
+    interfaces = ["enp1s0"];
+    # Daily IPv6 privacy-address rotation on enp1s0 makes avahi see its own
+    # records as a conflict and rename the host to crystalpalace-2.local.
+    # IPv4-only mDNS avoids that; .local clients here resolve over IPv4.
+    ipv6 = false;
+  };
 
   networking.firewall = {
     enable = true;
