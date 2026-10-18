@@ -1,9 +1,4 @@
 {pkgs, ...}: {
-  imports = [
-    ../../modules/global.nix
-    ../../modules/desktop.nix
-  ];
-
   networking.hostName = "falken";
 
   services.xserver.enable = true;

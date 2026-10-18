@@ -92,6 +92,7 @@
           homeManagerSharedModules
           inputs
           outputs
+          pkgsFor
           self
           ;
       };

@@ -2,14 +2,17 @@
   lib = self.inputs.nixpkgs.lib;
 
   sshKeys = import "${self}/lib/ssh-keys.nix";
-  mkPkgs = import ./lib/mk-pkgs.nix {
-    overlays = [self.overlays.all];
-  };
 
   # Each machine declares its tags, system, and the *profile* + *user* that
-  # parameterise module composition. Per-host customisations live in
-  # machines/<host>/configuration.nix (NixOS) and machines/<host>/home.nix
-  # (home-manager, optional, auto-detected).
+  # parameterise module composition:
+  #   modules/global.nix               every machine
+  #   modules/profiles/<profile>.nix   desktop | server | vm
+  #   users/<user>/nixos.nix           the user's system account
+  #   users/<user>/<profile>.nix       optional: user additions for that profile
+  #   users/<user>/home.nix            the user's home-manager bundle
+  #   machines/<host>/home.nix         optional: per-host HM tweaks
+  # machines/<host>/{configuration,disko}.nix and facter.json are
+  # auto-imported by clan.
   machineConfigs = {
     cheyenne = {
       tags = ["personal"];
@@ -47,88 +50,71 @@
     };
   };
 
-  mkInventoryMachine = cfg: {
-    inherit (cfg) tags;
+  mkMachine = name: cfg: {pkgsFor, ...}: let
+    optionalFile = path: lib.optional (builtins.pathExists path) path;
+    userDir = ./users + "/${cfg.user}";
+  in {
+    nixpkgs.pkgs = pkgsFor.${cfg.system};
+
+    imports =
+      [
+        ./modules/global.nix
+        ./modules/home-manager.nix
+        (./modules/profiles + "/${cfg.profile}.nix")
+        (userDir + "/nixos.nix")
+      ]
+      ++ optionalFile (userDir + "/${cfg.profile}.nix");
+
+    users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
+
+    home-manager.users.${cfg.user}.imports =
+      [(userDir + "/home.nix")]
+      ++ optionalFile (./machines + "/${name}/home.nix");
+
+    clan.core.networking.buildHost = lib.mkIf (cfg ? buildHost) cfg.buildHost;
+    clan.core.deployment.requireExplicitUpdate = lib.mkIf (cfg ? requireExplicitUpdate) cfg.requireExplicitUpdate;
   };
 
-  mkMachine = name: cfg: {inputs, ...}: let
-    hostHome = ./machines + "/${name}/home.nix";
-    hasHostHome = builtins.pathExists hostHome;
-  in
-    {
-      nixpkgs.pkgs = mkPkgs inputs.nixpkgs cfg.system;
-      nix.gc = {
-        automatic = true;
-        dates = "weekly";
-        options = "--delete-older-than 14d";
-      };
-      imports = [
-        ./modules/home-manager.nix
-        (./users + "/${cfg.user}/${cfg.profile}.nix")
-        (./users + "/${cfg.user}/nixos.nix")
-      ];
-      users.users.root.openssh.authorizedKeys.keys = [sshKeys.primary];
-      home-manager.users.${cfg.user}.imports =
-        [(./users + "/${cfg.user}/home.nix")]
-        ++ lib.optional hasHostHome hostHome;
-    }
-    // lib.optionalAttrs (cfg ? buildHost) {
-      clan.core.networking.buildHost = cfg.buildHost;
-    }
-    // lib.optionalAttrs (cfg ? requireExplicitUpdate) {
-      clan.core.deployment.requireExplicitUpdate = cfg.requireExplicitUpdate;
-    };
-
+  # One clan `users` instance per account; tags pick the machines it lands on.
   userInstanceConfigs = {
-    sadbeast-user = {
+    sadbeast = {
       tags = ["personal"];
-      user = "sadbeast";
       groups = ["wheel" "media" "docker" "audio" "input"];
     };
-    "kent.smith-user" = {
+    "kent.smith" = {
       tags = ["work"];
-      user = "kent.smith";
       groups = ["wheel" "docker"];
     };
   };
 
-  wifiInstanceConfig = {
-    moduleInput = "clan-core";
-    machineNetworks = {
-      wopr = ["home"];
-    };
-  };
-
-  mkUsersInstance = cfg: {
-    module.name = "users";
-    roles.default = {
-      inherit (cfg) tags;
-      settings = {
-        inherit (cfg) groups user;
-        share = true;
+  mkUsersInstance = user: cfg: {
+    name = "${user}-user";
+    value = {
+      module.name = "users";
+      roles.default = {
+        inherit (cfg) tags;
+        settings = {
+          inherit user;
+          inherit (cfg) groups;
+          share = true;
+        };
       };
     };
-  };
-
-  mkWifiMachineSettings = networks: {
-    settings.networks = lib.genAttrs networks (_: {});
-  };
-
-  mkWifiInstance = cfg: {
-    module.name = "wifi";
-    module.input = cfg.moduleInput;
-    roles.default.machines = lib.mapAttrs (_: mkWifiMachineSettings) cfg.machineNetworks;
   };
 in {
   # Ensure this is unique among all clans you want to use.
   meta.name = "norad";
   meta.domain = "norad";
 
-  inventory.machines = lib.mapAttrs (_: mkInventoryMachine) machineConfigs;
+  inventory.machines = lib.mapAttrs (_: cfg: {inherit (cfg) tags;}) machineConfigs;
 
   inventory.instances =
     {
-      wifi = mkWifiInstance wifiInstanceConfig;
+      wifi = {
+        module.name = "wifi";
+        module.input = "clan-core";
+        roles.default.machines.wopr.settings.networks.home = {};
+      };
       internet = {
         module.input = "clan-core";
         roles.default.machines.cheyenne = {
@@ -153,10 +139,7 @@ in {
         roles.peer.tags.work = {};
       };
     }
-    // lib.mapAttrs (_: mkUsersInstance) userInstanceConfigs;
+    // lib.mapAttrs' mkUsersInstance userInstanceConfigs;
 
-  # Additional NixOS configuration can be added here.
-  # machines/<host>/configuration.nix is automatically imported by clan.
-  # See: https://docs.clan.lol/guides/more-machines/#automatic-registration
   machines = lib.mapAttrs mkMachine machineConfigs;
 }

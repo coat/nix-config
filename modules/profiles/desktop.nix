@@ -1,11 +1,11 @@
+# Physical desktops/laptops (joshua, wopr): sway, microvm host, desktop VPN.
 {inputs, ...}: {
   imports = [
-    ./global.nix
-    ./desktop.nix
-    ./wireguard-desktop.nix
-    ./virt-manager.nix
+    ../desktop.nix
+    ../wireguard-desktop.nix
+    ../virt-manager.nix
     inputs.microvm.nixosModules.host
-    ./microvm.nix
+    ../microvm.nix
   ];
 
   boot.loader.systemd-boot.enable = true;

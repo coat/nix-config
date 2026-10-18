@@ -6,7 +6,6 @@
 }: {
   imports = [
     inputs.nixarr.nixosModules.default
-    ../../modules/global.nix
     ../../modules/nixarr.nix
     ../../modules/romm.nix
     ../../modules/samba.nix

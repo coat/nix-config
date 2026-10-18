@@ -1,6 +1,5 @@
 {
   imports = [
-    ../../modules/global.nix
     ../../modules/docker.nix
     ../../modules/docker-registry.nix
     ../../modules/soju.nix

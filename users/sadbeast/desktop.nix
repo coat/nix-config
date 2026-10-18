@@ -1,8 +1,5 @@
+# sadbeast's additions on desktop-profile machines.
 {
-  imports = [
-    ../../modules/desktop-host.nix
-  ];
-
   # soju bouncer password, read by senpai (users/features/senpai.nix) via
   # password-cmd; shared so every desktop gets the same account secret
   clan.core.vars.generators.soju-client = {

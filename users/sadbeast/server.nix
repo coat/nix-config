@@ -1,7 +1,4 @@
+# sadbeast's additions on server-profile machines.
 {
-  imports = [
-    ../../modules/home-manager-stylix.nix
-  ];
-
   users.users.sadbeast.extraGroups = ["video" "audio"];
 }
