@@ -164,7 +164,11 @@
     inherit (clan.config) nixosModules clanInternals;
     clan = clan.config;
 
-    packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
+    # Only expose packages whose meta.platforms include the system, so
+    # `nix flake check` doesn't trip over Linux-only packages on darwin.
+    packages = forEachSystem (pkgs:
+      lib.filterAttrs (_: lib.meta.availableOn pkgs.stdenv.hostPlatform)
+      (import ./pkgs {inherit pkgs;}));
 
     overlays = import ./overlays {inherit inputs outputs;};
 

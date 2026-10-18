@@ -2,29 +2,32 @@
   stdenv,
   lib,
   fetchurl,
+  autoPatchelfHook,
+  sdl3,
 }:
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fab-agon-emulator";
   version = "1.1.0";
-
-  dontBuild = true;
 
   meta = with lib; {
     description = "An emulator of the Agon Light, Agon Light 2, and Agon Console8 8-bit computers.";
     homepage = "https://github.com/tomm/fab-agon-emulator";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux"];
     sourceProvenance = with sourceTypes; [binaryNativeCode];
   };
 
   src = fetchurl {
-    url = "https://github.com/tomm/fab-agon-emulator/releases/download/1.1.0/fab-agon-emulator-v1.1.0-linux-x86_64.tar.bz2";
-    sha256 = "sha256-7kmd7YaY9K6eduIQi3f6nv11rOclZ17VPdka8cV2VfY=";
+    url = "https://github.com/tomm/fab-agon-emulator/releases/download/${version}/fab-agon-emulator-v${version}-linux-x86_64.tar.bz2";
+    hash = "sha256-7kmd7YaY9K6eduIQi3f6nv11rOclZ17VPdka8cV2VfY=";
   };
 
-  # unpackPhase = ''
-  #   tar xf $src
-  # '';
+  # Prebuilt generic-linux binaries: patch the interpreter and rpath so they
+  # run on NixOS.
+  nativeBuildInputs = [autoPatchelfHook];
+  buildInputs = [sdl3 stdenv.cc.cc.lib];
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
