@@ -1,23 +1,14 @@
-{
-  lib,
-  pkgs,
-  ...
-}: let
-  identity = import ./identity.nix;
-in {
+{pkgs, ...}: {
   imports = [
-    (import ../common/home-base.nix {
-      inherit (identity) username realName email;
-      homeDirectory = "/Users/${identity.username}";
-      extraImports = [
-        ../features/desktop/aerospace.nix
-        ../features/desktop/dev.nix
-        ../features/desktop/ghostty.nix
-        ../features/desktop/qutebrowser.nix
-        ../features/dev.nix
-      ];
-    })
+    ../common/home-base.nix
+    ../features/desktop/aerospace.nix
+    ../features/desktop/dev.nix
+    ../features/desktop/ghostty.nix
+    ../features/desktop/qutebrowser.nix
+    ../features/dev.nix
   ];
+
+  me = import ./identity.nix;
 
   home = {
     packages = with pkgs; [
