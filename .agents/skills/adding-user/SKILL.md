@@ -20,19 +20,22 @@ Which machines pick up a user is controlled by tags.
    ```
 2. **Add the user's ssh keys** to `lib/ssh-keys.nix`.
 3. **Create `users/<name>/`:**
-   - `home.nix` — base HM bundle (use `users/common/home-base.nix`, which is
-     parametric on username, email, extraImports).
-   - `nixos.nix` — system user account (calls `modules/user-account.nix`).
-   - `<profile>.nix` for each profile that user uses (`desktop.nix`,
-     `server.nix`, `vm.nix`) — NixOS-side module selecting the profile.
+   - `home.nix` — HM bundle: import `../common/home-base.nix` plus features,
+     and set `me = { username = "<name>"; realName = "…"; email = "…"; };`.
+   - `nixos.nix` — system account: `users.users.<name> = { isNormalUser;
+     shell; openssh.authorizedKeys.keys; }` (groups come from clan.nix).
+   - Optional `<profile>.nix` (`desktop.nix`, `server.nix`, `vm.nix`) — extra
+     NixOS config this user needs only on that profile (e.g. a secret). The
+     profile itself is `modules/profiles/<profile>.nix`, picked per machine.
    - Optional: `desktop-home.nix` — HM desktop add-ons (browser profile, gtk, dconf, …).
    - Optional: `darwin.nix` — Darwin-specific HM bundle.
    Use an existing `users/<user>/` as the template.
 4. **`git add -N` the new files**, then verify:
    ```sh
-   nix eval --no-write-lock-file 'path:.#homeConfigurations."<name>".config.home.stateVersion'
+   nix eval --no-write-lock-file 'path:.#nixosConfigurations.<machine>.config.home-manager.users."<name>".home.stateVersion'
+   nix flake check --no-write-lock-file
    ```
-5. **Format** with `nix fmt`.
+5. **Format** with `nix fmt .`.
 
 ## Key Files
 
@@ -40,4 +43,3 @@ Which machines pick up a user is controlled by tags.
 - `lib/ssh-keys.nix` — authorized keys per user.
 - `users/common/home-base.nix` — shared HM base.
 - `users/features/` — composable HM feature modules (git, zsh, tmux, dev, desktop/, nixvim/).
-- `modules/user-account.nix` — system account helper.

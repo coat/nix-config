@@ -11,8 +11,8 @@ NixOS + home-manager + nix-darwin configuration, orchestrated with
 | wopr          | laptop (sway) + microvm host     | desktop  | clan                          |
 | cheyenne      | public-facing web/gemini server  | server   | clan                          |
 | crystalpalace | media + arr-stack server         | server   | clan                          |
-| falken        | aarch64 work VM (awesome WM)     | vm       | clan                          |
-| kents-MacBook-Pro | work mac                     | —        | nix-darwin (see `hosts/`)     |
+| falken        | aarch64 work VM (i3)             | vm       | clan                          |
+| k-smith-3qcj  | work mac                         | —        | nix-darwin (see `hosts/`)     |
 
 ## Operating
 

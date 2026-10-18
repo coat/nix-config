@@ -10,7 +10,7 @@ Create a new ephemeral MicroVM declaration in this NixOS configuration.
 `modules/microvm.nix` enumerates every `microvms/*.nix` file and instantiates
 each as a guest via `modules/microvm-base.nix`. The filename becomes the VM
 name (so `microvms/devvm.nix` → `microvm.vms.devvm`). The module is imported
-by `modules/desktop-host.nix`, so every desktop-profile host (currently
+by `modules/profiles/desktop.nix`, so every desktop-profile host (currently
 `joshua`, `wopr`) can run any VM; nothing is tied to one host.
 
 ## Steps
@@ -59,7 +59,7 @@ by `modules/desktop-host.nix`, so every desktop-profile host (currently
      'path:.#nixosConfigurations.joshua.config.microvm.vms.<name>vm.config.config.system.stateVersion'
    ```
 
-5. **Format** with `nix fmt`.
+5. **Format** with `nix fmt .`.
 
 6. **Report back** with:
    - VM name and IP address

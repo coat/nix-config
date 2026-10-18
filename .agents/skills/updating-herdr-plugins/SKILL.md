@@ -156,7 +156,7 @@ If a plugin gained a `[[startup]]` or action command, run it once from the
 store path with `plugin_root` as cwd to confirm the pinned interpreter and
 PATH are sufficient (`cd "$out" && ./<cmd> --help` or similar).
 
-Finally, `nix fmt`.
+Finally, `nix fmt .`.
 
 ## 6. Report
 

@@ -24,9 +24,9 @@ Darwin hosts are **not** clan machines. They live in `hosts/darwin/` (not
 3. **Ensure `users/<user>/darwin.nix` exists** (Darwin-specific HM bundle).
 4. **`git add -N` the new files**, then verify:
    ```sh
-   nix eval --no-write-lock-file 'path:.#darwinConfigurations."<host>".config.system.stateVersion'
+   nix eval --no-write-lock-file 'path:.#darwinConfigurations."<host>".config.system.build.toplevel.drvPath'
    ```
-5. **Format** with `nix fmt`.
+5. **Format** with `nix fmt .`.
 6. **Deploy on the Mac:** `sudo darwin-rebuild switch --flake .#`
 
 ## Key Files
