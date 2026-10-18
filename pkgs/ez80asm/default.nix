@@ -5,7 +5,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ez80asm";
-  version = "2.0";
+  version = "2.3";
 
   meta = with lib; {
     description = "ez80 assembler, running natively on the Agon platform";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "envenomator";
     repo = "agon-ez80asm";
     rev = "v${version}";
-    hash = "sha256-6NqhlTht5W8emXdGU+JeM/TcGo8GnRWmrKT6T4NGLVg=";
+    hash = "sha256-BZ6kZHbd6BF1RRyLlFouL3l9WwIMg0LLMWrlS/5UidI=";
   };
 
   installPhase = ''
