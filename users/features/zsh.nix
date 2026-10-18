@@ -1,4 +1,9 @@
-{config, ...}: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs = {
     zsh = {
       enable = true;
@@ -8,108 +13,52 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
 
-      initContent = ''
-        # make opening things work in a herdr pane
-        if [[ -n $HERDR_ENV && -z $WAYLAND_DISPLAY ]] && command -v systemctl >/dev/null; then
-          eval "$(systemctl --user show-environment 2>/dev/null \
-            | grep -E '^(WAYLAND_DISPLAY|DISPLAY|XDG_CURRENT_DESKTOP|XDG_SESSION_TYPE|SWAYSOCK)=' \
-            | sed 's/^/export /')"
-        fi
-
-        #make sure brew is on the path for Apple Silicon
-        if [[ $(uname -m) == 'arm64' ]]; then
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-        fi
-
-        # foot-specific shell integration (OSC 7, OSC 0, OSC 133)
-        if [[ $TERM == foot* ]]; then
-            function osc7-pwd() {
-                emulate -L zsh # also sets localoptions for us
-                setopt extendedglob
-                local LC_ALL=C
-                if [[ -n $TMUX ]]; then
-                    printf '\eP\e]7;file://localhost%s\a\e\\' ''${PWD//(#m)([^@-Za-z&-;_~])/%''${(l:2::0:)$(([##16]#MATCH))}}
-                else
-                    printf '\e]7;file://localhost%s\e\' ''${PWD//(#m)([^@-Za-z&-;_~])/%''${(l:2::0:)$(([##16]#MATCH))}}
-                fi
-            }
-
-            function chpwd-osc7-pwd() {
-                (( ZSH_SUBSHELL )) || osc7-pwd
-            }
-            add-zsh-hook -Uz chpwd chpwd-osc7-pwd
-
-            function precmd {
-                if ! builtin zle; then
-                    print -n "\e]133;D\e\\"
-                    osc7-pwd
-                fi
-                local title="$(print -P '%2~')"
-                print -n "\e]0;''${title}\e\\"
-            }
-
-            function preexec {
-                print -n "\e]133;C\e\\"
-                print -n "\e]0;''${1[(w)1]:t}\e\\"
-            }
-        fi
-
-        # function to list all the profiles in ~/.aws/config
-        function aws_profiles() {
-          profiles=$(aws --no-cli-pager configure list-profiles 2> /dev/null)
-          if [[ -z "$profiles" ]]; then
-            echo "No AWS profiles found in '$HOME/.aws/config, check if ~/.aws/config exists and properly configured.'"
-            return 1
-          else
-            echo $profiles
-          fi
-        }
-
-        # function to set AWS profile, sso login and clear the profile
-        function asp() {
-          available_profiles=$(aws_profiles)
-          if [[ -z "$1" ]]; then
-            unset AWS_DEFAULT_PROFILE AWS_PROFILE
-            echo "Zero argument provided, AWS profile cleared."
-            return
+      initContent =
+        lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
+          # Homebrew (Apple Silicon) on PATH
+          eval "$(/opt/homebrew/bin/brew shellenv)"
+        ''
+        + ''
+          # make opening things work in a herdr pane
+          if [[ -n $HERDR_ENV && -z $WAYLAND_DISPLAY ]] && command -v systemctl >/dev/null; then
+            eval "$(systemctl --user show-environment 2>/dev/null \
+              | grep -E '^(WAYLAND_DISPLAY|DISPLAY|XDG_CURRENT_DESKTOP|XDG_SESSION_TYPE|SWAYSOCK)=' \
+              | sed 's/^/export /')"
           fi
 
-          echo "$available_profiles" | grep -qw "$1"
-          if [[ $? -ne 0 ]]; then
-            echo "Profile '$1' not configured in '$HOME/.aws/config'.\n"
-            echo "Available profiles: \n$available_profiles\n"
-            return 1
-          else
-            export AWS_DEFAULT_PROFILE="$1" AWS_PROFILE="$1"
-          fi
-        }
+          # foot-specific shell integration (OSC 7, OSC 0, OSC 133)
+          if [[ $TERM == foot* ]]; then
+              function osc7-pwd() {
+                  emulate -L zsh # also sets localoptions for us
+                  setopt extendedglob
+                  local LC_ALL=C
+                  if [[ -n $TMUX ]]; then
+                      printf '\eP\e]7;file://localhost%s\a\e\\' ''${PWD//(#m)([^@-Za-z&-;_~])/%''${(l:2::0:)$(([##16]#MATCH))}}
+                  else
+                      printf '\e]7;file://localhost%s\e\' ''${PWD//(#m)([^@-Za-z&-;_~])/%''${(l:2::0:)$(([##16]#MATCH))}}
+                  fi
+              }
 
-        # function to set AWS region and clear the region
-        function asr() {
-          if [[ -z "$1" ]]; then
-            unset AWS_DEFAULT_REGION AWS_REGION
-            echo "No argument provided, cleared AWS region."
-            return
-          else
-            export AWS_DEFAULT_REGION=$1 AWS_REGION=$1
-          fi
-        }
+              function chpwd-osc7-pwd() {
+                  (( ZSH_SUBSHELL )) || osc7-pwd
+              }
+              add-zsh-hook -Uz chpwd chpwd-osc7-pwd
 
-        # function to list all the profiles
-        function alp() {
-          aws_profiles
-        }
+              function precmd {
+                  if ! builtin zle; then
+                      print -n "\e]133;D\e\\"
+                      osc7-pwd
+                  fi
+                  local title="$(print -P '%2~')"
+                  print -n "\e]0;''${title}\e\\"
+              }
 
-        # function to exec into a devcontainer by branch name
-        function dcsh() {
-          local branch=''${1:-$(git rev-parse --abbrev-ref HEAD 2>/dev/null)}
-          if [[ -z "$branch" ]]; then
-            echo "Usage: dcsh <branch-name>"
-            return 1
+              function preexec {
+                  print -n "\e]133;C\e\\"
+                  print -n "\e]0;''${1[(w)1]:t}\e\\"
+              }
           fi
-          docker exec -it "''${branch}_devcontainer-app-1" bash
-        }
-      '';
+        '';
 
       defaultKeymap = "emacs";
 
