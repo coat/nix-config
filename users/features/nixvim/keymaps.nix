@@ -344,18 +344,7 @@
       '';
       options.desc = "Quickfix List";
     }
-    {
-      mode = "n";
-      key = "[q";
-      action = "<cmd>cprev<cr>";
-      options.desc = "Previous Quickfix";
-    }
-    {
-      mode = "n";
-      key = "]q";
-      action = "<cmd>cnext<cr>";
-      options.desc = "Next Quickfix";
-    }
+    # [q / ]q live in trouble.nix (Trouble-aware, falling back to cprev/cnext).
 
     # Diagnostics
     {
