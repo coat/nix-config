@@ -1,8 +1,7 @@
-{inputs, ...}: {
+{
   imports = [
     ./docker.nix
-    inputs.stylix.nixosModules.stylix
-    ./stylix.nix
+    ./stylix/nixos.nix
   ];
 
   programs.dconf.enable = true;

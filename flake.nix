@@ -59,28 +59,17 @@
     lib = nixpkgs.lib // home-manager.lib;
     forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
 
-    mkPkgs = import ./lib/mk-pkgs.nix {
-      overlays = [outputs.overlays.all];
-    };
+    # One nixpkgs instance per system (overlays + unfree), shared by clan
+    # machines, darwin and standalone home-manager.
+    pkgsFor = lib.genAttrs (import systems) (
+      import ./lib/mk-pkgs.nix {overlays = [outputs.overlays.all];} nixpkgs
+    );
 
-    mkPkgsFor = nixpkgsSrc:
-      lib.genAttrs (import systems) (
-        system: mkPkgs nixpkgsSrc system
-      );
-
-    pkgsFor = mkPkgsFor nixpkgs;
-
-    # Shared home-manager modules for clan + standalone + darwin.
+    # Home-manager modules every HM user gets (clan, microvm, darwin, standalone).
     homeManagerSharedModules = [
       nixvim.homeModules.nixvim
       nix-index-database.homeModules.nix-index
       {programs.nixvim.nixpkgs.source = nixpkgs;}
-      ./modules/stylix-hm.nix
-    ];
-
-    homeManagerStylixModules = [
-      stylix.homeModules.stylix
-      ./modules/stylix.nix
     ];
 
     # Usage see: https://docs.clan.lol
@@ -98,40 +87,26 @@
       };
     };
 
-    # Standalone home-manager (devcontainers).
-    # Each entry: { system, module }.
-    standaloneHomeConfigs = {
-      "devcontainer-x86_64-linux" = {
-        system = "x86_64-linux";
-        module = ./users/vscode/default.nix;
-      };
-      "devcontainer-aarch64-darwin" = {
-        system = "aarch64-darwin";
-        module = ./users/vscode/default.nix;
-      };
-      "devcontainer-aarch64-linux" = {
-        system = "aarch64-linux";
-        module = ./users/vscode/default.nix;
-      };
-    };
-
-    mkStandaloneHome = cfg:
+    # Standalone home-manager for devcontainers: `devcontainer-<system>`.
+    mkStandaloneHome = system:
       home-manager.lib.homeManagerConfiguration {
-        pkgs = pkgsFor.${cfg.system};
+        pkgs = pkgsFor.${system};
         extraSpecialArgs = {inherit inputs outputs;};
         modules =
-          [cfg.module]
-          ++ homeManagerSharedModules
-          ++ homeManagerStylixModules;
+          [
+            ./users/vscode/default.nix
+            ./modules/stylix/hm-terminal.nix
+          ]
+          ++ homeManagerSharedModules;
       };
 
-    # Darwin hosts. Each entry: { system, user, hostConfig }.
-    darwinHostConfigs = let
-      workIdentity = import ./users/kent.smith/identity.nix;
-    in {
+    devcontainerSystems = ["x86_64-linux" "aarch64-linux" "aarch64-darwin"];
+
+    # Darwin hosts (not clan-managed). Each entry: { system, user, hostConfig }.
+    darwinHostConfigs = {
       "k-smith-3qcj" = {
         system = "aarch64-darwin";
-        user = workIdentity.username;
+        user = (import ./users/kent.smith/identity.nix).username;
         hostConfig = ./hosts/darwin/work/configuration.nix;
       };
     };
@@ -144,10 +119,10 @@
         };
         modules = [
           cfg.hostConfig
-          {nixpkgs.overlays = [outputs.overlays.all];}
+          {nixpkgs.pkgs = pkgsFor.${cfg.system};}
           nix-index-database.darwinModules.nix-index
           stylix.darwinModules.stylix
-          ./modules/stylix.nix
+          ./modules/stylix/theme.nix
           home-manager.darwinModules.home-manager
           {
             home-manager = {
@@ -187,7 +162,7 @@
 
     # Standalone home-manager configs for non-NixOS targets (devcontainers).
     # NixOS machines use clan + integrated home-manager.
-    homeConfigurations = lib.mapAttrs (_: mkStandaloneHome) standaloneHomeConfigs;
+    homeConfigurations = lib.listToAttrs (map (system: lib.nameValuePair "devcontainer-${system}" (mkStandaloneHome system)) devcontainerSystems);
 
     darwinConfigurations = lib.mapAttrs (_: mkDarwin) darwinHostConfigs;
   };

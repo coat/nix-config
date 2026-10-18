@@ -30,7 +30,6 @@ cfg @ {
 in {
   imports = [
     inputs.home-manager.nixosModules.default
-    ./home-manager-stylix.nix
   ];
 
   _module.args.inputs = inputs;
@@ -156,7 +155,7 @@ in {
       inherit inputs outputs;
       nixosConfig = config;
     };
-    sharedModules = homeManagerSharedModules;
+    sharedModules = homeManagerSharedModules ++ [./stylix/hm-terminal.nix];
     users.${user}.imports = homeImports;
   };
 

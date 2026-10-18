@@ -9,7 +9,7 @@
 
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "ca-derivations nix-command flakes";
-  nix.settings.trusted-users = ["kent.smith"];
+  nix.settings.trusted-users = [username];
   # nix.settings.ssl-cert-file = "";
 
   nix.gc = {
@@ -78,11 +78,6 @@
       remapCapsLockToControl = true;
     };
   };
-
-  # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = "aarch64-darwin";
-  nixpkgs.config.allowUnfree = true;
-  # nixpkgs.config.allowUnsupportedSystem = true;
 
   homebrew = {
     enable = true;
