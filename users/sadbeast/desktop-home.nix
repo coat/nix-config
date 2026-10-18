@@ -12,6 +12,8 @@
   home.packages = [pkgs.pair-invite pkgs.zoom-us];
 
   programs.librewolf.profiles.sadbeast = {};
+  programs.obsidian.vaults.personal.target = "docs/vault/personal";
+
   programs.nixvim.plugins = {
     obsidian.settings = {
       workspaces = [

@@ -40,7 +40,10 @@ in {
   };
 
   programs = {
-    obsidian.enable = true;
+    obsidian = {
+      enable = true;
+      vaults.work.target = "Documents/vault/work";
+    };
 
     nixvim.plugins.obsidian.settings.workspaces = [
       {
