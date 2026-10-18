@@ -11,9 +11,7 @@
     jellyfin = "http://127.0.0.1:8096";
     seerr = "http://127.0.0.1:5055";
     transmission = "http://192.168.15.1:9091"; # RPC lives in the wg netns
-    dispatcharr = "http://127.0.0.1:9191";
     romm = "http://127.0.0.1:8080";
-    grafana = "http://127.0.0.1:3010";
   };
 
   # Names that get an mDNS alias but bring their own nginx vhost (see modules/searxng.nix).
@@ -60,7 +58,7 @@ in {
       lib.nameValuePair "${name}.local" {
         locations."/" = {
           proxyPass = upstream;
-          proxyWebsockets = true; # SignalR/*arr, jellyfin, grafana; harmless elsewhere
+          proxyWebsockets = true; # SignalR/*arr, jellyfin; harmless elsewhere
           recommendedProxySettings = true;
         };
       })

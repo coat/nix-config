@@ -12,7 +12,6 @@
     ../../modules/samba.nix
     ../../modules/local-hostnames.nix
     ../../modules/searxng.nix
-    # ../../modules/monitoring.nix
   ];
 
   boot.loader.grub.configurationLimit = 3;

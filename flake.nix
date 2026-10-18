@@ -98,7 +98,7 @@
       };
     };
 
-    # Standalone home-manager (devcontainers, nix-on-droid).
+    # Standalone home-manager (devcontainers).
     # Each entry: { system, module }.
     standaloneHomeConfigs = {
       "devcontainer-x86_64-linux" = {
