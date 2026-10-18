@@ -98,6 +98,14 @@
 
   programs = {
     swaylock.enable = true;
+
+    # Start sway on tty1 login. Lives here, not in zsh.nix, so hosts without
+    # sway (servers, darwin, VMs) don't exec a missing binary and drop the login.
+    zsh.loginExtra = ''
+      if [ "$(tty)" = "/dev/tty1" ]; then
+        exec sway
+      fi
+    '';
   };
 
   services = {

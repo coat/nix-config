@@ -8,12 +8,6 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
 
-      loginExtra = ''
-        if [ "$(tty)" = "/dev/tty1" ]; then
-          exec sway
-        fi
-      '';
-
       initContent = ''
         # make opening things work in a herdr pane
         if [[ -n $HERDR_ENV && -z $WAYLAND_DISPLAY ]] && command -v systemctl >/dev/null; then
