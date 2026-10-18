@@ -69,10 +69,6 @@
         # when the below is on, it means you can hold cmd+ctrl and click anywhere on a window to drag it around
         NSWindowShouldDragOnGesture = true;
       };
-      CustomUserPreferences = {
-        NSGlobalDomain = {
-        };
-      };
       WindowManager.EnableStandardClickToShowDesktop = false;
 
       screencapture.location = "~/Pictures";

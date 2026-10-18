@@ -60,7 +60,6 @@
     forEachSystem = f: lib.genAttrs (import systems) (system: f pkgsFor.${system});
 
     mkPkgs = import ./lib/mk-pkgs.nix {
-      inherit lib;
       overlays = [outputs.overlays.all];
     };
 
@@ -170,7 +169,7 @@
       lib.filterAttrs (_: lib.meta.availableOn pkgs.stdenv.hostPlatform)
       (import ./pkgs {inherit pkgs;}));
 
-    overlays = import ./overlays {inherit inputs outputs;};
+    overlays = import ./overlays {inherit inputs;};
 
     devShells = forEachSystem (pkgs: {
       default = pkgs.mkShell {

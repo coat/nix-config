@@ -15,9 +15,11 @@ else
 fi
 
 FLAKE="${1:-devcontainer-$SYSTEM}"
+# Defaults to the checkout this script lives in.
+FLAKE_DIR="${FLAKE_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 
 if [[ -z "${SKIP_NIX_INSTALL:-}" ]]; then
   sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install) --no-daemon
   . ~/.nix-profile/etc/profile.d/nix.sh
 fi
-nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager -- switch -b backup --flake ~/dotfiles#${FLAKE} --extra-experimental-features nix-command --extra-experimental-features flakes
+nix --extra-experimental-features nix-command --extra-experimental-features flakes run home-manager -- switch -b backup --flake "${FLAKE_DIR}#${FLAKE}" --extra-experimental-features nix-command --extra-experimental-features flakes

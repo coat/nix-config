@@ -3,7 +3,6 @@
 
   sshKeys = import "${self}/lib/ssh-keys.nix";
   mkPkgs = import ./lib/mk-pkgs.nix {
-    inherit lib;
     overlays = [self.overlays.all];
   };
 
