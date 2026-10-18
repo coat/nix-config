@@ -1,120 +1,35 @@
+# PIA WireGuard tunnel for nixarr's `wg` network namespace (transmission),
+# plus port forwarding, DNS pinning, a watchdog and torrent cleanup.
 {
   config,
   pkgs,
   ...
 }: let
   wgConfPath = "/run/pia-wg/wg.conf";
-  piaCaCert = ./pia-ca.rsa.4096.crt;
+  piaCaCert = ./pia/ca.rsa.4096.crt;
 
-  connectScript = pkgs.writeShellApplication {
+  connectScript = import ./pia/connect-script.nix {
+    inherit pkgs config wgConfPath;
     name = "pia-wg-connect";
-    runtimeInputs = with pkgs; [curl jq wireguard-tools coreutils bash];
-    text = ''
-            set -euo pipefail
-
-            PIA_USER=$(cat ${config.clan.core.vars.generators.pia-credentials.files.pia-user.path})
-            PIA_PASS=$(cat ${config.clan.core.vars.generators.pia-credentials.files.pia-pass.path})
-
-            echo "Getting PIA auth token..."
-            token_resp=$(curl -s --location --request POST \
-              'https://www.privateinternetaccess.com/api/client/v2/token' \
-              --form "username=$PIA_USER" \
-              --form "password=$PIA_PASS")
-            token=$(echo "$token_resp" | jq -r '.token')
-
-            if [[ -z "$token" || "$token" == "null" ]]; then
-              echo "Failed to get PIA token: $token_resp" >&2
-              exit 1
-            fi
-
-            echo "Getting server list..."
-            all_region_data=$(curl -s 'https://serverlist.piaservers.net/vpninfo/servers/v6' | head -1)
-
-            # Test WireGuard server latency in parallel and pick lowest
-            test_server() {
-              ip=$1; cn=$2; id=$3
-              time=$(LC_NUMERIC=en_US.utf8 curl -o /dev/null -s \
-                --connect-timeout 0.5 \
-                --write-out "%{time_connect}" \
-                "http://$ip:443" 2>/dev/null || true)
-              if [[ -n "$time" && "$time" != "0.000000" ]]; then
-                echo "$time $ip $cn $id"
-              fi
-            }
-            export -f test_server
-
-            echo "Testing server latency (port-forward-capable regions only)..."
-            best=$(echo "$all_region_data" \
-              | jq -r '.regions[] | select(.port_forward == true) | .servers.wg[0] | .ip + " " + .cn + " " + .ip' \
-              | xargs -P 20 -I{} bash -c 'test_server {}' 2>/dev/null \
-              | sort -n | head -1) || true
-
-            if [[ -z "$best" ]]; then
-              echo "No server responded within latency threshold" >&2
-              exit 1
-            fi
-
-            WG_SERVER_IP=$(echo "$best" | cut -d' ' -f2)
-            WG_HOSTNAME=$(echo "$best" | cut -d' ' -f3)
-            echo "Selected server: $WG_HOSTNAME ($WG_SERVER_IP)"
-
-            # Generate ephemeral WireGuard keypair
-            priv_key=$(wg genkey)
-            pub_key=$(echo "$priv_key" | wg pubkey)
-
-            echo "Registering with PIA WireGuard API..."
-            wg_json=$(curl -s -G \
-              --connect-to "$WG_HOSTNAME::$WG_SERVER_IP:" \
-              --cacert "${piaCaCert}" \
-              --data-urlencode "pt=$token" \
-              --data-urlencode "pubkey=$pub_key" \
-              "https://$WG_HOSTNAME:1337/addKey")
-
-            if [[ $(echo "$wg_json" | jq -r '.status') != "OK" ]]; then
-              echo "PIA API error: $wg_json" >&2
-              exit 1
-            fi
-
-            peer_ip=$(echo "$wg_json" | jq -r '.peer_ip')
-            server_key=$(echo "$wg_json" | jq -r '.server_key')
-            server_port=$(echo "$wg_json" | jq -r '.server_port')
-            server_vip=$(echo "$wg_json" | jq -r '.server_vip')
-            dns=$(echo "$wg_json" | jq -r '.dns_servers[0]')
-
-            mkdir -p /run/pia-wg
-            cat > "${wgConfPath}" <<EOF
-      [Interface]
-      Address = $peer_ip
-      PrivateKey = $priv_key
-      DNS = $dns
-
-      [Peer]
-      PersistentKeepalive = 25
-      PublicKey = $server_key
-      AllowedIPs = 0.0.0.0/0
-      Endpoint = $WG_SERVER_IP:$server_port
-      EOF
-            chmod 600 "${wgConfPath}"
-
-            # Persist metadata the port-forward service needs: the same token used
-            # for addKey, the server hostname/cn for TLS, and both candidate
-            # gateways for the getSignature/bindPort API. PIA's own script targets
-            # the public server IP (reached off-tunnel via wg-quick's endpoint
-            # route exception); this netns has no such exception and routes
-            # everything through wg0, so the in-tunnel VIP is the likely target.
-            # The port-forward service probes both and uses whichever answers.
-            # Drop any port-forward state from a previous connection so a fresh
-            # port is requested for this new server.
-            cat > /run/pia-wg/pf-meta.env <<EOF
+    portForwardOnly = true;
+    # Persist metadata the port-forward service needs: the same token used
+    # for addKey, the server hostname/cn for TLS, and both candidate
+    # gateways for the getSignature/bindPort API. PIA's own script targets
+    # the public server IP (reached off-tunnel via wg-quick's endpoint
+    # route exception); this netns has no such exception and routes
+    # everything through wg0, so the in-tunnel VIP is the likely target.
+    # The port-forward service probes both and uses whichever answers.
+    # Drop any port-forward state from a previous connection so a fresh
+    # port is requested for this new server.
+    postConnect = ''
+      cat > /run/pia-wg/pf-meta.env <<EOF
       PF_HOSTNAME=$WG_HOSTNAME
       PF_GATEWAY_VIP=$server_vip
       PF_GATEWAY_PUB=$WG_SERVER_IP
       PIA_TOKEN=$token
       EOF
-            chmod 600 /run/pia-wg/pf-meta.env
-            rm -f /run/pia-wg/pf-state.env
-
-            echo "WireGuard config written: $WG_HOSTNAME $WG_SERVER_IP -> $peer_ip"
+      chmod 600 /run/pia-wg/pf-meta.env
+      rm -f /run/pia-wg/pf-state.env
     '';
   };
 
@@ -310,22 +225,7 @@
     '';
   };
 in {
-  clan.core.vars.generators.pia-credentials = {
-    share = true;
-    files.pia-user.secret = true;
-    files.pia-pass.secret = true;
-    prompts.pia-user = {
-      description = "PIA username (p#######)";
-    };
-    prompts.pia-pass = {
-      description = "PIA password";
-      type = "hidden";
-    };
-    script = ''
-      cp "$prompts/pia-user" "$out/pia-user"
-      cp "$prompts/pia-pass" "$out/pia-pass"
-    '';
-  };
+  imports = [./pia/credentials.nix];
 
   systemd.services.pia-wg-connect = {
     description = "PIA WireGuard VPN connection setup";
