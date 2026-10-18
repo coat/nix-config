@@ -16,6 +16,9 @@
 
   vmCfgs = lib.genAttrs vmNames (name: import (vmDir + "/${name}.nix"));
 
+  # Host side of the guest bridge; guests take 192.168.83.2+ (microvms/*.nix).
+  bridgeAddress = "192.168.83.1";
+
   vmIp = cfg: lib.head (lib.splitString "/" cfg.ipAddress);
 
   mkVm = name: let
@@ -30,6 +33,7 @@
           (microvmBase (cfg
             // {
               hostName = name;
+              gateway = bridgeAddress;
               inherit inputs outputs homeManagerSharedModules;
             }))
         ];
@@ -65,7 +69,7 @@ in {
 
   systemd.network.networks."20-microbr" = {
     matchConfig.Name = "microbr";
-    addresses = [{Address = "192.168.83.1/24";}];
+    addresses = [{Address = "${bridgeAddress}/24";}];
     networkConfig = {
       ConfigureWithoutCarrier = true;
     };

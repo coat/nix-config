@@ -1,5 +1,6 @@
 # Guest config shared by every microvms/*.nix. Extra attrs in the VM file
 # (user, authorizedKeys, homeImports, userCA, sshProxyPort) are optional overrides;
+# hostName and gateway are supplied by modules/microvm.nix.
 # sshProxyPort is consumed host-side in microvm.nix and ignored here.
 cfg @ {
   hostName,
@@ -8,6 +9,7 @@ cfg @ {
   mac,
   workspace,
   vsockCid,
+  gateway,
   inputs,
   outputs,
   homeManagerSharedModules,
@@ -30,6 +32,7 @@ cfg @ {
 in {
   imports = [
     inputs.home-manager.nixosModules.default
+    ./base.nix
   ];
 
   _module.args.inputs = inputs;
@@ -98,7 +101,7 @@ in {
       matchConfig.Type = "ether";
       networkConfig = {
         Address = ipAddress;
-        Gateway = "192.168.83.1";
+        Gateway = gateway;
         DNS = ["1.1.1.1" "1.0.0.1"];
       };
     };
@@ -109,9 +112,7 @@ in {
   # sshd generates the key on first boot; /var is a persistent volume, so the
   # host key survives rebuilds without any host-side setup.
   services.openssh = {
-    enable = true;
     settings = {
-      PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
       AllowUsers = [user];
     };
@@ -141,12 +142,6 @@ in {
   # The workspace share is mounted before users are created, so systemd
   # makes /home/<user> as root and NixOS then leaves the existing dir alone.
   systemd.tmpfiles.rules = ["d /home/${user} 0700 ${user} users -"];
-
-  programs.zsh.enable = true;
-  security.sudo.wheelNeedsPassword = false;
-
-  time.timeZone = "America/Los_Angeles";
-  i18n.defaultLocale = "en_US.UTF-8";
 
   home-manager = {
     useGlobalPkgs = true;

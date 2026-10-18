@@ -1,12 +1,13 @@
+# Every clan machine (imported by mkMachine in clan.nix).
 {pkgs, ...}: {
-  imports = [./zerotier-hosts.nix];
+  imports = [
+    ./base.nix
+    ./zerotier-hosts.nix
+  ];
 
   environment.systemPackages = [pkgs.ghostty.terminfo];
-  programs = {
-    zsh.enable = true;
 
-    fuse.userAllowOther = true;
-  };
+  programs.fuse.userAllowOther = true;
 
   services = {
     resolved.settings.Resolve.MulticastDNS = "no";
@@ -20,15 +21,9 @@
       };
     };
 
-    openssh = {
-      enable = true;
-      settings = {
-        PasswordAuthentication = false;
-      };
-      extraConfig = ''
-        AcceptEnv COLORTERM
-      '';
-    };
+    openssh.extraConfig = ''
+      AcceptEnv COLORTERM
+    '';
   };
 
   nix.gc = {
@@ -37,13 +32,5 @@
     options = "--delete-older-than 14d";
   };
 
-  time.timeZone = "America/Los_Angeles";
-
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  console = {
-    keyMap = "emacs2";
-  };
-
-  security.sudo.wheelNeedsPassword = false;
+  console.keyMap = "emacs2";
 }
