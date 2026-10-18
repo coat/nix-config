@@ -1,21 +1,16 @@
 # Public front door for the RomM instance that lives on crystalpalace.
 # cheyenne terminates TLS for romm.sadbeast.com and forwards the request home
 # over ZeroTier; the 3.3 TB ROM library never has to leave the house.
-{lib, ...}: let
-  # Shared, non-secret clan var: crystalpalace's ZeroTier address. It is derived
-  # from the node identity and the network id, so it is stable across rebuilds.
-  crystalpalaceZt =
-    lib.removeSuffix "\n"
-    (builtins.readFile ../vars/shared/zerotier-ip-crystalpalace-zerotier/ip/value);
-in {
+{
   services.nginx.virtualHosts."romm.sadbeast.com" = {
     forceSSL = true;
     enableACME = true;
 
     locations."/" = {
+      # `crystalpalace` resolves to its ZeroTier IP via modules/zerotier-hosts.nix.
       # Hits crystalpalace's own nginx, which owns the romm.sadbeast.com vhost
       # on that side (see modules/romm.nix).
-      proxyPass = "http://[${crystalpalaceZt}]:80";
+      proxyPass = "http://crystalpalace:80";
       proxyWebsockets = true;
       recommendedProxySettings = true;
       extraConfig = ''
