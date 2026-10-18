@@ -15,7 +15,7 @@
     # ../../modules/monitoring.nix
   ];
 
-  boot.loader.systemd-boot.configurationLimit = 3;
+  boot.loader.grub.configurationLimit = 3;
 
   # Bound dirty page cache so writeback to the slow USB media drive happens in
   # small steady increments instead of multi-GB storms that stall all disk I/O
@@ -51,7 +51,7 @@
   };
 
   services.avahi = {
-    interfaces = ["enp1s0"];
+    allowInterfaces = ["enp1s0"];
     # Daily IPv6 privacy-address rotation on enp1s0 makes avahi see its own
     # records as a conflict and rename the host to crystalpalace-2.local.
     # IPv4-only mDNS avoids that; .local clients here resolve over IPv4.
