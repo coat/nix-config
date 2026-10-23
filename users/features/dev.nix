@@ -48,6 +48,15 @@
 
     claude-code = {
       enable = true;
+      # ~/.claude/CLAUDE.md
+      context = ''
+        ## Environment
+        - All my machines run NixOS. Tools that aren't installed globally are still available through Nix.
+        - Never assume a tool is missing. For Python, use `nix shell nixpkgs#python3 -c python3 ...`
+          or `nix run nixpkgs#python3 -- ...`. Add packages with
+          `nix shell --impure --expr 'with import <nixpkgs> {}; python3.withPackages (p: [ p.requests ])'`.
+        - The same applies to any other CLI tool: `nix shell nixpkgs#<pkg> -c <cmd>`.
+      '';
     };
 
     opencode = {
