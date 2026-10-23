@@ -19,7 +19,7 @@ For each `pkgs/herdr-*/default.nix`, record the pinned version and source
 (`rev` is a tag `v${version}` or a bare commit), then the upstream latest:
 
 ```sh
-# Tagged releases (auto-title, radar)
+# Tagged releases (auto-title, navigator, radar)
 gh api repos/<owner>/<repo>/releases/latest --jq .tag_name   # may 404 if no releases
 gh api repos/<owner>/<repo>/tags --jq '.[0].name'
 # Untagged (worktreeinclude-local: version is `<manifest>-unstable-<date>` + commit)
@@ -70,6 +70,9 @@ For `buildGoModule` packages (auto-title), also refresh `vendorHash` when
 `got:` hash from the mismatch error. If `go.sum` is unchanged the old
 `vendorHash` still holds, but a build confirms that either way.
 
+For `buildRustPackage` packages (navigator), do the same with `cargoHash`
+when `Cargo.lock` changed.
+
 For untagged packages, update the date suffix in `version` and, if the
 manifest's `version` field changed, the leading part too.
 
@@ -91,6 +94,16 @@ every `passthru` value copied from upstream source, and everything
 |---|---|---|
 | `mv $out/bin/<name> $out/<name>`; `cp $src/herdr-plugin.toml` | Manifest `[[startup]]` command is a relative `./herdr-auto-title`; herdr runs it with `plugin_root` as cwd | Manifest command path unchanged; binary name unchanged; no new files the manifest references |
 | `subPackages = ["cmd/herdr-auto-title"]` | Module layout | `cmd/` path still exists |
+
+### herdr-navigator (Rust, `buildRustPackage`)
+
+| Workaround | Depends on | Check |
+|---|---|---|
+| `--replace-fail '"./target/release/herdr-navigator"'` in manifest → `$out/bin/herdr-navigator` | Every action/pane command is the cargo output path, quoted exactly so | Grep the new manifest for `target/release`; a renamed binary or a non-`--release` path breaks the build (intended). Built manifest has no `./target/` left |
+| No `herdr` or `zoxide` in the package's runtime deps | Binary resolves herdr via `HERDR_BIN_PATH` (`src/herdr.rs`, falls back to bare `herdr`); `zoxide` is optional and only run from PATH (`src/sources.rs`) | Both still hold; any new `Command::new("<tool>")` in `src/` needs pinning or a note on why PATH is fine |
+| Darwin `checkFlags` skips the three `/tmp`-keyed tests | Upstream tests insert the literal `"/tmp"` while lookups canonicalize to `/private/tmp` | Test names still exist (a stale `--skip` silently skips nothing); drop the skips once upstream uses a tempdir. Only verifiable on darwin |
+| `[[build]]` (`cargo build --release`) left in manifest, never run | Same herdr install-only semantics as radar | As for radar |
+| `users/features/herdr.nix`: `prefix+t` keybinding runs `${navigatorId}.open`; plugin config sets `[picker] check_updates = false` | Manifest action id `open`; `picker.check_updates` key in `src/config.rs` (self-update runs `herdr plugin install`, which can't write the read-only registry) | Action id and config key unchanged; no new self-update path that bypasses `check_updates` |
 
 ### herdr-radar (node scripts, `dontBuild`)
 
