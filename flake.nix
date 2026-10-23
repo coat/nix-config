@@ -147,10 +147,22 @@
 
     overlays = import ./overlays {inherit inputs;};
 
-    devShells = forEachSystem (pkgs: {
+    devShells = forEachSystem (pkgs: let
+      # nixpkgs now builds python packages with __structuredAttrs, so each
+      # makeWrapperArgs element is passed as one argument and clan-cli's
+      # "--unset LD_LIBRARY_PATH" fails the build. Split those elements.
+      # Drop once clan-core lists them as separate elements.
+      clan-cli = clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli.overridePythonAttrs (old: {
+        makeWrapperArgs = lib.concatMap (arg:
+          if lib.hasPrefix "--unset " arg
+          then lib.splitString " " arg
+          else [arg])
+        old.makeWrapperArgs;
+      });
+    in {
       default = pkgs.mkShell {
         packages = [
-          clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli
+          clan-cli
           pkgs.sops
         ];
       };
