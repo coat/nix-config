@@ -5,4 +5,6 @@
     inputs.stylix.nixosModules.stylix
     ./theme.nix
   ];
+
+  home-manager.sharedModules = [./hm-targets.nix];
 }

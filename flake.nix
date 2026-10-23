@@ -129,7 +129,7 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               extraSpecialArgs = {inherit inputs outputs;};
-              sharedModules = homeManagerSharedModules;
+              sharedModules = homeManagerSharedModules ++ [./modules/stylix/hm-targets.nix];
               users.${cfg.user} = import (./users + "/${cfg.user}/darwin.nix");
             };
           }
