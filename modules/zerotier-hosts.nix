@@ -19,5 +19,9 @@
 
   ztIp = name: lib.removeSuffix "\n" (builtins.readFile (ztIpFile name));
 in {
-  networking.hosts = lib.listToAttrs (map (name: lib.nameValuePair (ztIp name) [name]) peers);
+  # Also answer to <host>.<clan domain>, which clan services (e.g. syncthing)
+  # use as peer addresses.
+  networking.hosts = lib.listToAttrs (map (name:
+    lib.nameValuePair (ztIp name) [name "${name}.${config.clan.core.settings.domain}"])
+  peers);
 }

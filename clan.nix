@@ -138,6 +138,27 @@ in {
         roles.peer.tags.personal = {};
         roles.peer.tags.work = {};
       };
+      # Obsidian vault (users/sadbeast/desktop-home.nix). crystalpalace is the
+      # always-on peer so the phone can sync without a desktop running.
+      syncthing = {
+        module.name = "syncthing";
+        module.input = "clan-core";
+        roles.peer.machines.joshua = {};
+        roles.peer.machines.wopr = {};
+        roles.peer.machines.crystalpalace = {};
+        roles.peer.extraModules = [./modules/syncthing-vault.nix];
+        roles.peer.settings.folders.obsidian-personal = {
+          path = "/home/sadbeast/docs/vault/personal";
+          versioning = {
+            type = "trashcan";
+            params.cleanoutDays = "30";
+          };
+        };
+        roles.peer.settings.extraDevices.phone = {
+          id = "OFB2Z7W-CV5XFLE-T4ZTTPV-5RIFKWD-MAPG4BD-LB4RRY4-V3UXNQE-MNK3BAJ";
+          name = "phone";
+        };
+      };
     }
     // lib.mapAttrs' mkUsersInstance userInstanceConfigs;
 
