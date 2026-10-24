@@ -56,6 +56,12 @@
           or `nix run nixpkgs#python3 -- ...`. Add packages with
           `nix shell --impure --expr 'with import <nixpkgs> {}; python3.withPackages (p: [ p.requests ])'`.
         - The same applies to any other CLI tool: `nix shell nixpkgs#<pkg> -c <cmd>`.
+        - `command not found` for a bare tool is expected; rerun it through `nix shell`, don't report it as missing.
+        - If a `nix shell`/`nix run` command fails, the bug is in your command (quoting, heredocs, flags),
+          not in tool availability. Read the error, fix the command and retry; don't switch approach
+          or tell me the tool isn't installed.
+        - For anything longer than a one-liner, write the script to a file in the scratchpad and run
+          `nix shell nixpkgs#python3 -c python3 <file>` instead of using heredocs or nested quotes.
       '';
     };
 
