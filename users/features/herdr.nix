@@ -272,8 +272,9 @@ in {
     })
 
     # `herdr integration install opencode`: a plugin auto-loaded from plugins/
-    # plus a TUI plugin registered in tui.json. herdr-opencode/tui.js is the
-    # v2 (cli.json) entry; it only matters once cli.json exists.
+    # plus a TUI plugin. OpenCode 2 ignores tui.json and loads TUI plugins from
+    # cli.json `plugins`; herdr-opencode/tui.js is that entry and re-exports
+    # herdr-tui-session.js (the v1 tui.json entry), so both files ship.
     (lib.mkIf config.programs.opencode.enable {
       xdg.configFile = {
         "opencode/plugins/herdr-agent-state.js" = {
@@ -289,7 +290,7 @@ in {
           force = true;
         };
       };
-      programs.opencode.tui.plugin = ["./herdr-tui-session.js"];
+      programs.opencode.cli.plugins = ["./herdr-opencode"];
     })
   ];
 }

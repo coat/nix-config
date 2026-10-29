@@ -152,13 +152,20 @@
       # makeWrapperArgs element is passed as one argument and clan-cli's
       # "--unset LD_LIBRARY_PATH" fails the build. Split those elements.
       # Drop once clan-core lists them as separate elements.
-      clan-cli = clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli.overridePythonAttrs (old: {
-        makeWrapperArgs = lib.concatMap (arg:
-          if lib.hasPrefix "--unset " arg
-          then lib.splitString " " arg
-          else [arg])
-        old.makeWrapperArgs;
-      });
+      #
+      # clan-core 26.05 pins nixVersions.nix_2_31 (a CI perf A/B test), which
+      # nixos-unstable removed. Use the default nix, as clan-core main does.
+      # Drop once the 26.05 branch unpins it.
+      clan-cli =
+        (clan-core.packages.${pkgs.stdenv.hostPlatform.system}.clan-cli.override {
+          inherit (pkgs) nix;
+        }).overridePythonAttrs (old: {
+          makeWrapperArgs = lib.concatMap (arg:
+            if lib.hasPrefix "--unset " arg
+            then lib.splitString " " arg
+            else [arg])
+          old.makeWrapperArgs;
+        });
     in {
       default = pkgs.mkShell {
         packages = [
