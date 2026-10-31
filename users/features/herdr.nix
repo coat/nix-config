@@ -248,6 +248,10 @@ in {
       # pinned source so it tracks the installed herdr version.
       home.file.".claude/skills/herdr".source = "${pkgs.herdr.src}/skills/herdr";
 
+      # Ours: drives a second Claude session in a Herdr tab. Not `pr-review`,
+      # which the work machine already uses for reviewing GitHub PRs.
+      programs.claude-code.skills.pre-pr-review = ./claude-skills/pre-pr-review.md;
+
       # force: replaces a copy left by an earlier `herdr integration install`.
       home.file.${claudeHookPath} = {
         source = claudeHook;
