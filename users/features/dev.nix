@@ -62,6 +62,22 @@
           or tell me the tool isn't installed.
         - For anything longer than a one-liner, write the script to a file in the scratchpad and run
           `nix shell nixpkgs#python3 -c python3 <file>` instead of using heredocs or nested quotes.
+
+        ## Herdr and Hunk
+        If `HERDR_ENV=1`, you are running in a Herdr pane, and I'm asking you to use the `herdr`
+        and `hunk-review` skills as described here (count this as me explicitly mentioning Herdr).
+        - Before your first file edit in a git repo, make sure a Hunk session is watching it:
+          `hunk session list --json` and look for a session whose `repoRoot` is the repo root.
+          If there is none, open one in a new background tab of the current workspace:
+          `herdr tab create --workspace "$HERDR_WORKSPACE_ID" --cwd <repo root> --label hunk --no-focus`,
+          then `herdr pane run <.result.root_pane.pane_id> "hunk diff --watch"`.
+          Open at most one per repo, and don't do this for read-only questions or outside a git repo.
+        - Never run `hunk diff`/`hunk show` in your own shell; it's an interactive TUI.
+        - After a non-trivial change, use the `hunk-review` skill to annotate it: a few
+          `hunk session comment add`/`apply` notes (`--repo <repo root>`) on the hunks where the
+          *why* isn't obvious from the code, or that I should look at closely. Skip trivial,
+          self-explanatory edits; don't narrate every hunk. Notes go to Hunk, not instead of your
+          normal summary.
       '';
     };
 

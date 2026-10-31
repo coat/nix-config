@@ -83,11 +83,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1793218136,
-        "narHash": "sha256-AuOONRB6O1FiIh+ES+hag2KATdHJ83nIPAEvAQIKQuk=",
-        "rev": "9267797582563a9e0c5354d8cf4738e5350c3c28",
+        "lastModified": 1793250506,
+        "narHash": "sha256-I0viaOLUvM9PdVQnesrw+jVSGvB6ODWlsq3azqRij8k=",
+        "rev": "1529ce588e09c0a7fa32a525ccc79dd3a50556dd",
         "type": "tarball",
-        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/9267797582563a9e0c5354d8cf4738e5350c3c28.tar.gz"
+        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/1529ce588e09c0a7fa32a525ccc79dd3a50556dd.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -284,11 +284,11 @@
         "rust-overlay": "rust-overlay"
       },
       "locked": {
-        "lastModified": 1793216654,
-        "narHash": "sha256-LSuQhQdhHvvBwDYy2cdBxrpKXzC6uM6gsPU1wqZtHp8=",
+        "lastModified": 1793278609,
+        "narHash": "sha256-0B58jR/v1vxbK7cwoq++SnOCsED0sHDkgqVMvsrjezE=",
         "owner": "herdrdev",
         "repo": "herdr",
-        "rev": "bc8c28988f75c538d4ca058b702f5adbea30566e",
+        "rev": "ee5bfb5041bb3e4a49d591c72308aae3c81ecdde",
         "type": "github"
       },
       "original": {
@@ -320,11 +320,11 @@
     "hunk": {
       "flake": false,
       "locked": {
-        "lastModified": 1793197914,
-        "narHash": "sha256-3VcXU4rynwxEVuMTgMxeWA/3O9Alint6JnTxRuaBDnU=",
+        "lastModified": 1793308705,
+        "narHash": "sha256-QtheAw9sy0lgliq65q2SLe5FqdnEvXtUcumxRQXbuUQ=",
         "owner": "modem-dev",
         "repo": "hunk",
-        "rev": "1b90e54d01e5026e5a0f1212e660e43a2390f050",
+        "rev": "3368209089b06e06d9816bce54a81aa1db313555",
         "type": "github"
       },
       "original": {
@@ -373,11 +373,11 @@
         "spectrum": "spectrum"
       },
       "locked": {
-        "lastModified": 1793225170,
-        "narHash": "sha256-G/iL0mroLP5etLwYs55uyOyffMS4t+gpyXF06haba4w=",
+        "lastModified": 1793281488,
+        "narHash": "sha256-ErGIqtoWEX9KKC8NFtJDx2pGGG02Cr6LGxrvzLd2sqA=",
         "owner": "microvm-nix",
         "repo": "microvm.nix",
-        "rev": "c37d37a876a3c4bd7ff78fcc716b2e4fac770360",
+        "rev": "b7bd556974fa8a171b5b639200e81d52244dfde4",
         "type": "github"
       },
       "original": {
