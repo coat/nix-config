@@ -14,7 +14,7 @@
 in
   stdenvNoCC.mkDerivation rec {
     pname = "herdr-radar";
-    version = "1.5.0";
+    version = "1.5.1";
 
     meta = with lib; {
       description = "Herdr plugin: vendor logos, lifecycle glyphs and workspace grouping for the sidebar";
@@ -27,7 +27,7 @@ in
       owner = "hhdebb";
       repo = "herdr-radar";
       rev = "v${version}";
-      hash = "sha256-ag9W4FlMdjO+3SmaJObNXI48WxCdx/NulMsSXvxxBCY=";
+      hash = "sha256-jQ8p1g/2jWo+s7ob65dFwODkeS9pV8X2NH+O9eZdDIM=";
     };
 
     nativeBuildInputs = [nodejs];
