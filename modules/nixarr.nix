@@ -1,8 +1,32 @@
-{...}: {
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}: {
   imports = [./wireguard.nix];
 
   nixarr = {
     enable = true;
+
+    # nixarr-py generates its Jellyfin client from the OpenAPI spec of the
+    # running Jellyfin version, but looks the spec's hash up in a hard-coded
+    # table that stops at 12.2; nixpkgs ships 12.4. Supply the missing hash
+    # through python-deps.nix's fetchurl argument. Drop once upstream nixarr
+    # knows 12.4.
+    nixarr-py.package = let
+      src = "${inputs.nixarr}/nixarr/lib/nixarr-py";
+      jellyfin = config.nixarr.jellyfin.package;
+      fetchurl = args:
+        pkgs.fetchurl (args
+          // lib.optionalAttrs (lib.hasSuffix "/jellyfin-openapi-12.4.json" args.url) {
+            hash = "sha256-AqYGSRa34I8fHY1//B+xx2I98ON4cp/Nf9NTdmhoA24=";
+          });
+    in
+      (pkgs.callPackage src {inherit jellyfin;}).overridePythonAttrs (_: {
+        dependencies = pkgs.callPackage "${src}/python-deps.nix" {inherit jellyfin fetchurl;};
+      });
 
     mediaDir = "/mnt/files/media";
     stateDir = "/var/lib/nixarr";
