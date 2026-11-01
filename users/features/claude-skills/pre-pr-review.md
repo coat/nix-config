@@ -18,10 +18,12 @@ Arguments, if given: the branch (default: the current one) and the base
 test "${HERDR_ENV:-}" = 1   # otherwise say so and stop
 git status --short           # uncommitted work isn't on the branch, so the reviewer won't see it
 git log --oneline <base>..<branch>
+git log --oneline @{u}..<branch> 2>/dev/null   # unpushed commits, if it has an upstream
 ```
 
 If the branch has uncommitted changes the user meant to include, ask them
-whether to commit first.
+whether to commit first. Step 6 rewrites the branch's commits, so if any
+are already pushed, ask the user before going on.
 
 ## 2. Write the PR description
 
@@ -92,9 +94,21 @@ code:
 
 ## 6. Apply and report
 
-- Fix the accurate findings. Commit the fixes as a separate commit on
-  the branch, following the repo's commit conventions, so the user can
-  see what the review changed.
+- Before fixing anything, note the branch tip: `pre=$(git rev-parse HEAD)`.
+- Fix the accurate findings in the commits they belong to, so the branch
+  reads as if it had been right the first time, unless the repo's
+  conventions or the user's memory say to keep review fixes separate.
+  Commit each fix with `git commit --fixup=<sha>` against the commit that
+  introduced the problem, or `--fixup=amend:<sha>` when the fix also
+  changes what that commit's message says, writing the corrected message
+  in full. Then `git rebase --autosquash <base>`, which needs no editor.
+  If a fixup conflicts, resolve it, or `git rebase --abort` and ask the
+  user.
+- On a branch of several commits, run the checks on each one
+  (`git rebase --exec '<test command>' <base>`), as a fix can land in an
+  earlier commit than code that relies on it.
+- Show the user what the review changed with
+  `git range-diff <base> $pre HEAD`, and give them `$pre` to go back to.
 - Correct the PR description where the review showed it was wrong.
 - Run whatever checks the change calls for (tests, linters) again.
 - Tell the user about each finding: fixed, fixed only in the
