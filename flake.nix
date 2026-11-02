@@ -8,6 +8,10 @@
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
+    # gui-config: the home-manager module's branch, until coat/gasim#37 merges.
+    gasim.url = "github:coat/gasim";
+    gasim.inputs.nixpkgs.follows = "nixpkgs";
+
     herdr.url = "github:herdrdev/herdr";
     herdr.inputs.nixpkgs.follows = "nixpkgs";
 

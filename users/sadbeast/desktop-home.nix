@@ -1,4 +1,8 @@
-{pkgs, ...}: {
+{
+  inputs,
+  pkgs,
+  ...
+}: {
   # sadbeast's home-manager desktop bundle. Imported by per-host home.nix files.
   imports = [
     ../features/desktop
@@ -7,9 +11,13 @@
     ../features/desktop/dev.nix
     ../features/dev.nix
     ../features/senpai.nix
+    inputs.gasim.homeModules.default
   ];
 
   home.packages = [pkgs.pair-invite pkgs.zoom-us];
+
+  # gasim and gasim-gui, its fonts and colors from stylix
+  programs.gasim.enable = true;
 
   programs.librewolf.profiles.sadbeast = {};
   programs.obsidian.vaults.personal.target = "docs/vault/personal";

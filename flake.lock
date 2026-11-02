@@ -257,6 +257,26 @@
         "type": "github"
       }
     },
+    "gasim": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793582338,
+        "narHash": "sha256-wKz4M9SZu9qlzk/AQR5xKcqE0TwzI97mhuPBLODs2Ck=",
+        "owner": "coat",
+        "repo": "gasim",
+        "rev": "e8752c956b9e4db83d8f7364bcc9057bc6672796",
+        "type": "github"
+      },
+      "original": {
+        "owner": "coat",
+        "repo": "gasim",
+        "type": "github"
+      }
+    },
     "gnome-shell": {
       "flake": false,
       "locked": {
@@ -320,11 +340,11 @@
     "hunk": {
       "flake": false,
       "locked": {
-        "lastModified": 1793493108,
-        "narHash": "sha256-PkBsdBvAU4thdUMu0UWBaVk6ei7cjjQY4Hlko49WRGM=",
+        "lastModified": 1793565727,
+        "narHash": "sha256-XmtMNixZpgVGuWTAE0mBWGEETUH4LgZn4vX+YE2KRw0=",
         "owner": "modem-dev",
         "repo": "hunk",
-        "rev": "e83ff1bfd2d6868cf851d377707528499b69d2f6",
+        "rev": "503efd5aa664e78241139ee9f02ae7942e811d95",
         "type": "github"
       },
       "original": {
@@ -531,6 +551,7 @@
       "inputs": {
         "clan-core": "clan-core",
         "darwin": "darwin",
+        "gasim": "gasim",
         "herdr": "herdr",
         "home-manager": "home-manager",
         "hunk": "hunk",
