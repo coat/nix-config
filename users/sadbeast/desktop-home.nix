@@ -14,7 +14,7 @@
     inputs.gasim.homeModules.default
   ];
 
-  home.packages = [pkgs.pair-invite pkgs.zoom-us];
+  home.packages = [pkgs.pair-invite];
 
   # gasim and gasim-gui, its fonts and colors from stylix
   programs.gasim.enable = true;
