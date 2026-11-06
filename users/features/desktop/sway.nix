@@ -15,6 +15,9 @@
       wl-clipboard
       xwayland
     ];
+
+    # sway-launcher-desktop runs terminal apps with "$TERMINAL -e".
+    sessionVariables.TERMINAL = config.wayland.windowManager.sway.config.terminal;
   };
 
   wayland.windowManager.sway = {
