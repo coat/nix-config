@@ -8,6 +8,8 @@
       new_notes_location = "notes_subdir";
       notes_subdir = "notes";
 
+      daily_notes.folder = "daily";
+
       # Default is { " ", "~", "!", ">", "x" }; put done right after todo.
       checkbox.order = [" " "x" "~" "!" ">"];
     };
