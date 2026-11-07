@@ -58,13 +58,13 @@
       StateDirectory = "romarr";
       StateDirectoryMode = "0750";
 
-      # Batch service, like the other arrs, but Python + DAT verification is far
-      # heavier than the Go/.NET arrs: ROMarr parses the whole DAT set (here
-      # ~500 No-Intro/Redump/etc XMLs, ~550M on disk) into ~2G of resident
-      # objects plus the ~17k-file library catalogue. MemoryHigh sits above that
-      # so the cgroup never throttles the scan; MemoryMax is the runaway ceiling.
-      MemoryHigh = "3G";
-      MemoryMax = "4G";
+      # Batch service, like the other arrs, but Python + DAT verification is
+      # heavier than the Go/.NET arrs: it parses the No-Intro DATs (~250 XMLs)
+      # plus the ~17k-file library catalogue and TitleDB into ~1G of resident
+      # objects. Keep MemoryHigh above that so the cgroup never throttles the
+      # startup scan; MemoryMax is the runaway ceiling.
+      MemoryHigh = "1.5G";
+      MemoryMax = "2G";
       CPUQuota = "50%";
       IOSchedulingClass = "idle";
       IOSchedulingPriority = 7;
