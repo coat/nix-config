@@ -2,13 +2,12 @@
 # the upstream Python app natively — no Docker — filing ROMs into RomM's
 # library and verifying them against No-Intro/Redump DATs.
 #
-# Unlike gamarr, ROMarr imports torrents from Transmission (this host's nixarr
-# download client, in the wg netns) as well as qBittorrent, so the download
-# client is added in the UI at Settings → Download Clients (Transmission at
-# http://192.168.15.1:9091, no auth; its completed files live at
-# /var/lib/nixarr/transmission/downloads on the host filesystem, which ROMarr
-# reads directly). Only non-secret defaults are seeded here; the Prowlarr API
-# key and any login are configured in the UI.
+# The download client is qBittorrent (nixarr, in the wg netns), configured in
+# the UI at Settings → Download Clients. qBittorrent's WebUI API is reachable
+# at http://192.168.15.1:8085 (no auth from the 192.168.15.0/24 whitelist); its
+# completed files live under /var/lib/nixarr/qbittorrent/downloads on the host
+# filesystem, which ROMarr reads directly. Only non-secret defaults are seeded
+# here; the Prowlarr API key and any login are configured in the UI.
 {
   lib,
   pkgs,

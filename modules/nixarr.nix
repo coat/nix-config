@@ -36,38 +36,28 @@
       wgConf = "/run/pia-wg/wg.conf";
     };
 
-    transmission = {
+    qbittorrent = {
       enable = true;
       peerPort = 51413;
       vpn.enable = true;
-      extraSettings = {
-        rpc-host-whitelist = "transmission.local";
-        download-queue-enabled = true;
-        download-queue-size = 3;
-        seed-queue-enabled = true;
-        seed-queue-size = 5;
-        blocklist-enabled = false;
-        # Keep ALL torrent I/O on the SSD, away from the SMR USB media drive:
-        # it is BOT-only (queue depth 1), write-through, and collapses to
-        # ~2 IO/s under SMR garbage collection. Transmission 4 does file I/O
-        # on its RPC/session thread, so one slow USB read freezes the daemon
-        # (Idle status, RPC timeouts). Torrents download AND seed from here;
-        # sonarr/radarr import to the library with a cross-filesystem
-        # sequential copy, the one workload the USB drive handles well.
-        download-dir = "/var/lib/nixarr/transmission/downloads";
-        incomplete-dir = "/var/lib/nixarr/transmission/incomplete";
-        incomplete-dir-enabled = true;
-        watch-dir = "/var/lib/nixarr/transmission/watch";
-        # Seeding caps bound SSD usage (146G free); the arrs remove
-        # torrents after import once seeding goals are met.
-        ratio-limit = 2;
-        ratio-limit-enabled = true;
-        idle-seeding-limit = 10080; # minutes; stop seeds idle for 7 days
-        idle-seeding-limit-enabled = true;
-        cache-size-mb = 32;
-        preallocation = 2; # full — avoid fragmentation on the SSD
-        peer-limit-global = 200;
-        peer-limit-per-torrent = 50;
+      openFirewall = true; # qui WebUI (port 5252)
+      extraConfig = {
+        BitTorrent = {
+          # Keep ALL torrent I/O on the SSD, away from the SMR USB media drive
+          # (same reasons as the old transmission setup — see the comment
+          # history). Override nixarr's mediaDir default for both the session
+          # and downloads paths.
+          "Session\\DefaultSavePath" = "/var/lib/nixarr/qbittorrent/downloads";
+          "Session\\TempPath" = "/var/lib/nixarr/qbittorrent/.incomplete";
+          # Seeding caps bound SSD usage (146G free); the arrs remove torrents
+          # after import once these are met.
+          "Session\\GlobalMaxRatio" = "2.0";
+          "Session\\GlobalMaxSeedingMinutes" = "10080";
+        };
+        Preferences = {
+          "Downloads\\SavePath" = "/var/lib/nixarr/qbittorrent/downloads";
+          "Downloads\\TempPath" = "/var/lib/nixarr/qbittorrent/.incomplete";
+        };
       };
     };
 
@@ -92,15 +82,14 @@
   };
 
   systemd.tmpfiles.rules = [
-    # o+rx on transmission's home: sonarr/radarr run with PrivateUsers=true,
+    # o+rx on qbittorrent's home: sonarr/radarr run with PrivateUsers=true,
     # where foreign uids/gids collapse to nobody/nogroup, so group-based access
     # to the downloads dir fails inside their sandbox and imports error with
     # "path does not exist or is not accessible". World-traverse fixes it; the
-    # dir holds no secrets (settings.json itself stays 0600).
-    "d /var/lib/nixarr/transmission 0755 transmission media -"
-    "d /var/lib/nixarr/transmission/downloads 0775 transmission media -"
-    "d /var/lib/nixarr/transmission/incomplete 0755 transmission media -"
-    "d /var/lib/nixarr/transmission/watch 0775 transmission media -"
+    # dir holds no secrets (qBittorrent's config stays 0700).
+    "d /var/lib/nixarr/qbittorrent 0755 qbittorrent media -"
+    "d /var/lib/nixarr/qbittorrent/downloads 0775 qbittorrent media -"
+    "d /var/lib/nixarr/qbittorrent/.incomplete 0755 qbittorrent media -"
   ];
 
   services = {

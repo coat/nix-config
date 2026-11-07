@@ -18,13 +18,13 @@
 
   # Bound dirty page cache so writeback to the slow USB media drive happens in
   # small steady increments instead of multi-GB storms that stall all disk I/O
-  # (Jellyfin streams and transmission's session thread block behind them).
+  # (Jellyfin streams and qbittorrent's I/O block behind them).
   boot.kernel.sysctl = {
     "vm.dirty_background_bytes" = 134217728; # 128M
     "vm.dirty_bytes" = 536870912; # 512M
   };
 
-  systemd.services.transmission = {
+  systemd.services.qbittorrent = {
     partOf = ["wg.service"];
     serviceConfig = {
       TimeoutStartSec = "10min";

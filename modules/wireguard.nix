@@ -1,5 +1,5 @@
-# PIA WireGuard tunnel for nixarr's `wg` network namespace (transmission),
-# plus port forwarding, DNS pinning, a watchdog and torrent cleanup.
+# PIA WireGuard tunnel for nixarr's `wg` network namespace (qBittorrent),
+# plus port forwarding, DNS pinning and a watchdog.
 {
   config,
   pkgs,
@@ -50,7 +50,7 @@
         echo "VPN health check failed after 3 attempts, reconnecting..."
         systemctl restart pia-wg-connect.service
         systemctl restart wg.service
-        systemctl restart transmission.service
+        systemctl restart qbittorrent.service
       else
         echo "VPN health check OK"
       fi
@@ -68,7 +68,7 @@
       # serve the RPC, but that broad 10.0.0.0/8 route shadows the PIA DNS address
       # and black-holes name resolution to the LAN. Pin a more-specific /32 back
       # through the tunnel so DNS works inside the netns. This must land before
-      # transmission starts, else the daemon caches the resolution failures and
+      # qbittorrent starts, else the daemon caches the resolution failures and
       # never recovers without a restart.
       for _i in $(seq 1 30); do
         [[ -f ${wgConfPath} ]] && ip netns exec wg ip link show wg0 >/dev/null 2>&1 && break
@@ -88,13 +88,13 @@
 
   portForwardScript = pkgs.writeShellApplication {
     name = "pia-port-forward";
-    runtimeInputs = with pkgs; [curl jq coreutils iproute2 iptables transmission_4 bash];
+    runtimeInputs = with pkgs; [curl jq coreutils iproute2 iptables bash];
     text = ''
       set -euo pipefail
 
       META=/run/pia-wg/pf-meta.env
       STATE=/run/pia-wg/pf-state.env
-      RPC=192.168.15.1:9091
+      QBT_API=http://192.168.15.1:8085/api/v2
 
       if [[ ! -f "$META" ]]; then
         echo "No PIA metadata at $META (VPN not connected yet?)" >&2
@@ -154,15 +154,15 @@
         echo "bindPort OK for port $PF_PORT"
       }
 
-      wait_for_transmission() {
+      wait_for_qbittorrent() {
         local _i
         for _i in $(seq 1 30); do
-          if ip netns exec wg timeout 5 transmission-remote "$RPC" -si >/dev/null 2>&1; then
+          if ip netns exec wg curl -s -m 5 "$QBT_API/app/version" >/dev/null 2>&1; then
             return 0
           fi
           sleep 2
         done
-        echo "transmission RPC not reachable at $RPC" >&2
+        echo "qBittorrent WebUI not reachable at $QBT_API" >&2
         return 1
       }
 
@@ -176,15 +176,18 @@
             ip netns exec wg iptables -I INPUT -i wg0 -p "$proto" --dport "$port" -j ACCEPT
           fi
         done
-        # Point transmission at the forwarded port. peer-port is both the listen
+        # Point qBittorrent at the forwarded port. listen_port is both the listen
         # port and the port announced to the swarm, so it must equal the forward.
-        # Applied live via RPC and re-asserted every run, since nixarr resets
-        # settings.json back to the declared peerPort whenever transmission restarts.
-        ip netns exec wg timeout 15 transmission-remote "$RPC" -p "$port" >/dev/null
-        echo "transmission peer-port set to $port and opened in netns firewall"
+        # Applied live via the WebUI API and re-asserted every run, since nixarr
+        # regenerates qBittorrent.conf from the declared peerPort on restart.
+        # The request originates from 192.168.15.x, which the WebUI's
+        # AuthSubnetWhitelist lets through without a login.
+        ip netns exec wg curl -s -m 15 -X POST "$QBT_API/app/setPreferences" \
+          --data-urlencode "json={\"listen_port\": $port}" >/dev/null
+        echo "qBittorrent listen_port set to $port and opened in netns firewall"
       }
 
-      wait_for_transmission
+      wait_for_qbittorrent
 
       # If we already hold a port, keep it alive by re-binding and re-asserting it.
       # If the re-bind fails (the forward expired, or the VPN reconnected to a new
@@ -200,28 +203,6 @@
         apply_port "$PF_PORT"
         bind_port
       fi
-    '';
-  };
-
-  cleanupScript = pkgs.writeShellApplication {
-    name = "pia-transmission-cleanup";
-    runtimeInputs = with pkgs; [transmission_4 coreutils gawk gnugrep iproute2];
-    text = ''
-      RPC=192.168.15.1:9091
-      REMOVED=0
-
-      # Query each torrent individually: the -l table's Have column ("8.90 GB")
-      # splits into two awk fields, so positional parsing of Status is unreliable.
-      # Ratio/idle-stopped torrents report "Finished"; "Stopped" is a manual pause.
-      while read -r id; do
-        info=$(ip netns exec wg transmission-remote "$RPC" -t "$id" -i 2>/dev/null)
-        if grep -q "Percent Done: 100%" <<<"$info" \
-          && grep -qE "State: (Stopped|Finished)" <<<"$info"; then
-          ip netns exec wg transmission-remote "$RPC" -t "$id" -r >/dev/null 2>&1 && REMOVED=$((REMOVED+1))
-        fi
-      done < <(ip netns exec wg transmission-remote "$RPC" -l 2>/dev/null | awk 'NR>1 && !/^Sum:/ {gsub(/\*$/, "", $1); print $1}')
-
-      echo "Cleanup: removed $REMOVED stopped/finished completed torrents (data kept)"
     '';
   };
 in {
@@ -270,12 +251,12 @@ in {
   # Pin PIA's in-tunnel DNS resolver back through the tunnel. Without this the
   # netns's broad 10.0.0.0/8-via-veth route shadows the DNS address, breaking all
   # name resolution (trackers, DHT) inside the netns and stalling every torrent.
-  # Ordered before transmission so the daemon never starts against broken DNS.
+  # Ordered before qbittorrent so the daemon never starts against broken DNS.
   systemd.services.pia-dns-route = {
     description = "Pin PIA in-tunnel DNS route inside the wg netns";
     after = ["wg.service"];
-    before = ["transmission.service"];
-    requiredBy = ["transmission.service"];
+    before = ["qbittorrent.service"];
+    requiredBy = ["qbittorrent.service"];
     partOf = ["wg.service"];
     wantedBy = ["wg.service"];
     serviceConfig = {
@@ -285,14 +266,14 @@ in {
     };
   };
 
-  # Request and maintain a PIA-forwarded port so transmission can accept incoming
+  # Request and maintain a PIA-forwarded port so qBittorrent can accept incoming
   # peer connections (crucial for scarcely-seeded torrents). Runs after the netns
-  # and transmission are up, and re-runs whenever wg restarts (new server -> new
+  # and qbittorrent are up, and re-runs whenever wg restarts (new server -> new
   # port). PIA requires the binding to be refreshed at least every 15 minutes.
   systemd.services.pia-port-forward = {
-    description = "PIA WireGuard port forwarding for transmission";
-    after = ["wg.service" "transmission.service"];
-    wants = ["transmission.service"];
+    description = "PIA WireGuard port forwarding for qBittorrent";
+    after = ["wg.service" "qbittorrent.service"];
+    wants = ["qbittorrent.service"];
     partOf = ["wg.service"];
     wantedBy = ["wg.service"];
     serviceConfig = {
@@ -308,26 +289,6 @@ in {
       OnBootSec = "3min";
       OnUnitActiveSec = "14min";
       Unit = "pia-port-forward.service";
-    };
-  };
-
-  systemd.services.pia-transmission-cleanup = {
-    description = "Remove idle completed transmission torrents";
-    after = ["wg.service" "transmission.service"];
-    wants = ["transmission.service"];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${cleanupScript}/bin/pia-transmission-cleanup";
-    };
-  };
-
-  systemd.timers.pia-transmission-cleanup = {
-    description = "Weekly cleanup of idle completed torrents";
-    wantedBy = ["timers.target"];
-    timerConfig = {
-      OnCalendar = "weekly";
-      Persistent = true;
-      Unit = "pia-transmission-cleanup.service";
     };
   };
 }

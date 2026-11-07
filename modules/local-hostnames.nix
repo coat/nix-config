@@ -10,7 +10,7 @@
     prowlarr = "http://127.0.0.1:9696";
     jellyfin = "http://127.0.0.1:8096";
     seerr = "http://127.0.0.1:5055";
-    transmission = "http://192.168.15.1:9091"; # RPC lives in the wg netns
+    qbittorrent = "http://127.0.0.1:5252"; # qui WebUI on the host
     romm = "http://127.0.0.1:8080";
     romarr = "http://127.0.0.1:6868";
   };
@@ -54,7 +54,7 @@ in {
   aliases;
 
   services.nginx = {
-    enable = true; # already on via nixarr's transmission vhost; harmless
+    enable = true; # already on via nixarr's qbittorrent vhost; harmless
     virtualHosts = lib.mapAttrs' (name: upstream:
       lib.nameValuePair "${name}.local" {
         locations."/" = {
