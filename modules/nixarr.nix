@@ -46,17 +46,20 @@
           # Keep ALL torrent I/O on the SSD, away from the SMR USB media drive
           # (same reasons as the old transmission setup — see the comment
           # history). Override nixarr's mediaDir default for both the session
-          # and downloads paths.
-          "Session\\DefaultSavePath" = "/var/lib/nixarr/qbittorrent/downloads";
-          "Session\\TempPath" = "/var/lib/nixarr/qbittorrent/.incomplete";
+          # and downloads paths. NOTE: the download dir deliberately lives
+          # OUTSIDE qbittorrent's stateDir (/var/lib/nixarr/qbittorrent), which
+          # `nixarr fix-permissions` chowns to qbittorrent:root mode 0750 —
+          # that would lock the arrs (PrivateUsers -> nobody) out of downloads.
+          "Session\\DefaultSavePath" = "/var/lib/nixarr/qbittorrent-downloads";
+          "Session\\TempPath" = "/var/lib/nixarr/qbittorrent-downloads/.incomplete";
           # Seeding caps bound SSD usage (146G free); the arrs remove torrents
           # after import once these are met.
           "Session\\GlobalMaxRatio" = "2.0";
           "Session\\GlobalMaxSeedingMinutes" = "10080";
         };
         Preferences = {
-          "Downloads\\SavePath" = "/var/lib/nixarr/qbittorrent/downloads";
-          "Downloads\\TempPath" = "/var/lib/nixarr/qbittorrent/.incomplete";
+          "Downloads\\SavePath" = "/var/lib/nixarr/qbittorrent-downloads";
+          "Downloads\\TempPath" = "/var/lib/nixarr/qbittorrent-downloads/.incomplete";
         };
       };
     };
@@ -82,14 +85,14 @@
   };
 
   systemd.tmpfiles.rules = [
-    # o+rx on qbittorrent's home: sonarr/radarr run with PrivateUsers=true,
-    # where foreign uids/gids collapse to nobody/nogroup, so group-based access
-    # to the downloads dir fails inside their sandbox and imports error with
+    # o+rx on qbittorrent's download dir: sonarr/radarr run with
+    # PrivateUsers=true, where foreign uids/gids collapse to nobody/nogroup, so
+    # group-based access fails inside their sandbox and imports error with
     # "path does not exist or is not accessible". World-traverse fixes it; the
-    # dir holds no secrets (qBittorrent's config stays 0700).
-    "d /var/lib/nixarr/qbittorrent 0755 qbittorrent media -"
-    "d /var/lib/nixarr/qbittorrent/downloads 0775 qbittorrent media -"
-    "d /var/lib/nixarr/qbittorrent/.incomplete 0755 qbittorrent media -"
+    # dir holds no secrets (qbittorrent's config lives in the stateDir, not
+    # here).
+    "d /var/lib/nixarr/qbittorrent-downloads 0775 qbittorrent media -"
+    "d /var/lib/nixarr/qbittorrent-downloads/.incomplete 0755 qbittorrent media -"
   ];
 
   services = {

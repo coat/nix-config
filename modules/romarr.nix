@@ -5,7 +5,7 @@
 # The download client is qBittorrent (nixarr, in the wg netns), configured in
 # the UI at Settings → Download Clients. qBittorrent's WebUI API is reachable
 # at http://192.168.15.1:8085 (no auth from the 192.168.15.0/24 whitelist); its
-# completed files live under /var/lib/nixarr/qbittorrent/downloads on the host
+# completed files live under /var/lib/nixarr/qbittorrent-downloads on the host
 # filesystem, which ROMarr reads directly. Only non-secret defaults are seeded
 # here; the Prowlarr API key and any login are configured in the UI.
 {
