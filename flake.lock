@@ -264,11 +264,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793582338,
-        "narHash": "sha256-wKz4M9SZu9qlzk/AQR5xKcqE0TwzI97mhuPBLODs2Ck=",
+        "lastModified": 1793997509,
+        "narHash": "sha256-+q7waOzFECPV6K0g9EzFQPbdwjqJfpQfls7Ooct1xbE=",
         "owner": "coat",
         "repo": "gasim",
-        "rev": "e8752c956b9e4db83d8f7364bcc9057bc6672796",
+        "rev": "2443468b6579d1880be4f3c9bc2751c1571fc248",
         "type": "github"
       },
       "original": {
