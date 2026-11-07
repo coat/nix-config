@@ -9,4 +9,5 @@
   herdr-radar = pkgs.callPackage ./herdr-radar {};
   herdr-worktreeinclude-local = pkgs.callPackage ./herdr-worktreeinclude-local {};
   pair-invite = pkgs.callPackage ./pair-invite {};
+  romarr = pkgs.callPackage ./romarr {};
 }

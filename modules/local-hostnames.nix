@@ -12,6 +12,7 @@
     seerr = "http://127.0.0.1:5055";
     transmission = "http://192.168.15.1:9091"; # RPC lives in the wg netns
     romm = "http://127.0.0.1:8080";
+    romarr = "http://127.0.0.1:6868";
   };
 
   # Names that get an mDNS alias but bring their own nginx vhost (see modules/searxng.nix).

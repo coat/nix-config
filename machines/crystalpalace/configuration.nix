@@ -7,6 +7,7 @@
   imports = [
     inputs.nixarr.nixosModules.default
     ../../modules/nixarr.nix
+    ../../modules/romarr.nix
     ../../modules/romm.nix
     ../../modules/samba.nix
     ../../modules/local-hostnames.nix
