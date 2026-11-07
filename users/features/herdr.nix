@@ -153,6 +153,14 @@
     chmod +x "$out"
   '';
 
+  # OpenCode variant of the pre-PR-review skill: identical workflow, but it
+  # spawns an OpenCode agent instead of a Claude Code agent. Derived from the
+  # Claude source so the two stay in sync.
+  prePrReviewOpenCode = pkgs.writeText "pre-pr-review-opencode.md" (builtins.replaceStrings
+    ["--kind claude" "second Claude session"]
+    ["--kind opencode" "second OpenCode session"]
+    (builtins.readFile ./claude-skills/pre-pr-review.md));
+
   claudeDir = config.programs.claude-code.configDir;
   claudeHookPath = "${claudeDir}/hooks/herdr-agent-state.sh";
   claudeHookCommand = "bash '${claudeHookPath}' session";
@@ -289,8 +297,25 @@ in {
           source = "${integrationAssets}/opencode/herdr-tui-session.js";
           force = true;
         };
+        # tui.js is only a re-export of herdr-tui-session.js. Upstream writes
+        # that as `../herdr-tui-session.js`, which only resolves when the two
+        # files are real siblings on disk. home-manager materializes both as
+        # symlinks into flat store paths, so Bun resolves the relative import
+        # against tui.js's *realpath* (herdr's src/.../opencode/), where
+        # ../herdr-tui-session.js does not exist. Generate tui.js with an
+        # absolute specifier instead; the herdr-tui-session.js symlink above
+        # keeps the referenced store path in the closure.
         "opencode/herdr-opencode/tui.js" = {
-          source = "${integrationAssets}/opencode/tui.js";
+          text = ''
+            // installed by herdr
+            // HERDR_INTEGRATION_ID=opencode-tui-v2
+            // HERDR_INTEGRATION_VERSION=13
+            export { default } from ${builtins.toJSON "${integrationAssets}/opencode/herdr-tui-session.js"};
+          '';
+          force = true;
+        };
+        "opencode/skills/pre-pr-review/SKILL.md" = {
+          source = prePrReviewOpenCode;
           force = true;
         };
       };
