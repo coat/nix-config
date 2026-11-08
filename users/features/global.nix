@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   imports = [
+    ./direnv.nix
     ./git.nix
     ./herdr.nix
     ./nixvim
@@ -18,12 +19,6 @@
     fd.enable = true;
     ripgrep.enable = true;
     starship.enable = true;
-
-    direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true;
-    };
 
     fzf = {
       enable = true;
