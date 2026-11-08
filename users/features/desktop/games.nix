@@ -20,8 +20,6 @@
 
   home = {
     packages = with pkgs; [
-      ez80asm
-      fab-agon-emulator
       # fallout-ce
       # fceux
       # lutris
