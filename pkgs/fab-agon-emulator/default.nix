@@ -31,6 +31,11 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Gx7FIaqhjBz37z9SKUwtU4cLZVUuD4HOq82B5Uc080Y=";
   };
 
+  # Cargo.lock pins `ez80` via a git dependency (tomm/ez80), which the legacy
+  # fetchCargoTarball fetcher rejects. fetchCargoVendor handles git deps and is
+  # already the default on nixpkgs >= 25.05; opting in explicitly keeps older
+  # nixpkgs (24.05/24.11, where it's off by default) working too.
+  useFetchCargoVendor = true;
   cargoHash = "sha256-PCs3jYmIhiYc+f6804QEc/+BAM56x1/xnPxjdypMYJc=";
 
   nativeBuildInputs = [pkg-config makeWrapper];
