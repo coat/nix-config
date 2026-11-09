@@ -4,6 +4,7 @@
       ./cmp.nix
       ./conform.nix
       ./dap.nix
+      ./ez80.nix
       ./gitsigns.nix
       ./lsp.nix
       ./mdkite.nix

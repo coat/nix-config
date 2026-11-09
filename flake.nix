@@ -28,6 +28,9 @@
     mdkite-nvim.url = "github:selimacerbas/mdkite.nvim";
     mdkite-nvim.flake = false;
 
+    vim-ez80.url = "github:tomm/vim-ez80";
+    vim-ez80.flake = false;
+
     microvm.url = "github:microvm-nix/microvm.nix";
     microvm.inputs.nixpkgs.follows = "nixpkgs";
 

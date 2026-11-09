@@ -83,11 +83,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1794081975,
-        "narHash": "sha256-DpIU0rCGH/WO2S1WrdKJypASa3ViuTHVd02RnzJ4arE=",
-        "rev": "0974abebd00b0466e6c1d513cf9cd814e385e0e1",
+        "lastModified": 1794168503,
+        "narHash": "sha256-O6Q0j8JYJ7IuTGbSqVovhPD7LFZgqX6W9tMXj3BKdio=",
+        "rev": "705707359e8a575f26396d095631f6bba7462179",
         "type": "tarball",
-        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/0974abebd00b0466e6c1d513cf9cd814e385e0e1.tar.gz"
+        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/705707359e8a575f26396d095631f6bba7462179.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -340,11 +340,11 @@
     "hunk": {
       "flake": false,
       "locked": {
-        "lastModified": 1794069265,
-        "narHash": "sha256-BmrpNlVd2gAHr8DlN/cfQYLqHVQXFFX60sgqdJLZOR4=",
+        "lastModified": 1794187526,
+        "narHash": "sha256-zIbBa6os4Xot6mHz5dhJDLMzGrEvswHPQlNusW+odQA=",
         "owner": "modem-dev",
         "repo": "hunk",
-        "rev": "a3c2592c4c38f3b8060cc9c9885c2c775a1c6d40",
+        "rev": "2425fe1c63cef85b0139c84086b689424c51820d",
         "type": "github"
       },
       "original": {
@@ -566,7 +566,8 @@
         "systems": [
           "clan-core",
           "systems"
-        ]
+        ],
+        "vim-ez80": "vim-ez80"
       }
     },
     "rust-overlay": {
@@ -812,6 +813,22 @@
       "original": {
         "owner": "numtide",
         "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "vim-ez80": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1737127294,
+        "narHash": "sha256-PyahTNpDnl2Nlas6MTG9cRucHlXYVFpdWDFgdDG5Jo0=",
+        "owner": "tomm",
+        "repo": "vim-ez80",
+        "rev": "dda7903ba314073d231e70fa27a715c633f9a1a1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tomm",
+        "repo": "vim-ez80",
         "type": "github"
       }
     },
