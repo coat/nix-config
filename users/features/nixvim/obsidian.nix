@@ -5,8 +5,11 @@
     settings = {
       legacy_commands = false;
 
-      new_notes_location = "notes_subdir";
-      notes_subdir = "notes";
+      new_notes_location = "current_dir";
+
+      # Name new notes after their title ("Hello, world" -> hello-world.md)
+      # instead of random zettel IDs.
+      note_id_func = lib.nixvim.mkRaw ''require("obsidian.builtin").title_id'';
 
       daily_notes.folder = "daily";
 
