@@ -1,6 +1,7 @@
 # Custom packages, that can be defined similarly to ones from nixpkgs
 # You can build them using 'nix build .#example'
 {pkgs ? import <nixpkgs> {}, ...}: {
+  agon-compression = pkgs.callPackage ./agon-compression {};
   ez80asm = pkgs.callPackage ./ez80asm {};
   fab-agon-emulator = pkgs.callPackage ./fab-agon-emulator {};
   foot-terminfo = pkgs.callPackage ./foot-terminfo {};
