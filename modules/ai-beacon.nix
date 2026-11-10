@@ -2,27 +2,26 @@
 # Runs the upstream native binary (no container) on :8090 (8080 is romm) and
 # behind http://ai-beacon.local (modules/local-hostnames.nix).
 #
-# The browser password and the agent bearer token come from clan vars, so they
-# survive reinstalls and other machines can read them:
-#   clan vars get crystalpalace ai-beacon/env
-# Point an agent here with:
-#   AI_BEACON_AUTH_TOKEN=<token> ai-beacon install --url http://ai-beacon.local
+# The browser password is a clan var, so it survives reinstalls:
+#   clan vars get crystalpalace ai-beacon-password/env
+# The agent bearer token is the shared `ai-beacon-token` var
+# (modules/ai-beacon-token.nix); users/sadbeast/nixos.nix points every
+# personal machine's agents here with it.
 {
   config,
   lib,
   pkgs,
   ...
 }: let
-  vars = config.clan.core.vars.generators.ai-beacon;
+  generators = config.clan.core.vars.generators;
 in {
-  clan.core.vars.generators.ai-beacon = {
+  imports = [./ai-beacon-token.nix];
+
+  clan.core.vars.generators.ai-beacon-password = {
     files.env.secret = true;
     runtimeInputs = [pkgs.coreutils pkgs.openssl];
     script = ''
-      {
-        echo "AI_BEACON_AUTH_TOKEN=$(openssl rand -hex 32)"
-        echo "AI_BEACON_AUTH_PASSWORD=$(openssl rand -hex 16)"
-      } > "$out/env"
+      echo "AI_BEACON_AUTH_PASSWORD=$(openssl rand -hex 16)" > "$out/env"
     '';
   };
 
@@ -37,7 +36,10 @@ in {
     serviceConfig = {
       # Env vars rather than --password-file: the server chmods that file,
       # and the secret is root-owned.
-      EnvironmentFile = vars.files.env.path;
+      EnvironmentFile = [
+        generators.ai-beacon-password.files.env.path
+        generators.ai-beacon-token.files.env.path
+      ];
       ExecStart = "${lib.getExe pkgs.ai-beacon} server --address :8090 --data-dir /var/lib/ai-beacon";
       Restart = "always";
       RestartSec = "10s";

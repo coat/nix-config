@@ -6,9 +6,9 @@
 # GC leaves the hooks pointing at nothing. It is idempotent and rewrites its own
 # (`# ai-beacon-managed`) entries in place, so re-run it on every activation.
 #
-# The token is not managed here: install points token_path at
-# <data-dir>/token, which a server on the same machine writes itself. For a
-# remote dashboard, run once by hand with AI_BEACON_AUTH_TOKEN set.
+# Token: install points token_path at <data-dir>/token. A server run by the
+# same user writes that file itself (the work laptop); for a remote dashboard
+# set `ai-beacon.tokenEnvFile`, and install copies the token from it.
 {
   config,
   lib,
@@ -16,12 +16,24 @@
   ...
 }: let
   cfg = config.ai-beacon;
+  tokenEnvFile = lib.escapeShellArg cfg.tokenEnvFile;
 in {
-  options.ai-beacon.url = lib.mkOption {
-    type = lib.types.nullOr lib.types.str;
-    default = null;
-    example = "http://localhost:8090";
-    description = "Dashboard URL to register agent hooks with; null leaves hooks alone.";
+  options.ai-beacon = {
+    url = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      example = "http://localhost:8090";
+      description = "Dashboard URL to register agent hooks with; null leaves hooks alone.";
+    };
+
+    tokenEnvFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Runtime path of a file holding `AI_BEACON_AUTH_TOKEN=<token>` for the
+        dashboard at `url`; null when the dashboard runs as this user.
+      '';
+    };
   };
 
   config = lib.mkIf (cfg.url != null) {
@@ -29,8 +41,22 @@ in {
 
     # Note: install re-serializes settings.json hooks and drops fields it does
     # not model (e.g. the herdr SessionStart hook's `timeout`).
+    #
+    # Subshell so the token does not leak into later activation steps. A
+    # missing file (secret not deployed yet) must not fail the activation.
     home.activation.aiBeaconHooks = lib.hm.dag.entryAfter ["writeBoundary"] ''
-      run ${lib.getExe pkgs.ai-beacon} install --url ${lib.escapeShellArg cfg.url} --yes >/dev/null
+      (
+        ${lib.optionalString (cfg.tokenEnvFile != null) ''
+        if [[ -r ${tokenEnvFile} ]]; then
+          set -a
+          . ${tokenEnvFile}
+          set +a
+        else
+          warnEcho "ai-beacon: cannot read ${tokenEnvFile}; hooks installed without a token"
+        fi
+      ''}
+        run ${lib.getExe pkgs.ai-beacon} install --url ${lib.escapeShellArg cfg.url} --yes >/dev/null
+      )
     '';
 
     # Start agents through the wrapper so their terminal can be attached from
