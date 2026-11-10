@@ -6,6 +6,7 @@
 }: {
   imports = [
     inputs.nixarr.nixosModules.default
+    ../../modules/ai-beacon.nix
     ../../modules/nixarr.nix
     ../../modules/romarr.nix
     ../../modules/romm.nix

@@ -10,6 +10,9 @@
 
   me = import ./identity.nix;
 
+  # The work-only dashboard launchd runs on this laptop (hosts/darwin/work).
+  ai-beacon.url = "http://localhost:8090";
+
   home = {
     packages = with pkgs; [
       _1password-cli

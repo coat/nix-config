@@ -79,6 +79,19 @@
     };
   };
 
+  # Work-only ai-beacon dashboard, separate from crystalpalace's, for trying it
+  # out with co-workers. Password and agent token are generated on first start
+  # into ~/Library/Application Support/ai-beacon/{password,token}; co-workers
+  # point their agents at http://<this laptop>:8090 with that token. Local
+  # Claude hooks: `ai-beacon.url` in users/kent.smith/darwin.nix.
+  launchd.user.agents.ai-beacon.serviceConfig = {
+    ProgramArguments = ["${pkgs.ai-beacon}/bin/ai-beacon" "server" "--address" ":8090"];
+    RunAtLoad = true;
+    KeepAlive = true;
+    StandardOutPath = "/Users/${username}/Library/Logs/ai-beacon.log";
+    StandardErrorPath = "/Users/${username}/Library/Logs/ai-beacon.log";
+  };
+
   homebrew = {
     enable = true;
     brews = [

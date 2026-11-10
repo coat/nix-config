@@ -13,6 +13,7 @@
     qbittorrent = "http://127.0.0.1:5252"; # qui WebUI on the host
     romm = "http://127.0.0.1:8080";
     romarr = "http://127.0.0.1:6868";
+    ai-beacon = "http://127.0.0.1:8090";
   };
 
   # Names that get an mDNS alias but bring their own nginx vhost (see modules/searxng.nix).
