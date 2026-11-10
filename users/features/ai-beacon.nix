@@ -43,7 +43,15 @@ in {
     # herdr finds agents by the pane's foreground process, which is now
     # ai-beacon (the agent runs on the wrapper's PTY), so the pane drops out of
     # herdr's agent panel. HERDR_AGENT on that process is herdr's override.
+    #
+    # AI_BEACON_PROJECTS_DIR: roots the dashboard's New session dialog lists
+    # repos from (unset, the device is read-only there). Set here rather than
+    # in config.toml, which install neither writes nor keeps, and rather than
+    # home.sessionVariables, whose __HM_SESS_VARS_SOURCED guard is inherited
+    # from the long-running herdr server and skips new vars in its panes.
     programs.zsh.initContent = ''
+      export AI_BEACON_PROJECTS_DIR=${lib.escapeShellArg "${config.home.homeDirectory}/projects"}
+
       claude() {
         if [[ -t 0 && -t 1 && -z $AI_BEACON_WRAPPER ]]; then
           HERDR_AGENT=claude ai-beacon session -- claude "$@"
