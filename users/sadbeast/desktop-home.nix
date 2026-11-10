@@ -21,6 +21,10 @@
 
   programs.librewolf.profiles.sadbeast = {};
   programs.obsidian.vaults.personal.target = "docs/vault/personal";
+  # Syncthing once propagated this HM symlink to peers where its store path
+  # didn't exist, so Obsidian replaced it with a plain file. It's no longer
+  # synced (modules/syncthing-vault.nix); force replaces leftover copies.
+  home.file."docs/vault/personal/.obsidian/appearance.json".force = true;
 
   programs.nixvim.plugins = {
     obsidian.settings = {

@@ -9,6 +9,8 @@
     settings.folders.obsidian-personal.ignorePatterns = [
       ".obsidian/workspace.json"
       ".obsidian/workspace-mobile.json"
+      ".obsidian/appearance.json"
+      ".obsidian/snippets"
     ];
   };
 }
