@@ -20,6 +20,13 @@ in {
     tokenEnvFile = config.clan.core.vars.generators.ai-beacon-token.files.env.path;
   };
 
+  # Shell history and agent threads, synced through crystalpalace
+  # (modules/atuin-server.nix), by hostname for the same reason.
+  home-manager.users.sadbeast.atuin = {
+    enable = true;
+    syncAddress = "http://crystalpalace:8888";
+  };
+
   users.users.sadbeast = {
     isNormalUser = true;
     shell = pkgs.zsh;

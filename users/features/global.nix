@@ -1,6 +1,7 @@
 {pkgs, ...}: {
   imports = [
     ./ai-beacon.nix
+    ./atuin.nix
     ./direnv.nix
     ./git.nix
     ./herdr.nix

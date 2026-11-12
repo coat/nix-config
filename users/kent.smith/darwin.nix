@@ -13,6 +13,10 @@
   # The work-only dashboard launchd runs on this laptop (hosts/darwin/work).
   ai-beacon.url = "http://localhost:8090";
 
+  # Local-only: work agent sessions can hold PHI, so they never sync, not to
+  # Atuin's cloud and not to crystalpalace. Leave syncAddress unset.
+  atuin.enable = true;
+
   home = {
     packages = with pkgs; [
       _1password-cli
