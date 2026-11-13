@@ -6,7 +6,7 @@
   imports = [
     ./foot.nix
     ./ghostty.nix
-    ./qutebrowser.nix
+    # ./qutebrowser.nix
   ];
 
   fonts.fontconfig.enable = true;

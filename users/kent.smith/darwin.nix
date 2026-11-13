@@ -4,7 +4,7 @@
     ../features/desktop/aerospace.nix
     ../features/desktop/dev.nix
     ../features/desktop/ghostty.nix
-    ../features/desktop/qutebrowser.nix
+    # ../features/desktop/qutebrowser.nix
     ../features/dev.nix
   ];
 
