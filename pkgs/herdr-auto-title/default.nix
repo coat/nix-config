@@ -5,7 +5,7 @@
 }:
 buildGoModule rec {
   pname = "herdr-auto-title";
-  version = "0.20.0";
+  version = "0.22.2";
 
   meta = with lib; {
     description = "Herdr plugin that automatically generates contextual tab titles";
@@ -18,10 +18,10 @@ buildGoModule rec {
     owner = "kryptamine";
     repo = "herdr-auto-title";
     rev = "v${version}";
-    hash = "sha256-1Ebc40+fU0HtvuOmFrV+sAU+5GGMoJhWDj0++93fWg4=";
+    hash = "sha256-ebLE7rkpENQJpGs4gYO2G96n29S6Jt5kQ2zk7JQ3WXk=";
   };
 
-  vendorHash = "sha256-BN/q/5o9CiklREYZloLZU2rLKUIW6Eq6Yy1Wr9vK3hU=";
+  vendorHash = "sha256-UfIpYaA2eIRl29fhi7ESEoHEsyiXmEZ4MO78T0Q6OCs=";
 
   subPackages = ["cmd/herdr-auto-title"];
 
