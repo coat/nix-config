@@ -1,7 +1,8 @@
 # Guest config shared by every microvms/*.nix. Extra attrs in the VM file
-# (user, authorizedKeys, homeImports, userCA, sshProxyPort) are optional overrides;
-# hostName and gateway are supplied by modules/microvm.nix.
-# sshProxyPort is consumed host-side in microvm.nix and ignored here.
+# (user, authorizedKeys, homeImports, userCA, modules, sshProxyPort,
+# dashboardProxyPort) are optional overrides; hostName and gateway are supplied
+# by modules/microvm.nix. `modules` are extra guest NixOS modules.
+# sshProxyPort and dashboardProxyPort are consumed host-side in microvm.nix.
 cfg @ {
   hostName,
   ipAddress,
@@ -30,10 +31,12 @@ cfg @ {
       ../users/features/dev.nix
     ];
 in {
-  imports = [
-    inputs.home-manager.nixosModules.default
-    ./base.nix
-  ];
+  imports =
+    [
+      inputs.home-manager.nixosModules.default
+      ./base.nix
+    ]
+    ++ (cfg.modules or []);
 
   _module.args.inputs = inputs;
 

@@ -22,7 +22,7 @@ writeShellApplication {
       principal  account the cert is valid for, default pair
     With a pubkey the certificate is printed; send it back as <their-key>-cert.pub.
     Without one a throwaway keypair is created in ./<name>-pairvm/ for the guest.
-    env: PAIR_CA_PASS_ENTRY (ids/ssh/pair-ca), PAIR_TARGET (pair@cheyenne.sadbeast.com:2222)
+    env: PAIR_CA_PASS_ENTRY (ids/ssh/pair-ca), PAIR_TARGET (pair@pair.sadbeast.com:2222)
     EOF
       exit 2
     }
@@ -37,7 +37,7 @@ writeShellApplication {
       esac
     done
     entry=''${PAIR_CA_PASS_ENTRY:-ids/ssh/pair-ca}
-    target=''${PAIR_TARGET:-pair@cheyenne.sadbeast.com:2222}
+    target=''${PAIR_TARGET:-pair@pair.sadbeast.com:2222}
     host=''${target##*@}; host=''${host%%:*}
     port=''${target##*:}; user=''${target%%@*}
 
@@ -72,6 +72,8 @@ writeShellApplication {
       herdr --remote ssh://$target
 
     Without an agent: ssh -i ./pairvm -p $port $user@$host
+
+    Session dashboard: https://$host  (password: ssh in, cat .config/ai-beacon/password)
     EOF
     echo >&2
     echo "wrote $dir/ (pairvm, pairvm-cert.pub, README) — send over a private channel; the guest runs:" >&2

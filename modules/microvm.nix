@@ -58,9 +58,25 @@
     chown 1000:100 "$(dirname "$ws")" "$ws"
   '';
 
-  # VMs that set sshProxyPort get a host-side listener forwarding to the
-  # guest's sshd, so a peer only needs to reach the host (LAN or zerotier).
-  proxied = lib.filterAttrs (_: cfg: cfg ? sshProxyPort) vmCfgs;
+  # Host-side listeners forwarding to a guest, so a peer only needs to reach
+  # the host (LAN or zerotier): sshProxyPort -> the guest's sshd, and
+  # dashboardProxyPort -> its ai-beacon (e.g. modules/pair-beacon.nix).
+  proxies = lib.concatLists (lib.mapAttrsToList (name: cfg:
+    lib.optional (cfg ? sshProxyPort) {
+      unit = "microvm-ssh-proxy-${name}";
+      description = "SSH proxy to microvm '${name}'";
+      port = cfg.sshProxyPort;
+      target = "${vmIp cfg}:22";
+    }
+    ++ lib.optional (cfg ? dashboardProxyPort) {
+      unit = "microvm-dashboard-proxy-${name}";
+      description = "ai-beacon dashboard proxy to microvm '${name}'";
+      port = cfg.dashboardProxyPort;
+      target = "${vmIp cfg}:8090";
+    })
+  vmCfgs);
+
+  proxyUnits = f: lib.listToAttrs (map (p: lib.nameValuePair p.unit (f p)) proxies);
 in {
   systemd.network.netdevs."20-microbr".netdevConfig = {
     Kind = "bridge";
@@ -87,24 +103,20 @@ in {
 
   microvm.vms = builtins.listToAttrs (map mkVm vmNames);
 
-  systemd.sockets = lib.mapAttrs' (name: cfg:
-    lib.nameValuePair "microvm-ssh-proxy-${name}" {
-      description = "SSH proxy to microvm '${name}'";
-      wantedBy = ["sockets.target"];
-      listenStreams = [(toString cfg.sshProxyPort)];
-    })
-  proxied;
+  systemd.sockets = proxyUnits (p: {
+    inherit (p) description;
+    wantedBy = ["sockets.target"];
+    listenStreams = [(toString p.port)];
+  });
 
   systemd.services =
     {
       # virtiofsd is Required/Before microvm@, so the dir must exist here.
       "microvm-virtiofsd@".serviceConfig.ExecStartPre = ["+${prepWorkspace} %i"];
     }
-    // lib.mapAttrs' (name: cfg:
-      lib.nameValuePair "microvm-ssh-proxy-${name}" {
-        serviceConfig.ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${vmIp cfg}:22";
-      })
-    proxied;
+    // proxyUnits (p: {
+      serviceConfig.ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd ${p.target}";
+    });
 
-  networking.firewall.allowedTCPPorts = lib.mapAttrsToList (_: cfg: cfg.sshProxyPort) proxied;
+  networking.firewall.allowedTCPPorts = map (p: p.port) proxies;
 }

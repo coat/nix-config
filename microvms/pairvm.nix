@@ -12,6 +12,9 @@ in {
   user = "pair";
   authorizedKeys = sshKeys.sadbeast ++ sshKeys.pairGuests;
   sshProxyPort = 2222;
+  # Its own ai-beacon dashboard, public at https://pair.sadbeast.com.
+  modules = [../modules/pair-beacon.nix];
+  dashboardProxyPort = 8091;
   # Short-lived guest access: `pair-invite <name> <pubkey> [ttl]` signs a
   # cert with the CA whose private half lives in pass (ids/ssh/pair-ca).
   userCA = ../lib/pair-ca.pub;

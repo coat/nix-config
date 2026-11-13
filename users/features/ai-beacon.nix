@@ -34,6 +34,13 @@ in {
         dashboard at `url`; null when the dashboard runs as this user.
       '';
     };
+
+    projectsDir = lib.mkOption {
+      type = lib.types.str;
+      default = "${config.home.homeDirectory}/projects";
+      defaultText = lib.literalExpression ''"''${config.home.homeDirectory}/projects"'';
+      description = "Root the dashboard's New session dialog lists repos from.";
+    };
   };
 
   config = lib.mkIf (cfg.url != null) {
@@ -57,6 +64,16 @@ in {
       ''}
         run ${lib.getExe pkgs.ai-beacon} install --url ${lib.escapeShellArg cfg.url} --yes >/dev/null
       )
+
+      # opencode 2.x rejects a plugin whose default export has no setup/effect
+      # ("Plugin must export a default definition with an id and an effect or
+      # setup function"); upstream's bridge (v4) exports only { id, server }.
+      # Add a no-op setup, as herdr's own opencode plugin does. Exact-line
+      # match, so this goes inert once upstream changes the export.
+      plugin=${lib.escapeShellArg "${config.xdg.configHome}/opencode/plugins/ai-beacon.ts"}
+      if [[ -f $plugin ]] && grep -qx 'export default { id: "ai-beacon", server }' "$plugin"; then
+        run sed -i 's/^export default { id: "ai-beacon", server }$/export default { id: "ai-beacon", server, setup() {} }/' "$plugin"
+      fi
     '';
 
     # Start agents through the wrapper so their terminal can be attached from
@@ -76,7 +93,7 @@ in {
     # home.sessionVariables, whose __HM_SESS_VARS_SOURCED guard is inherited
     # from the long-running herdr server and skips new vars in its panes.
     programs.zsh.initContent = ''
-      export AI_BEACON_PROJECTS_DIR=${lib.escapeShellArg "${config.home.homeDirectory}/projects"}
+      export AI_BEACON_PROJECTS_DIR=${lib.escapeShellArg cfg.projectsDir}
 
       claude() {
         if [[ -t 0 && -t 1 && -z $AI_BEACON_WRAPPER ]]; then
