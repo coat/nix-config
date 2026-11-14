@@ -8,13 +8,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "romarr";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "BlizzHacker";
     repo = "romarr";
     rev = "v${version}";
-    hash = "sha256-kEc7Y3DsZ5d3bMJGJeu5EGrPxQQ3CXWahrUjZg+lTMg=";
+    hash = "sha256-W1FSSfF8mLN8jJk3TRpRR9t+x/ERql+ulxJmzmcv8jI=";
   };
 
   nativeBuildInputs = [makeWrapper];

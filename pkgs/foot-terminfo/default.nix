@@ -6,7 +6,7 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "foot-terminfo";
-  version = "1.27.0";
+  version = "1.28.0";
 
   src = fetchurl {
     url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/foot.info";

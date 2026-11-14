@@ -83,11 +83,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1794513911,
-        "narHash": "sha256-FbZ35tgguzCjMdNPYExY6UeQWMH+3p1bHTE9etr2WQo=",
-        "rev": "91a2cba68a2ce7b5cc1f142acad4f95650162489",
+        "lastModified": 1794652431,
+        "narHash": "sha256-49+9IC+4/Jzg5OTvpSXjfyk47WtnxIqgorTcQiD+WOo=",
+        "rev": "43fd46681d22dc9bd40c3e77e32f195f625e6294",
         "type": "tarball",
-        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/91a2cba68a2ce7b5cc1f142acad4f95650162489.tar.gz"
+        "url": "https://git.clan.lol/api/v1/repos/clan/clan-core/archive/43fd46681d22dc9bd40c3e77e32f195f625e6294.tar.gz"
       },
       "original": {
         "type": "tarball",
@@ -264,11 +264,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794532955,
-        "narHash": "sha256-y5BcRjuxvnoLDa+jIMjV8IIxVRZSNmvS/tCzBnD4WCs=",
+        "lastModified": 1794542294,
+        "narHash": "sha256-NsaYNlQUqUDtV6tt8RND4aPsUbb8bQ8UhfcP9JW1FfE=",
         "owner": "coat",
         "repo": "gasim",
-        "rev": "21735090ca324c86638ed208e7898a4f7ff25f81",
+        "rev": "3b402f669ea82d5766a22460cbda1413f0329c8f",
         "type": "github"
       },
       "original": {
@@ -340,11 +340,11 @@
     "hunk": {
       "flake": false,
       "locked": {
-        "lastModified": 1794421724,
-        "narHash": "sha256-5+vx4RLbX8OMFfDeJ2m8ZrBKcToWt0GIOjpVY4MM7pc=",
+        "lastModified": 1794578812,
+        "narHash": "sha256-mSIvEVMpHnQ0tFX03P76FC8K18VoIkox/fk8Po9K58w=",
         "owner": "modem-dev",
         "repo": "hunk",
-        "rev": "6734751d07968da0d541d7e182c5cc94c7a6b16e",
+        "rev": "0147a846951627b88f8ddc178e0d23ca58cece76",
         "type": "github"
       },
       "original": {
@@ -599,11 +599,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1794261845,
-        "narHash": "sha256-Ivif/kuD68yEOKcZZG3zSwNMFUuIgzUgeJuzcHrQy+8=",
+        "lastModified": 1794624949,
+        "narHash": "sha256-3q/hxp/flW1PnV3Dx+H3p8kHGEHJ7251BqVMNsAAB9E=",
         "owner": "Mic92",
         "repo": "sops-nix",
-        "rev": "fe7b4228405aeac2ce7192c2049a6e2bc8637082",
+        "rev": "11e5885d241743ff0193465d533b20e754bc3ce0",
         "type": "github"
       },
       "original": {
