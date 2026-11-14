@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   pkgs,
   ...
@@ -79,6 +80,13 @@ in {
       ssm-session-manager-plugin
       tree-sitter
     ];
+
+    # Not programs.claude-code.plugins: HM wraps each plugin in a directory of
+    # top-level symlinks, so the manifest's ./.claude-plugin/agents/*.md paths
+    # resolve outside it and Claude Code skips every agent ("agents path
+    # escapes plugin directory"). Linking the source itself as the personal
+    # plugin directory keeps those paths inside it.
+    file."${config.programs.claude-code.configDir}/skills/egm".source = egmPlugin;
   };
 
   programs = {
@@ -105,7 +113,6 @@ in {
       # ~/.claude/CLAUDE.md
       context = sharedAgentContext;
       skills = sharedSkills;
-      plugins.egm = egmPlugin;
     };
 
     opencode = {
