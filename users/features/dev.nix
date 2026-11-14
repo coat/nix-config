@@ -14,6 +14,15 @@
     socratic-tutor = "${janestreetSkills}/socratic-tutor";
   };
 
+  # Elephant-Goldfish Model (https://egm.dev): design/review skills plus
+  # fresh-context reviewer agents. Claude Code only.
+  egmPlugin = pkgs.fetchFromGitHub {
+    owner = "google";
+    repo = "elephant-goldfish-model";
+    rev = "e4747323aab66157812cd3a71755f6447b2803a2";
+    hash = "sha256-P9ln+bIhHKl4O0cmVKhTxT00ddvx+hy/OrFMs7Jli90=";
+  };
+
   # Shared agent context: the same environment + Herdr/Hunk guidance is loaded
   # by both Claude Code (~/.claude/CLAUDE.md) and OpenCode
   # (~/.config/opencode/AGENTS.md). Keep it in one place so the two stay in sync.
@@ -96,6 +105,7 @@ in {
       # ~/.claude/CLAUDE.md
       context = sharedAgentContext;
       skills = sharedSkills;
+      plugins.egm = egmPlugin;
     };
 
     opencode = {
