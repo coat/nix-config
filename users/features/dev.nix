@@ -3,6 +3,17 @@
   pkgs,
   ...
 }: let
+  # Third-party skills installed for both Claude Code and OpenCode.
+  janestreetSkills = pkgs.fetchFromGitHub {
+    owner = "janestreet";
+    repo = "agent_skills";
+    rev = "7c6715c29548a3b39d4a9545c698ee4fd17a7213";
+    hash = "sha256-bKGKDaK2pSJsp5uVMUQDcj8J+N9nX2fDdeU1DXM2qLw=";
+  };
+  sharedSkills = {
+    socratic-tutor = "${janestreetSkills}/socratic-tutor";
+  };
+
   # Shared agent context: the same environment + Herdr/Hunk guidance is loaded
   # by both Claude Code (~/.claude/CLAUDE.md) and OpenCode
   # (~/.config/opencode/AGENTS.md). Keep it in one place so the two stay in sync.
@@ -84,6 +95,7 @@ in {
       enable = true;
       # ~/.claude/CLAUDE.md
       context = sharedAgentContext;
+      skills = sharedSkills;
     };
 
     opencode = {
@@ -91,6 +103,7 @@ in {
       settings = {
         lsp = true;
       };
+      skills = sharedSkills;
     };
   };
 
