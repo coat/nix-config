@@ -1,6 +1,11 @@
 {pkgs, ...}: {
   programs = {
-    discord.enable = true;
+    discord = {
+      enable = true;
+      # nixpkgs' discord wrapper rewrites settings.json (replacing HM's symlink
+      # with a plain file) unless both SKIP_* keys are set; HM only sets HOST.
+      settings.SKIP_MODULE_UPDATE = true;
+    };
 
     retroarch = {
       enable = true;
