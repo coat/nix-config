@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   imports = [
+    ./agentrun.nix
     ./ai-beacon.nix
     ./atuin.nix
     ./direnv.nix

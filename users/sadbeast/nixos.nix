@@ -7,7 +7,18 @@
 }: let
   sshKeys = import ../../lib/ssh-keys.nix;
 in {
-  imports = [../../modules/ai-beacon-token.nix];
+  imports = [
+    ../../modules/agentrun-token.nix
+    ../../modules/ai-beacon-token.nix
+  ];
+
+  # AgentRun CLI + skill against the shared server on crystalpalace
+  # (modules/agentrun.nix), by hostname over ZeroTier like the two below.
+  clan.core.vars.generators.agentrun-token.files.token.owner = "sadbeast";
+  home-manager.users.sadbeast.agentrun = {
+    url = "http://crystalpalace:7340/v2";
+    tokenFile = config.clan.core.vars.generators.agentrun-token.files.token.path;
+  };
 
   # Report this machine's Claude Code / OpenCode sessions to the dashboard on
   # crystalpalace (modules/ai-beacon.nix). By hostname rather than

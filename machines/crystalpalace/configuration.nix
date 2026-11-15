@@ -6,6 +6,7 @@
 }: {
   imports = [
     inputs.nixarr.nixosModules.default
+    ../../modules/agentrun.nix
     ../../modules/ai-beacon.nix
     ../../modules/atuin-server.nix
     ../../modules/nixarr.nix
