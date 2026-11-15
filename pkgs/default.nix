@@ -2,6 +2,7 @@
 # You can build them using 'nix build .#example'
 {pkgs ? import <nixpkgs> {}, ...}: {
   ai-beacon = pkgs.callPackage ./ai-beacon {};
+  agentrun = pkgs.callPackage ./agentrun {};
   agon-compression = pkgs.callPackage ./agon-compression {};
   ez80asm = pkgs.callPackage ./ez80asm {};
   fab-agon-emulator = pkgs.callPackage ./fab-agon-emulator {};
