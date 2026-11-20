@@ -1,92 +1,37 @@
----
-name: updating-herdr-plugins
-description: "Checks the nix-packaged herdr plugins (pkgs/herdr-*) for upstream updates, bumps them, verifies they build, and audits whether each packaging workaround is still needed. Use when the user asks to update, bump, or check herdr plugins, or asks whether a herdr plugin patch/workaround is still necessary."
----
+# Herdr plugins
 
-# Updating herdr plugins
+Herdr-specific additions to the `updating-packages` procedure for
+`pkgs/herdr-*`. These plugins are packaged by hand rather than via
+`herdr plugin install`, so beyond their own upstream they are coupled to
+herdr's plugin loader and to the consumer, `users/features/herdr.nix`.
 
-The herdr plugins in `pkgs/herdr-*` are packaged by hand rather than via
-`herdr plugin install`, so each derivation carries workarounds that couple it
-to specific upstream file names, manifest strings and script contents. An
-update is not "bump version + hash": every coupling must be re-checked against
-the new source, and the consumer (`users/features/herdr.nix`) re-verified.
+## Inventory: the herdr input
 
-Run this for all plugins unless the user names one.
-
-## 1. Inventory
-
-For each `pkgs/herdr-*/default.nix`, record the pinned version and source
-(`rev` is a tag `v${version}` or a bare commit), then the upstream latest:
-
-```sh
-# Tagged releases (auto-title, navigator, radar)
-gh api repos/<owner>/<repo>/releases/latest --jq .tag_name   # may 404 if no releases
-gh api repos/<owner>/<repo>/tags --jq '.[0].name'
-# Untagged (worktreeinclude-local: version is `<manifest>-unstable-<date>` + commit)
-gh api repos/<owner>/<repo>/commits/HEAD --jq '.sha + " " + .commit.committer.date'
-```
-
-`owner`/`repo` are in each derivation's `fetchFromGitHub`. Also note the
-locked herdr input, since plugin-loading semantics live there:
+Plugin-loading semantics live in the herdr flake input. Record it alongside
+the plugin versions:
 
 ```sh
 jq -r '.nodes.herdr.locked | "\(.rev[0:12]) \(.lastModified | todate)"' flake.lock
+git log -1 --format=%cd -- pkgs/herdr-*
 ```
 
-If nothing is behind, report that and stop (still do step 4 if the herdr
-input moved since the last plugin bump — `git log -1 --format=%cd -- pkgs/herdr-*`).
-
-## 2. Review the upstream diff before touching anything
+If it moved since the last plugin bump (or in an uncommitted `flake.lock`),
+run the **herdr input** checks below even when no plugin is behind. Review
+its diff the same way as a plugin's:
 
 ```sh
-gh api repos/<owner>/<repo>/compare/<old-rev>...<new-rev> \
-  --jq '.commits[].commit.message | split("\n")[0]'
-gh api repos/<owner>/<repo>/compare/<old-rev>...<new-rev> --jq '.files[].filename'
+gh api repos/herdrdev/herdr/compare/<old>...<new> --jq '.files[].filename' \
+  | grep -E 'plugin|integration/assets'
 ```
 
-Cross the changed-file list against the plugin's **coupling list** (step 4).
-Any hit means the corresponding workaround must be re-derived, not just
-rebuilt. Read the actual patch for those files:
+## Diff review: the manifest
 
-```sh
-gh api repos/<owner>/<repo>/compare/<old-rev>...<new-rev> \
-  --jq '.files[] | select(.filename == "<file>") | .patch'
-```
+In every plugin diff, check `herdr-plugin.toml` for a new
+`min_herdr_version` (compare with the locked herdr), or for new
+`[[startup]]`/`[[build]]`/`[[actions]]` entries. New commands mean new
+interpreters or tools that need pinning the same way the existing ones are.
 
-Also check `herdr-plugin.toml` for a new minimum herdr version or new
-`[[startup]]`/`[[build]]`/action entries: new commands mean new interpreters
-or tools that need pinning the same way the existing ones are.
-
-## 3. Bump
-
-Edit `version`, `rev` (if a bare commit) and `hash`:
-
-```sh
-nix flake prefetch --json github:<owner>/<repo>/<tag-or-rev> | jq -r .hash
-```
-
-For `buildGoModule` packages (auto-title), also refresh `vendorHash` when
-`go.mod`/`go.sum` changed: set it to `lib.fakeHash`, build, and copy the
-`got:` hash from the mismatch error. If `go.sum` is unchanged the old
-`vendorHash` still holds, but a build confirms that either way.
-
-For `buildRustPackage` packages (navigator), do the same with `cargoHash`
-when `Cargo.lock` changed.
-
-For untagged packages, update the date suffix in `version` and, if the
-manifest's `version` field changed, the leading part too.
-
-## 4. Audit the workarounds
-
-Each workaround exists because of a specific upstream fact. For every entry,
-confirm the fact still holds in the new source; if upstream fixed it, drop
-the workaround rather than carrying it forever. Read the new source directly
-(`nix build` then inspect `result/`, or `gh api repos/<owner>/<repo>/contents/<path>?ref=<rev>`).
-
-How to find the couplings without trusting this list: every
-`--replace-fail` string, every path named in `installPhase`/`postInstall`,
-every `passthru` value copied from upstream source, and everything
-`users/features/herdr.nix` references under `${p}/…` or via `passthru`.
+## Couplings per plugin
 
 ### herdr-auto-title (Go, `subPackages`)
 
@@ -94,6 +39,7 @@ every `passthru` value copied from upstream source, and everything
 |---|---|---|
 | `mv $out/bin/<name> $out/<name>`; `cp $src/herdr-plugin.toml` | Manifest `[[startup]]` command is a relative `./herdr-auto-title`; herdr runs it with `plugin_root` as cwd | Manifest command path unchanged; binary name unchanged; no new files the manifest references |
 | `subPackages = ["cmd/herdr-auto-title"]` | Module layout | `cmd/` path still exists |
+| Nothing pinned for `ps`/`lsof` (`internal/desktop/sessions_unix.go`) or `python3` (`internal/files/machine.go`) | `ps`/`lsof` come from the user's PATH; `python3 -c <embedded machine.py>` runs on a *connected remote machine* via herdr's `machine.exec` RPC, not locally | No new local `exec.Command` targets; `machine.py` still sent through `ExecMachine` rather than run locally |
 
 ### herdr-navigator (Rust, `buildRustPackage`)
 
@@ -124,10 +70,13 @@ every `passthru` value copied from upstream source, and everything
 | `--replace-fail '["bash", '` in manifest | Manifest command starts with bare `bash` | Unchanged |
 | `--replace-fail 'export PATH="'` in script | The script has exactly that `export PATH="` line; tools it calls are `coreutils git grep sed jq` | Line still present (else `--replace-fail` breaks the build, which is intended); no new tools used |
 
-### Shared: users/features/herdr.nix vs the herdr input
+The version is `<manifest version>-unstable-<date>`; if the manifest's
+`version` field changed, update the leading part too.
+
+## Herdr input: users/features/herdr.nix
 
 Not a plugin, but the same class of coupling, and a `flake.lock` bump of
-`herdr` can invalidate it. When the herdr input moved, check in
+`herdr` can invalidate it. When the herdr input moved, check in the
 `inputs.herdr` source:
 
 - `plugins.json` fields (registry still needs only `plugin_id name version
@@ -135,25 +84,15 @@ Not a plugin, but the same class of coupling, and a `flake.lock` bump of
 - `[[build]]` only runs at install time.
 - `src/integration/assets/claude/herdr-agent-state.sh` still has the exact
   `command -v python3` and `python3 - <<'PY'` strings the `substitute` targets
-  (a mismatch fails the eval, which is the point — but then re-derive).
+  (a mismatch fails the eval, which is the point, but then re-derive).
 - The opencode asset filenames.
 
-## 5. Build and inspect
+## Build and inspect
 
-Build each changed package and the consumer derivation:
-
-```sh
-nix build --no-write-lock-file --no-link --print-out-paths 'path:.#<pkg>'
-```
-
-Then inspect `$out` — a successful build is not enough because most
-workarounds are string substitutions on files that are never executed at
-build time:
+In addition to the generic inspection of each plugin's `$out`:
 
 ```sh
-out=$(nix build --no-write-lock-file --no-link --print-out-paths 'path:.#<pkg>')
 cat "$out/herdr-plugin.toml"      # interpreters resolved to /nix/store/…; no bare node/bash
-ls -R "$out" | head -40           # no leftover bin/ (auto-title); expected files present
 ```
 
 Then the generated herdr config, which runs radar's `configure.js` at build
@@ -169,20 +108,8 @@ If a plugin gained a `[[startup]]` or action command, run it once from the
 store path with `plugin_root` as cwd to confirm the pinned interpreter and
 PATH are sufficient (`cd "$out" && ./<cmd> --help` or similar).
 
-Finally, `nix fmt .`.
-
-## 6. Report
-
-For each plugin: old → new version, the upstream changes that mattered for
-packaging, and for each workaround whether it was **kept** (fact still
-holds), **re-derived** (fact changed, what was updated), or **dropped**
-(upstream fixed it). State that the change is evaluated/built only — the
-user deploys with `clan machines update <host>` — and that the updated
-plugin takes effect after herdr restarts.
-
 ## Key files
 
-- `pkgs/herdr-*/default.nix` — one derivation per plugin; `$out` is the plugin root.
-- `pkgs/default.nix` — package index (also what `nix build .#<pkg>` resolves).
-- `users/features/herdr.nix` — plugin registry, generated `config.toml`, font/ghostty wiring, herdr agent integrations.
-- `flake.lock` `nodes.herdr` — the herdr version the plugins run under.
+- `pkgs/herdr-*/default.nix`: one derivation per plugin; `$out` is the plugin root.
+- `users/features/herdr.nix`: plugin registry, generated `config.toml`, font/ghostty wiring, herdr agent integrations.
+- `flake.lock` `nodes.herdr`: the herdr version the plugins run under.

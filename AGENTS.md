@@ -78,4 +78,4 @@ refactor is a no-op for a host.
 - Add a user → `.agents/skills/adding-user/SKILL.md`
 - Add a darwin host → `.agents/skills/adding-darwin-host/SKILL.md`
 - Add a microvm guest → `.agents/skills/creating-microvm/SKILL.md`
-- Update / audit herdr plugin packages → `.agents/skills/updating-herdr-plugins/SKILL.md`
+- Update / audit custom packages in `pkgs/` (incl. herdr plugins) → `.agents/skills/updating-packages/SKILL.md`
