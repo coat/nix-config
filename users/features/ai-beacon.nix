@@ -64,16 +64,6 @@ in {
       ''}
         run ${lib.getExe pkgs.ai-beacon} install --url ${lib.escapeShellArg cfg.url} --yes >/dev/null
       )
-
-      # opencode 2.x rejects a plugin whose default export has no setup/effect
-      # ("Plugin must export a default definition with an id and an effect or
-      # setup function"); upstream's bridge (v4) exports only { id, server }.
-      # Add a no-op setup, as herdr's own opencode plugin does. Exact-line
-      # match, so this goes inert once upstream changes the export.
-      plugin=${lib.escapeShellArg "${config.xdg.configHome}/opencode/plugins/ai-beacon.ts"}
-      if [[ -f $plugin ]] && grep -qx 'export default { id: "ai-beacon", server }' "$plugin"; then
-        run sed -i 's/^export default { id: "ai-beacon", server }$/export default { id: "ai-beacon", server, setup() {} }/' "$plugin"
-      fi
     '';
 
     # Start agents through the wrapper so their terminal can be attached from

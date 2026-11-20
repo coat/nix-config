@@ -9,10 +9,10 @@
   #   gh api repos/manusa/ai-beacon/releases --jq '.[].assets[] | .name+" "+.digest'
   # and `ai-beacon version` on the new binary.
   hashes = {
-    x86_64-linux = "sha256-Usse6vyI/neeExT4Lf8bO7Bkxig90Nt/z4PhJNEg9IY=";
-    aarch64-linux = "sha256-P02T897avDfDIrlHRY0Yp6sV/9LtthB/LZaWr2RbY8w=";
-    x86_64-darwin = "sha256-gUArG+KA/QznYL1IX6DksnuxwBZlf8aQEKd7q/vpjls=";
-    aarch64-darwin = "sha256-yzsAwJLuAAiOS/dkUnimsO3mTXtiJhTTQjA2ja7UM0A=";
+    x86_64-linux = "sha256-1wnyV7wUSt53HSBuzmSHdV6jAywBi42bSJl+Df+9oBg=";
+    aarch64-linux = "sha256-CafTQo+tvsSXJtHZy2m4AfejA+mVBLj6itN+LeoLk0k=";
+    x86_64-darwin = "sha256-je8ogvwRwxov6BZwY+VS1tj52MQLJ4qEWGzFEQfkKy0=";
+    aarch64-darwin = "sha256-oRyy8SpliktHIVlwENSl9KwkhQBWBwXRlQv8o8bhykU=";
   };
   platform = stdenvNoCC.hostPlatform;
   goos = platform.parsed.kernel.name;
@@ -23,7 +23,7 @@
 in
   stdenvNoCC.mkDerivation {
     pname = "ai-beacon";
-    version = "0.0.0-snapshot.20261118085429";
+    version = "0.0.0-snapshot.20261119061114";
 
     src = fetchurl {
       url = "https://github.com/manusa/ai-beacon/releases/download/snapshot/ai-beacon-${goos}-${goarch}";
