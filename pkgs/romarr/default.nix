@@ -5,16 +5,17 @@
   makeWrapper,
   python3,
   libarchive,
+  _7zz-rar,
 }:
 stdenv.mkDerivation rec {
   pname = "romarr";
-  version = "1.8.1";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "BlizzHacker";
     repo = "romarr";
     rev = "v${version}";
-    hash = "sha256-W1FSSfF8mLN8jJk3TRpRR9t+x/ERql+ulxJmzmcv8jI=";
+    hash = "sha256-4xSLd7vUIf5te4ZxLq7GLjRT23F41dUZAyyA7Mp6Ygw=";
   };
 
   nativeBuildInputs = [makeWrapper];
@@ -35,10 +36,16 @@ stdenv.mkDerivation rec {
     # number instead of "unknown".
     printf '__version__ = "%s"\n' "${version}" > "$out/lib/romarr/_version.py"
 
+    # bsdtar (libarchive) reads 7z/rar/zip but only one RAR volume at a time.
+    # Split RAR sets need a 7-Zip that carries the Rar2/Rar3/Rar5 codecs
+    # (romarr/library.py::rar_tools looks for `7zz`, and `_reads_rar` checks
+    # `7zz i` for those codecs). nixpkgs' plain `_7zz` has only the Rar5
+    # format, not the decoders; `_7zz-rar` (unfree unRAR licence) has them,
+    # matching the official 7-Zip build the upstream Dockerfile installs.
     makeWrapper "${py}/bin/python" "$out/bin/romarr" \
       --set PYTHONPATH "$out/lib:${py}/${python3.sitePackages}" \
       --set PYTHONDONTWRITEBYTECODE 1 \
-      --prefix PATH : "${libarchive}/bin" \
+      --prefix PATH : "${lib.makeBinPath [libarchive _7zz-rar]}" \
       --add-flags "-m romarr"
     runHook postInstall
   '';
